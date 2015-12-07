@@ -67,22 +67,22 @@
 	</bean>
 	<tx:advice id="txAdvice" transaction-manager="transactionManagerHibernate">
 		<tx:attributes>
-			<tx:method name="save*" propagation="REQUIRED" />
-			<tx:method name="add*" propagation="REQUIRED" />
-			<tx:method name="create*" propagation="REQUIRED" />
-			<tx:method name="insert*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="merge*" propagation="REQUIRED" />
-			<tx:method name="del*" propagation="REQUIRED" />
-			<tx:method name="remove*" propagation="REQUIRED" />
-			<tx:method name="put*" propagation="REQUIRED" />
-			<tx:method name="use*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="add*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="create*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="merge*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="del*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="remove*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="put*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="use*" propagation="REQUIRED" read-only="true" />
 			<!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="count*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
 	<aop:config expose-proxy="true">
