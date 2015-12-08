@@ -2,10 +2,10 @@ package com.kankanews.search.service;
 
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 
-import com.kankanews.search.db.dao.VideosDAO;
+import com.kankanews.search.db.dao.VideoDAO;
 
 public class IndexService {
-	private VideosDAO videosDAO;
+	private VideoDAO videoDAO;
 	private CloudSolrClient solrClient;
 
 	public boolean indexWhole() {
@@ -20,12 +20,12 @@ public class IndexService {
 		this.solrClient = solrClient;
 	}
 
-	public VideosDAO getVideosDAO() {
-		return videosDAO;
+	public VideoDAO getVideoDAO() {
+		return videoDAO;
 	}
 
-	public void setVideosDAO(VideosDAO videosDAO) {
-		this.videosDAO = videosDAO;
+	public void setVideoDAO(VideoDAO videoDAO) {
+		this.videoDAO = videoDAO;
 	}
 
 }

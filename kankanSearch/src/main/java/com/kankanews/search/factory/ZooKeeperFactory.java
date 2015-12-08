@@ -17,11 +17,12 @@ public class ZooKeeperFactory {
 	public CuratorFramework instanceClient() {
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMS,
 				maxRetries);
-		CuratorFramework client = CuratorFrameworkFactory.builder()
-				.connectString(zkHost).retryPolicy(retryPolicy)
-				.namespace(nameSpace).build();
-		client.start();
-		return client;
+//		CuratorFramework client = CuratorFrameworkFactory.builder()
+//				.connectString(zkHost).retryPolicy(retryPolicy)
+//				.namespace(nameSpace).build();
+//		client.start();
+//		return client;
+		return null;
 	}
 
 	public String getZkHost() {
