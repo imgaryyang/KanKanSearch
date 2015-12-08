@@ -11,8 +11,8 @@ import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
  * JUnit测试action时使用的基类
@@ -45,11 +45,11 @@ public class JUnitActionBase {
 					WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE,
 					context);// TODO
 			handlerMapping = (HandlerMapping) context
-					.getBean(DefaultAnnotationHandlerMapping.class);
+					.getBean(RequestMappingHandlerMapping.class);
 
 			handlerAdapter = (HandlerAdapter) context
 					.getBean(context
-							.getBeanNamesForType(AnnotationMethodHandlerAdapter.class)[0]);
+							.getBeanNamesForType(RequestMappingHandlerAdapter.class)[0]);
 
 			// handlerAdapter = (HandlerAdapter) context.getBean(context
 			// .getNamespace());

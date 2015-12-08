@@ -16,17 +16,24 @@
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
-	<bean id="cloudSolrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient">
-		<constructor-arg value="${zkHost}"></constructor-arg>
+	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient">
+		<constructor-arg value="${zk.host}"></constructor-arg>
+		<property name="zkConnectTimeout" value="${solr.connect_timeout}"></property>
+		<property name="zkClientTimeout" value="${solr.client_timeout}"></property>
+		<property name="defaultCollection" value="${solr.default_collection}"></property>
 	</bean>
-
-	<bean id="solrClient" class="com.kankanews.search.client.SolrClient">
-		<property name="solrClient" ref="cloudSolrClient"></property>
-		<property name="myCollection" ref="${solrDefaultCollection}"></property>
+	<bean id="zookeeperFactory" class="com.kankanews.search.factory.ZooKeeperFactory"
+		scope="singleton">
+		<property name="zkHost" value="${zk.host}"></property>
+		<property name="maxRetries" value="${zk.max_retries}"></property>
+		<property name="baseSleepTimeMS" value="${zk.base_sleep_timeMS}"></property>
+		<property name="nameSpace" value="${zk.name_space}"></property>
+	</bean>
+	<bean id="zookeeperClient" factory-bean="zookeeperFactory"
+		factory-method="instanceClient">
 	</bean>
 
 	<bean id="indexService" class="com.kankanews.search.service.IndexService">
-		<property name="solrClient" ref="solrClient"></property>
 		<property name="videosDAO" ref="videosDAO"></property>
 	</bean>
 

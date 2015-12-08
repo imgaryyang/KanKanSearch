@@ -1,17 +1,22 @@
 package com.kankanews.search.service;
 
-import com.kankanews.search.client.SolrClient;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
+
 import com.kankanews.search.db.dao.VideosDAO;
 
 public class IndexService {
-	private SolrClient solrClient;
 	private VideosDAO videosDAO;
+	private CloudSolrClient solrClient;
 
-	public SolrClient getSolrClient() {
+	public boolean indexWhole() {
+		return true;
+	}
+
+	public CloudSolrClient getSolrClient() {
 		return solrClient;
 	}
 
-	public void setSolrClient(SolrClient solrClient) {
+	public void setSolrClient(CloudSolrClient solrClient) {
 		this.solrClient = solrClient;
 	}
 
