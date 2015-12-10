@@ -23,16 +23,41 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 		try {
 			// zookeeperClient.delete().deletingChildrenIfNeeded()
 			// .forPath("/myconf");
-//			zookeeperClient.delete().forPath("/schema.xml");
-//			 zookeeperClient.create().forPath("/myconf");
-			 zookeeperClient.create().forPath("/myconf/schema.xml");
-//			 zookeeperClient.create().forPath("/myconf/solrconfig.xml");
+			// zookeeperClient.delete().forPath("/schema.xml");
+			// zookeeperClient.create().forPath("/myconf");
+			// zookeeperClient.create().forPath("/myconf/schema.xml");
+			// zookeeperClient.create().forPath("/myconf/solrconfig.xml");
 			byte[] schema = FileUtils.readFileToByteArray(new File(
-					"G://KanKanServer/solr-1/solr-conf/schema.xml"));
+					"G://solr/conf/schema.xml"));
 			zookeeperClient.setData().forPath("/myconf/schema.xml", schema);
+
 			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-					"G://KanKanServer/solr-1/solr-conf/solrconfig.xml"));
-			zookeeperClient.setData().forPath("/myconf/solrconfig.xml", solrconfig);
+					"G://solr/conf/solrconfig.xml"));
+			zookeeperClient.setData().forPath("/myconf/solrconfig.xml",
+					solrconfig);
+
+			zookeeperClient.create().forPath("/myconf/admin-extra.html");
+			byte[] admin_extra = FileUtils.readFileToByteArray(new File(
+					"G://solr/conf/admin-extra.html"));
+			zookeeperClient.setData().forPath("/myconf/admin-extra.html",
+					admin_extra);
+
+			zookeeperClient.create().forPath(
+					"/myconf/admin-extra.menu-bottom.html");
+			byte[] admin_extra_menu_bottom = FileUtils
+					.readFileToByteArray(new File(
+							"G://solr/conf/admin-extra.menu-bottom.html"));
+			zookeeperClient.setData().forPath(
+					"/myconf/admin-extra.menu-bottom.html",
+					admin_extra_menu_bottom);
+
+			zookeeperClient.create().forPath(
+					"/myconf/admin-extra.menu-top.html");
+			byte[] admin_extra_menu_top = FileUtils
+					.readFileToByteArray(new File(
+							"G://solr/conf/admin-extra.menu-top.html"));
+			zookeeperClient.setData().forPath(
+					"/myconf/admin-extra.menu-top.html", admin_extra_menu_top);
 			// zookeeperClient.getData().forPath("");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

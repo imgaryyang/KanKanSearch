@@ -8,21 +8,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import test.kankanews.search.action.base.JUnitActionBase;
 
-public class IndexActionTest extends JUnitActionBase {
+public class QueryActionTest extends JUnitActionBase {
 
 	@Test
-	public void testAddWhole() throws Exception {
+	public void testQuery() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		request.setServletPath("/index/add/whole");
+		request.setServletPath("/query/query");
 		final ModelAndView mav = this.excuteAction(request, response);
 	}
 
 	@Test
-	public void testDeleteWhole() throws Exception {
+	public void testQueryGroup() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		request.setServletPath("/index/delete/whole");
+		request.setServletPath("/query/queryGroup");
 		final ModelAndView mav = this.excuteAction(request, response);
 	}
 

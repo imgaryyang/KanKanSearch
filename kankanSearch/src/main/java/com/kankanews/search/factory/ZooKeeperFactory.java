@@ -6,23 +6,22 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
 public class ZooKeeperFactory {
-	public String zkHost;
+	private String zkHost;
 
-	public int maxRetries;
+	private int maxRetries;
 
-	public int baseSleepTimeMS;
+	private int baseSleepTimeMS;
 
-	public String nameSpace;
+	private String nameSpace;
 
 	public CuratorFramework instanceClient() {
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMS,
 				maxRetries);
-//		CuratorFramework client = CuratorFrameworkFactory.builder()
-//				.connectString(zkHost).retryPolicy(retryPolicy)
-//				.namespace(nameSpace).build();
-//		client.start();
-//		return client;
-		return null;
+		CuratorFramework client = CuratorFrameworkFactory.builder()
+				.connectString(zkHost).retryPolicy(retryPolicy)
+				.namespace(nameSpace).build();
+		client.start();
+		return client;
 	}
 
 	public String getZkHost() {

@@ -19,7 +19,7 @@ public class Video implements Serializable {
 	private String title;
 	@Column(name = "titlepic")
 	private String titlePic;
-	@Column(name = "newsTime")
+	@Column(name = "newstime")
 	private String newsTime;
 	@Column(name = "keywords")
 	private String keyWords;
