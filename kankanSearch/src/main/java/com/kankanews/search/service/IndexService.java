@@ -52,7 +52,16 @@ public class IndexService {
 				doc.addField("id", rs.getObject("id"));
 				// doc.addField("title_mmseg_complex", rs.getObject("title"));
 				// doc.addField("title_mmseg_maxword", rs.getObject("title"));
-				doc.addField("title_ikusersmart", rs.getObject("title"));
+				doc.addField("title_iksmart", rs.getObject("title"));
+				doc.addField("title_ik", rs.getObject("title"));
+				doc.addField("title", rs.getObject("title"));
+				doc.addField("onclick", rs.getObject("onclick"));
+				doc.addField("titlepic", rs.getObject("titlepic"));
+				doc.addField("newstime", rs.getObject("newstime"));
+				doc.addField("keywords", rs.getObject("keywords"));
+				doc.addField("createtime", rs.getObject("createtime"));
+				doc.addField("videourl", rs.getObject("videourl"));
+				doc.addField("docversion", 0);
 				// doc.addField("title_ik", rs.getObject("title"));
 				// doc.addField("title", rs.getObject("title"));
 				logger.info("添加Doc");
@@ -66,7 +75,7 @@ public class IndexService {
 					logger.info("提交");
 					solrClient.commit();
 					_docs.clear();
-					i = 0;
+//					i = 0;
 				}
 			}
 		} catch (SQLException e) {

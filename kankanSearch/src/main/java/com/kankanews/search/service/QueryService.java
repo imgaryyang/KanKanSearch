@@ -94,7 +94,7 @@ public class QueryService {
 	public void SearchGroup(String QUERY_CONTENT, int QUERY_ROWS,
 			Boolean GROUP, String GROUP_FIELD, String GROUP_LIMIT) {
 		SolrQuery param = new SolrQuery();
-		param.addFilterQuery("title_ikusersmart:" + QUERY_CONTENT);
+		param.addFilterQuery("title_iksmart:" + QUERY_CONTENT);
 		// param.setQuery("title_ikusersmart:" + QUERY_CONTENT);
 		param.setRows(QUERY_ROWS);
 		param.setParam(GroupParams.GROUP, GROUP);
