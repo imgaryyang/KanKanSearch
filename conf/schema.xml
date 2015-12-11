@@ -1,0 +1,49 @@
+<schema name="coretest" version="1.5" >
+	<fieldType name="string" class="solr.StrField" sortMissingLast="true"/>  
+
+	<fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>  
+
+	<fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>   
+
+	<fieldType name="text_general" class="solr.TextField" positionIncrementGap="100"/>  
+	
+	<fieldType name="text_ik_smart" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+	</fieldType>
+
+	<fieldType name="text_ik" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+	</fieldType>
+
+	<fields>
+
+		<field name="id" type="int" indexed="true" stored="true" required="true" multiValued="false" />   
+		<field name="title_iksmart" type="text_ik_smart" indexed="true" stored="false" multiValued="false" />
+		<field name="title_ik" type="text_ik" indexed="true" stored="false" multiValued="false" />
+		<field name="title" type="string" indexed="false" stored="true" multiValued="false" docValues="true" /> 
+		<field name="onclick" type="text_general" indexed="false" stored="true" multiValued="false" /> 
+		<field name="titlepic" type="text_general" indexed="false" stored="true" multiValued="false" /> 
+		<field name="newstime" type="text_general" indexed="false" stored="true" multiValued="false" /> 
+		<field name="keywords" type="text_ik_smart" indexed="true" stored="true" multiValued="false" /> 
+		<field name="createtime" type="text_general" indexed="false" stored="true" multiValued="false" /> 
+		<field name="videourl" type="text_general" indexed="false" stored="true" multiValued="false"/> 
+		<field name="docversion" type="long" indexed="true" stored="true" multiValued="false"/>
+		
+		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
+
+	</fields>
+	<solrQueryParser defaultOperator="OR"/>  
+	<uniqueKey>id</uniqueKey>
+	<defaultSearchField>title_iksmart</defaultSearchField>
+
+</schema>
