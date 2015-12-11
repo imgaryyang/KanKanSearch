@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.response.Group;
 import org.apache.solr.client.solrj.response.GroupCommand;
 import org.apache.solr.client.solrj.response.GroupResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.GroupParams;
 
 public class QueryService {
@@ -94,8 +95,8 @@ public class QueryService {
 	public void SearchGroup(String QUERY_CONTENT, int QUERY_ROWS,
 			Boolean GROUP, String GROUP_FIELD, String GROUP_LIMIT) {
 		SolrQuery param = new SolrQuery();
-		param.addFilterQuery("title_iksmart:" + QUERY_CONTENT);
-		// param.setQuery("title_ikusersmart:" + QUERY_CONTENT);
+		// param.addFilterQuery("title:" + QUERY_CONTENT);
+		param.setQuery("title_iksmart:" + QUERY_CONTENT);
 		param.setRows(QUERY_ROWS);
 		param.setParam(GroupParams.GROUP, GROUP);
 		param.setParam(GroupParams.GROUP_FIELD, GROUP_FIELD);
@@ -110,9 +111,12 @@ public class QueryService {
 		GroupResponse groupResponse = response.getGroupResponse();
 		if (groupResponse != null) {
 			List<GroupCommand> groupList = groupResponse.getValues();
+			System.out.println(groupList.size());
 			for (GroupCommand groupCommand : groupList) {
 				List<Group> groups = groupCommand.getValues();
+				System.out.println(groups.size());
 				for (Group group : groups) {
+					SolrDocumentList list = group.getResult();
 					info.put(group.getGroupValue(), (int) group.getResult()
 							.getNumFound());
 					System.out.println(group.getGroupValue() + "---"

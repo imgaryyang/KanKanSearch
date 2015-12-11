@@ -25,8 +25,8 @@ public class QueryAction {
 	@ResponseBody
 	public String query() {
 		QueryResponse response = queryService.Search(
-				new String[] { "title_iksmart" }, new String[] { "习近平" },
-				0, 100, new String[0], new Boolean[0], false);
+				new String[] { "title_iksmart" }, new String[] { "习近平" }, 0,
+				100, new String[0], new Boolean[0], false);
 		List<SolrDocument> list = response.getResults();
 		for (SolrDocument solrDocument : list) {
 			System.out.println(solrDocument.get("title"));
@@ -37,7 +37,7 @@ public class QueryAction {
 	@RequestMapping("/queryGroup")
 	@ResponseBody
 	public String queryGroup() {
-		queryService.SearchGroup("习近平", 20, true, "title", "1");
+		queryService.SearchGroup("习近平", 1, true, "title", "10");
 		return "test";
 	}
 }

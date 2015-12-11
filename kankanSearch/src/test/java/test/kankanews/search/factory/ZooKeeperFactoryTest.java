@@ -31,33 +31,33 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 					"G://solr/conf/schema.xml"));
 			zookeeperClient.setData().forPath("/myconf/schema.xml", schema);
 
-			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-					"G://solr/conf/solrconfig.xml"));
-			zookeeperClient.setData().forPath("/myconf/solrconfig.xml",
-					solrconfig);
-
-			zookeeperClient.create().forPath("/myconf/admin-extra.html");
-			byte[] admin_extra = FileUtils.readFileToByteArray(new File(
-					"G://solr/conf/admin-extra.html"));
-			zookeeperClient.setData().forPath("/myconf/admin-extra.html",
-					admin_extra);
-
-			zookeeperClient.create().forPath(
-					"/myconf/admin-extra.menu-bottom.html");
-			byte[] admin_extra_menu_bottom = FileUtils
-					.readFileToByteArray(new File(
-							"G://solr/conf/admin-extra.menu-bottom.html"));
-			zookeeperClient.setData().forPath(
-					"/myconf/admin-extra.menu-bottom.html",
-					admin_extra_menu_bottom);
-
-			zookeeperClient.create().forPath(
-					"/myconf/admin-extra.menu-top.html");
-			byte[] admin_extra_menu_top = FileUtils
-					.readFileToByteArray(new File(
-							"G://solr/conf/admin-extra.menu-top.html"));
-			zookeeperClient.setData().forPath(
-					"/myconf/admin-extra.menu-top.html", admin_extra_menu_top);
+			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
+			// "G://solr/conf/solrconfig.xml"));
+			// zookeeperClient.setData().forPath("/myconf/solrconfig.xml",
+			// solrconfig);
+			//
+			// zookeeperClient.create().forPath("/myconf/admin-extra.html");
+			// byte[] admin_extra = FileUtils.readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.html"));
+			// zookeeperClient.setData().forPath("/myconf/admin-extra.html",
+			// admin_extra);
+			//
+			// zookeeperClient.create().forPath(
+			// "/myconf/admin-extra.menu-bottom.html");
+			// byte[] admin_extra_menu_bottom = FileUtils
+			// .readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.menu-bottom.html"));
+			// zookeeperClient.setData().forPath(
+			// "/myconf/admin-extra.menu-bottom.html",
+			// admin_extra_menu_bottom);
+			//
+			// zookeeperClient.create().forPath(
+			// "/myconf/admin-extra.menu-top.html");
+			// byte[] admin_extra_menu_top = FileUtils
+			// .readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.menu-top.html"));
+			// zookeeperClient.setData().forPath(
+			// "/myconf/admin-extra.menu-top.html", admin_extra_menu_top);
 			// zookeeperClient.getData().forPath("");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
