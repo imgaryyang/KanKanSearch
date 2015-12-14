@@ -96,7 +96,7 @@ public class QueryService {
 			Boolean GROUP, String GROUP_FIELD, String GROUP_LIMIT) {
 		SolrQuery param = new SolrQuery();
 		// param.addFilterQuery("title:" + QUERY_CONTENT);
-		param.setQuery("title_iksmart:" + QUERY_CONTENT);
+		param.setQuery("all:" + QUERY_CONTENT);
 		param.setRows(QUERY_ROWS);
 		param.setParam(GroupParams.GROUP, GROUP);
 		param.setParam(GroupParams.GROUP_FIELD, GROUP_FIELD);
@@ -117,9 +117,11 @@ public class QueryService {
 				System.out.println(groups.size());
 				for (Group group : groups) {
 					SolrDocumentList list = group.getResult();
+
 					info.put(group.getGroupValue(), (int) group.getResult()
 							.getNumFound());
-					System.out.println(group.getGroupValue() + "---"
+					System.out.println(list.get(0).get("id") + "---"
+							+ list.get(0).get("title") + "---"
 							+ group.getResult().getNumFound());
 				}
 			}
