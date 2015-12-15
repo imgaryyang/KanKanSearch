@@ -340,9 +340,9 @@ public final class DBHelper {
 	 */
 	public static void closeAll(ResultSet rs) {
 		try {
-			if (rs != null) {
-				rs.close();
-			}
+//			if (rs != null) {
+//				rs.close();
+//			}
 			if (rs.getStatement() != null) {
 				rs.getStatement().close();
 			}

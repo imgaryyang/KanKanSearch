@@ -14,8 +14,14 @@ public class QueryActionTest extends JUnitActionBase {
 	public void testQuery() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		request.setServletPath("/query/query");
+		request.setServletPath("/search/query");
+		request.setParameter("word", "习近平");
+		request.setParameter("page", "1");
+		request.setParameter("rows", "20");
+		request.setParameter("highlight", "true");
 		final ModelAndView mav = this.excuteAction(request, response);
+		response.setCharacterEncoding("UTF-8");
+		System.out.println(response.getContentAsString());
 	}
 
 	@Test

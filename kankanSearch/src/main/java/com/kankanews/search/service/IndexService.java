@@ -1,20 +1,18 @@
 package com.kankanews.search.service;
 
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.core.DBHelper;
 import com.kankanews.search.db.dao.VideoDAO;
+import com.kankanews.search.db.model.Video;
 
 public class IndexService {
 	Logger logger = Logger.getLogger(IndexService.class);
@@ -38,29 +36,8 @@ public class IndexService {
 			// createtime, videourl
 			int i = 0;
 			while (rs.next()) {
-				/**
-				 * <field name="id" type="int" indexed="true" stored="true"
-				 * required="true" multiValued="false" />
-				 * 
-				 * <!--<field name="id" type="int" indexed="true" stored="true"
-				 * required="true" multiValued="false"/> -->
-				 * 
-				 * <field name="title_mmseg_complex" type="text_mmseg_complex"
-				 * indexed="true" stored="true" /> <field
-				 * name="title_mmseg_maxword" type="text_mmseg_maxword"
-				 * indexed="true" stored="true" /> <field
-				 * name="title_ikusersmart" type="text_ikanalyse_useSmart"
-				 * indexed="true" stored="true" /> <field name="title_ik"
-				 * type="text_ikanalyse" indexed="true" stored="true" /> <field
-				 * name="title" type="text_general" indexed="true" stored="true"
-				 * />
-				 */
 				SolrInputDocument doc = new SolrInputDocument();
 				doc.addField("id", rs.getObject("id"));
-				// doc.addField("title_mmseg_complex", rs.getObject("title"));
-				// doc.addField("title_mmseg_maxword", rs.getObject("title"));
-				// doc.addField("title_iksmart", rs.getObject("title"));
-				// doc.addField("title_ik", rs.getObject("title"));
 				doc.addField("title", rs.getObject("title"));
 				doc.addField("onclick", rs.getObject("onclick"));
 				doc.addField("titlepic", rs.getObject("titlepic"));
@@ -69,12 +46,6 @@ public class IndexService {
 				doc.addField("createtime", rs.getObject("createtime"));
 				doc.addField("videourl", rs.getObject("videourl"));
 				doc.addField("docversion", curIndexVersion);
-				// doc.addField("title_ik", rs.getObject("title"));
-				// doc.addField("title", rs.getObject("title"));
-				logger.info("添加Doc");
-				// solrClient.add(doc);
-				// solrClient.commit();
-				// logger.info("添加完毕");
 				i++;
 				_docs.add(doc);
 				if (_docs.size() >= 3000) {
@@ -82,9 +53,8 @@ public class IndexService {
 					logger.info("提交");
 					solrClient.commit();
 					_docs.clear();
-					// i = 0;
 				}
-				if (i >= 30000) {
+				if (i >= 300000) {
 					break;
 				}
 			}
@@ -107,11 +77,59 @@ public class IndexService {
 		return true;
 	}
 
+	public boolean addOne(String id) {
+		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		Video video = videoDAO.get(id);
+		solrClient.connect();
+		try {
+			if (video != null) {
+				SolrInputDocument doc = new SolrInputDocument();
+				doc.addField("id", video.getId());
+				doc.addField("title", video.getTitle());
+				doc.addField("onclick", video.getOnclick());
+				doc.addField("titlepic", video.getTitlePic());
+				doc.addField("newstime", video.getNewsTime());
+				doc.addField("keywords", video.getKeyWords());
+				doc.addField("createtime", video.getCreateTime());
+				doc.addField("videourl", video.getVideoUrl());
+				doc.addField("docversion", indexVersion);
+				solrClient.add(doc);
+				logger.info("提交");
+				solrClient.commit();
+			} else {
+				logger.error("id:" + id + "未查询到任何记录");
+				return false;
+			}
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return false;
+		}
+		logger.info("新增索引结束");
+		return true;
+	}
+
+	public boolean deleteOne(String id) {
+		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		solrClient.connect();
+		try {
+			solrClient.deleteByQuery("id:" + id + " AND docversion:"
+					+ indexVersion);
+			solrClient.commit();
+			logger.info("删除索引结束");
+		} catch (Exception e) {
+			logger.error(e.getLocalizedMessage());
+			return false;
+		}
+		logger.info("删除索引结束");
+		return true;
+	}
+
 	public boolean deleteWhole() {
 		try {
 			String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
 			// 删除所有的索引
 			solrClient.deleteByQuery("docversion:" + indexVersion);
+//			 solrClient.deleteByQuery("*:*");
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import org.apache.solr.common.SolrDocument;
 
 @Entity
 @javax.persistence.Table(name = "kk_ecms_kankanvideos")
@@ -27,6 +30,22 @@ public class Video implements Serializable {
 	private String createTime;
 	@Column(name = "videourl")
 	private String videoUrl;
+
+	@Transient
+	private String docVersion;
+
+	public Video(SolrDocument doc) {
+		super();
+		this.id = "" + doc.get("id");
+		this.onclick = (String) doc.get("onclick");
+		this.title = (String) doc.get("title");
+		this.titlePic = (String) doc.get("titlepic");
+		this.newsTime = (String) doc.get("newstime");
+		this.keyWords = (String) doc.get("keywords");
+		this.createTime = (String) doc.get("createtime");
+		this.videoUrl = (String) doc.get("videourl");
+		this.docVersion = "" + doc.get("docversion");
+	}
 
 	public String getId() {
 		return id;
@@ -90,6 +109,14 @@ public class Video implements Serializable {
 
 	public void setVideoUrl(String videoUrl) {
 		this.videoUrl = videoUrl;
+	}
+
+	public String getDocVersion() {
+		return docVersion;
+	}
+
+	public void setDocVersion(String docVersion) {
+		this.docVersion = docVersion;
 	}
 
 }
