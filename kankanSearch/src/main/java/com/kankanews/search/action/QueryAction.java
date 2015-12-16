@@ -34,12 +34,20 @@ public class QueryAction {
 				new String[0], new Boolean[0], true);
 		List<SolrDocument> list = response.getResults();
 		Map<String, Map<String, List<String>>> map = response.getHighlighting();
+		System.out.println(map.get("643564").get("keywords").get(0));
 		for (SolrDocument solrDocument : list) {
-			System.out.println(solrDocument.get("title"));
+			if (!map.get(solrDocument.get("id").toString()).get("keywords")
+					.isEmpty()){
+				System.out.println(map.get(solrDocument.get("id"))
+						.get("keywords").get(0));
+				System.out.println(map.get(solrDocument.get("id"))
+						.get("title").get(0));
+			}
+			System.out.println(solrDocument.get("id"));
 		}
-//		List<Video> videos = queryService.searchGroup(word, page, rows,
-//				highlight);
-//		return videos;
+		// List<Video> videos = queryService.searchGroup(word, page, rows,
+		// highlight);
+		// return videos;
 		return new ArrayList<Video>();
 	}
 

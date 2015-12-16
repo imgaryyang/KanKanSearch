@@ -55,11 +55,12 @@ public class QueryService {
 			// 设置高亮
 			if (null != hightlight) {
 				query.setHighlight(true); // 开启高亮组件
+				query.addHighlightField("keywords");// 高亮字段
 				query.addHighlightField("title");// 高亮字段
 				query.setHighlightSimplePre("<font color=\"red\">");// 标记
 				query.setHighlightSimplePost("</font>");
-				query.setHighlightSnippets(1);// 结果分片数，默认为1
-				query.setHighlightFragsize(1000);// 每个分片的最大长度，默认为100
+				// query.setHighlightSnippets(1);// 结果分片数，默认为1
+				// query.setHighlightFragsize(1000);// 每个分片的最大长度，默认为100
 
 			}
 		} catch (Exception e) {

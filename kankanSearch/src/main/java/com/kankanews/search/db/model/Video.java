@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 
 import org.apache.solr.common.SolrDocument;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @javax.persistence.Table(name = "kk_ecms_kankanvideos")
 public class Video implements Serializable {
@@ -32,6 +34,7 @@ public class Video implements Serializable {
 	private String videoUrl;
 
 	@Transient
+	@JsonIgnore
 	private String docVersion;
 
 	public Video(SolrDocument doc) {
