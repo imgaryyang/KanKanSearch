@@ -31,10 +31,10 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 					"G://solr/conf/schema.xml"));
 			zookeeperClient.setData().forPath("/myconf/schema.xml", schema);
 
-			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-			// "G://solr/conf/solrconfig.xml"));
-			// zookeeperClient.setData().forPath("/myconf/solrconfig.xml",
-			// solrconfig);
+//			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
+//					"G://solr/conf/solrconfig.xml"));
+//			zookeeperClient.setData().forPath("/myconf/solrconfig.xml",
+//					solrconfig);
 			//
 			// zookeeperClient.create().forPath("/myconf/admin-extra.html");
 			// byte[] admin_extra = FileUtils.readFileToByteArray(new File(

@@ -18,18 +18,22 @@ public class Video implements Serializable {
 
 	@Id
 	private String id;
+	@Column(name = "classid")
+	private String classId;
 	@Column(name = "onclick")
 	private String onclick;
 	@Column(name = "title")
 	private String title;
 	@Column(name = "titlepic")
 	private String titlePic;
+	@Column(name = "titleurl")
+	private String titleUrl;
 	@Column(name = "newstime")
 	private String newsTime;
 	@Column(name = "keywords")
 	private String keyWords;
-	@Column(name = "createtime")
-	private String createTime;
+	@Column(name = "type")
+	private String type;
 	@Column(name = "videourl")
 	private String videoUrl;
 
@@ -45,7 +49,6 @@ public class Video implements Serializable {
 		this.titlePic = (String) doc.get("titlepic");
 		this.newsTime = (String) doc.get("newstime");
 		this.keyWords = (String) doc.get("keywords");
-		this.createTime = (String) doc.get("createtime");
 		this.videoUrl = (String) doc.get("videourl");
 		this.docVersion = "" + doc.get("docversion");
 	}
@@ -98,14 +101,6 @@ public class Video implements Serializable {
 		this.keyWords = keyWords;
 	}
 
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
 	public String getVideoUrl() {
 		return videoUrl;
 	}
@@ -120,6 +115,14 @@ public class Video implements Serializable {
 
 	public void setDocVersion(String docVersion) {
 		this.docVersion = docVersion;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

@@ -28,22 +28,28 @@
 	<fields>
 
 		<field name="id" type="int" indexed="true" stored="true" required="true" multiValued="false" />   
-		<field name="title_iksmart" type="text_ik_smart" indexed="true" stored="false" multiValued="false" />
-		<field name="title_ik" type="text_ik" indexed="true" stored="false" multiValued="false" />
-		<field name="title" type="string" indexed="false" stored="true" multiValued="false" docValues="true" /> 
-		<field name="onclick" type="text_general" indexed="false" stored="true" multiValued="false" /> 
-		<field name="titlepic" type="text_general" indexed="false" stored="true" multiValued="false" /> 
-		<field name="newstime" type="text_general" indexed="false" stored="true" multiValued="false" /> 
+		<!--<field name="title_iksmart" type="text_ik_smart" indexed="true" stored="false" multiValued="false" />
+		<field name="title_ik" type="text_ik" indexed="true" stored="false" multiValued="false" />-->
+		<field name="title" type="string" indexed="true" stored="true" multiValued="false" docValues="true" /> 
+		<field name="onclick" type="string" indexed="false" stored="true" multiValued="false" /> 
+		<field name="titlepic" type="string" indexed="false" stored="true" multiValued="false" /> 
+		<field name="newstime" type="string" indexed="false" stored="true" multiValued="false" /> 
 		<field name="keywords" type="text_ik_smart" indexed="true" stored="true" multiValued="false" /> 
-		<field name="createtime" type="text_general" indexed="false" stored="true" multiValued="false" /> 
-		<field name="videourl" type="text_general" indexed="false" stored="true" multiValued="false"/> 
-		<field name="docversion" type="long" indexed="true" stored="true" multiValued="false"/>
+		<field name="createtime" type="string" indexed="false" stored="true" multiValued="false" /> 
+		<field name="videourl" type="string" indexed="false" stored="true" multiValued="false"/> 
+		<field name="docversion" type="string" indexed="true" stored="true" multiValued="false"/>
+		<!--拷贝字段-->
+		<field name="all" type="text_ik_smart" indexed="true" stored="false" multiValued="true"/>
+
 		
 		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 
 	</fields>
+	<copyField source="title" dest="all"/>
+	<copyField source="keywords" dest="all"/>
+
 	<solrQueryParser defaultOperator="OR"/>  
 	<uniqueKey>id</uniqueKey>
-	<defaultSearchField>title_iksmart</defaultSearchField>
+	<defaultSearchField>all</defaultSearchField>
 
 </schema>

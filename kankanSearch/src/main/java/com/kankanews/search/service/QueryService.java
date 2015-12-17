@@ -16,6 +16,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.GroupParams;
 
+import com.kankanews.search.db.model.SearchResult;
 import com.kankanews.search.db.model.Video;
 
 public class QueryService {
@@ -97,24 +98,24 @@ public class QueryService {
 	 * @Throws
 	 * @Date 2015-1-7 输出结果的时候，由于定义的数据索引没有做很好是调整，显示的结果并不理想，不过此方法可以作为参考
 	 */
-	public List<Video> searchGroup(String word, int page, int rows,
+	public List<SearchResult> searchGroup(String word, int page, int rows,
 			boolean isHighLight) {
-		List<Video> videos = new ArrayList<Video>();
+		List<SearchResult> results = new ArrayList<SearchResult>();
 		SolrQuery query = new SolrQuery();
 		// param.addFilterQuery("title:" + QUERY_CONTENT);
 		query.setQuery("all:" + word);
 		query.setStart((page - 1) * rows);
 		query.setRows(rows);
 		query.setParam(GroupParams.GROUP, true);
-		query.setParam(GroupParams.GROUP_FIELD, "title");
+		query.setParam(GroupParams.GROUP_FIELD, "titleGroup");
 		query.setParam(GroupParams.GROUP_LIMIT, "1");
 		query.setParam("hl", isHighLight);
 
 		// 设置高亮
 		if (isHighLight) {
 			query.setHighlight(true); // 开启高亮组件
-			query.setParam("hl.fl", "keywords");
-			query.setParam("hl.q", "keywords:" + word);
+			query.setParam("hl.fl", "title");
+//			query.setParam("hl.q", "keywords:" + word);
 			// query.addHighlightField("keywords");// 高亮字段
 			query.setHighlightSimplePre("<font color=\"red\">");// 标记
 			query.setHighlightSimplePost("</font>");
@@ -133,7 +134,7 @@ public class QueryService {
 			for (GroupCommand groupCommand : groupResponse.getValues()) {
 				for (Group group : groupCommand.getValues()) {
 					SolrDocumentList list = group.getResult();
-					Video video = new Video(list.get(0));
+					SearchResult video = new SearchResult(list.get(0));
 					if (isHighLight) {
 						for (SolrDocument doc : list) {
 							video.setTitle(map.get(doc.getFieldValue("id"))
@@ -142,11 +143,11 @@ public class QueryService {
 									.toString()));
 						}
 					}
-					videos.add(video);
+					results.add(video);
 				}
 			}
 		}
-		return videos;
+		return results;
 	}
 
 	public CloudSolrClient getSolrClient() {

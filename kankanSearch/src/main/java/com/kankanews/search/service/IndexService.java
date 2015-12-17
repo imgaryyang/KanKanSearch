@@ -26,7 +26,8 @@ public class IndexService {
 	public boolean addWhole() {
 		logger.info("建立索引启动");
 		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
-		int curIndexVersion = Integer.parseInt(indexVersion) + 1;
+		int curIndexVersion = Integer.parseInt(indexVersion);
+		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 		Collection _docs = new ArrayList();
 		ResultSet rs = videoDAO.getAllVideo();
 		solrClient.connect();
@@ -38,13 +39,20 @@ public class IndexService {
 			while (rs.next()) {
 				SolrInputDocument doc = new SolrInputDocument();
 				doc.addField("id", rs.getObject("id"));
+				doc.addField("classid", rs.getObject("classid"));
+				doc.addField("type", rs.getObject("type"));
 				doc.addField("title", rs.getObject("title"));
+				doc.addField("titleGroup", rs.getObject("title"));
 				doc.addField("onclick", rs.getObject("onclick"));
 				doc.addField("titlepic", rs.getObject("titlepic"));
 				doc.addField("newstime", rs.getObject("newstime"));
 				doc.addField("keywords", rs.getObject("keywords"));
-				doc.addField("createtime", rs.getObject("createtime"));
 				doc.addField("videourl", rs.getObject("videourl"));
+				doc.addField("titleurl", rs.getObject("titleurl"));
+				doc.addField("authorid", rs.getObject("authorid"));
+				doc.addField("author", rs.getObject("author"));
+				doc.addField("intro", rs.getObject("intro"));
+				doc.addField("imagegroup", rs.getObject("imagegroup"));
 				doc.addField("docversion", curIndexVersion);
 				i++;
 				_docs.add(doc);
@@ -71,7 +79,7 @@ public class IndexService {
 		} finally {
 			DBHelper.closeAll(rs);
 		}
-		deleteWhole();
+		// deleteWhole();
 		globalConfig.setProperty("_INDEX_VERSION_", "" + curIndexVersion);
 		logger.info("建立索引结束");
 		return true;
@@ -90,7 +98,6 @@ public class IndexService {
 				doc.addField("titlepic", video.getTitlePic());
 				doc.addField("newstime", video.getNewsTime());
 				doc.addField("keywords", video.getKeyWords());
-				doc.addField("createtime", video.getCreateTime());
 				doc.addField("videourl", video.getVideoUrl());
 				doc.addField("docversion", indexVersion);
 				solrClient.add(doc);
@@ -127,9 +134,10 @@ public class IndexService {
 	public boolean deleteWhole() {
 		try {
 			String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+			// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 			// 删除所有的索引
 			solrClient.deleteByQuery("docversion:" + indexVersion);
-//			 solrClient.deleteByQuery("*:*");
+			// solrClient.deleteByQuery("*:*");
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {

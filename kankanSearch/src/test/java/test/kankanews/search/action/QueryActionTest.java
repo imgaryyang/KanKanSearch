@@ -15,7 +15,7 @@ public class QueryActionTest extends JUnitActionBase {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		request.setServletPath("/search/query");
-		request.setParameter("word", "习近平");
+		request.setParameter("word", "东电将赔付巨额精神损失费");
 		request.setParameter("page", "1");
 		request.setParameter("rows", "20");
 		request.setParameter("highlight", "true");
