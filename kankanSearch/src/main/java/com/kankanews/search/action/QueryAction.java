@@ -57,12 +57,13 @@ public class QueryAction {
 		// response.getHighlighting();
 		// System.out.println(map.get("643564").get("keywords").get(0));
 		// for (SolrDocument solrDocument : list) {
-		// if (!map.get(solrDocument.get("id").toString()).get("keywords")
-		// .isEmpty()){
+		// if (map.get(solrDocument.get("id").toString()) != null &&
+		// !map.get(solrDocument.get("id").toString()).get("keywords")
+		// .isEmpty()) {
 		// System.out.println(map.get(solrDocument.get("id"))
 		// .get("keywords").get(0));
-		// System.out.println(map.get(solrDocument.get("id"))
-		// .get("title").get(0));
+		// System.out.println(map.get(solrDocument.get("id")).get("title")
+		// .get(0));
 		// }
 		// System.out.println(solrDocument.get("id"));
 		// }

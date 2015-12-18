@@ -56,15 +56,21 @@ public class IndexService {
 				doc.addField("docversion", curIndexVersion);
 				i++;
 				_docs.add(doc);
-				if (_docs.size() >= 3000) {
+				if (_docs.size() >= 30000) {
 					solrClient.add(_docs);
 					logger.info("提交");
 					solrClient.commit();
 					_docs.clear();
 				}
-				if (i >= 300000) {
-					break;
-				}
+//				if (i >= 300000) {
+//					break;
+//				}
+			}
+			if (!_docs.isEmpty()) {
+				solrClient.add(_docs);
+				logger.info("提交");
+				solrClient.commit();
+				_docs.clear();
 			}
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());

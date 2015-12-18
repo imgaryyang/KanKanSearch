@@ -115,7 +115,7 @@ public class QueryService {
 		if (isHighLight) {
 			query.setHighlight(true); // 开启高亮组件
 			query.setParam("hl.fl", "title");
-//			query.setParam("hl.q", "keywords:" + word);
+			// query.setParam("hl.q", "keywords:" + word);
 			// query.addHighlightField("keywords");// 高亮字段
 			query.setHighlightSimplePre("<font color=\"red\">");// 标记
 			query.setHighlightSimplePost("</font>");
@@ -136,11 +136,24 @@ public class QueryService {
 					SolrDocumentList list = group.getResult();
 					SearchResult video = new SearchResult(list.get(0));
 					if (isHighLight) {
-						for (SolrDocument doc : list) {
-							video.setTitle(map.get(doc.getFieldValue("id"))
-									.toString());
-							System.out.println(map.get(doc.getFieldValue("id")
-									.toString()));
+						for (SolrDocument solrDocument : list) {
+							if (map.get(solrDocument.get("docId").toString()) != null
+									&& map.get(
+											solrDocument.get("docId")
+													.toString()).get("title") != null
+									&& !map.get(
+											solrDocument.get("docId")
+													.toString()).get("title")
+											.isEmpty()) {
+								video.setTitle(map
+										.get(solrDocument.get("docId"))
+										.get("title").get(0).toString());
+								// System.out.println(map.get(solrDocument.get("id"))
+								// .get("keywords").get(0));
+								// System.out.println(map.get(solrDocument.get("id")).get("title")
+								// .get(0));
+							}
+							// System.out.println(solrDocument.get("id"));
 						}
 					}
 					results.add(video);
