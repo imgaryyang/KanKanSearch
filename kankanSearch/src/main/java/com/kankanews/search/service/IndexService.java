@@ -23,6 +23,8 @@ public class IndexService {
 	@Autowired
 	private Properties globalConfig;
 
+	private static int docIndexNum;
+
 	public boolean addWhole() {
 		logger.info("建立索引启动");
 		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
@@ -35,7 +37,7 @@ public class IndexService {
 		try {
 			// select id, onclick, title, titlepic, newstime, keywords,
 			// createtime, videourl
-			int i = 0;
+			docIndexNum = 0;
 			while (rs.next()) {
 				SolrInputDocument doc = new SolrInputDocument();
 				doc.addField("id", rs.getObject("id"));
@@ -54,7 +56,7 @@ public class IndexService {
 				doc.addField("intro", rs.getObject("intro"));
 				doc.addField("imagegroup", rs.getObject("imagegroup"));
 				doc.addField("docversion", curIndexVersion);
-				i++;
+				docIndexNum++;
 				_docs.add(doc);
 				if (_docs.size() >= 30000) {
 					solrClient.add(_docs);
@@ -62,9 +64,9 @@ public class IndexService {
 					solrClient.commit();
 					_docs.clear();
 				}
-//				if (i >= 300000) {
-//					break;
-//				}
+				// if (i >= 300000) {
+				// break;
+				// }
 			}
 			if (!_docs.isEmpty()) {
 				solrClient.add(_docs);
@@ -73,12 +75,12 @@ public class IndexService {
 				_docs.clear();
 			}
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error("", e);
 			try {
 				solrClient.deleteByQuery("docversion:" + curIndexVersion);
 				solrClient.commit();
 			} catch (Exception err) {
-				logger.error(err.getLocalizedMessage());
+				logger.error(err);
 				return false;
 			}
 			return false;
@@ -114,7 +116,7 @@ public class IndexService {
 				return false;
 			}
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 			return false;
 		}
 		logger.info("新增索引结束");
@@ -130,7 +132,7 @@ public class IndexService {
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 			return false;
 		}
 		logger.info("删除索引结束");
@@ -147,7 +149,7 @@ public class IndexService {
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 			return false;
 		}
 		return true;
@@ -167,6 +169,14 @@ public class IndexService {
 
 	public void setVideoDAO(VideoDAO videoDAO) {
 		this.videoDAO = videoDAO;
+	}
+
+	public int getDocIndexNum() {
+		return docIndexNum;
+	}
+
+	public void setDocIndexNum(int docIndexNum) {
+		this.docIndexNum = docIndexNum;
 	}
 
 }

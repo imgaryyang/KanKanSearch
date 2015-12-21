@@ -28,7 +28,19 @@ public class IndexAction {
 	@RequestMapping("/add/whole")
 	@ResponseBody
 	public String addWhole() {
-		return indexService.addWhole() + "";
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				indexService.addWhole();
+			}
+		}).start();
+		return "已开始";
+	}
+
+	@RequestMapping("/get/curIndexNum")
+	@ResponseBody
+	public String getCurIndexNum() {
+		return indexService.getDocIndexNum() + "";
 	}
 
 	@RequestMapping("/delete/whole")

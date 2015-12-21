@@ -26,11 +26,11 @@ public final class DBHelper {
 				conn = DriverManager.getConnection(url, user, password);
 			}
 		} catch (ClassNotFoundException e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 		} catch (SQLException e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 		} catch (Exception e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 		}
 		return conn;
 	}
@@ -54,7 +54,7 @@ public final class DBHelper {
 			stmt = conn.createStatement();
 			result = stmt.executeUpdate(sql);
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 			closeAll(null, stmt, conn);
 		} finally {
 			closeAll(null, stmt, conn);
@@ -87,7 +87,7 @@ public final class DBHelper {
 			}
 			result = pstmt.executeUpdate();
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error("", err);
 			closeAll(null, pstmt, conn);
 		} finally {
 			closeAll(null, pstmt, conn);
@@ -113,9 +113,10 @@ public final class DBHelper {
 		try {
 			conn = getConnection();
 			stmt = conn.createStatement();
+			logger.error("简历链接" + stmt + sql);
 			rs = stmt.executeQuery(sql);
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error("", err);
 			closeAll(rs, stmt, conn);
 		}
 		return rs;
@@ -146,7 +147,7 @@ public final class DBHelper {
 			}
 			rs = pstmt.executeQuery();
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 			closeAll(rs, pstmt, conn);
 		}
 		return rs;
@@ -175,7 +176,7 @@ public final class DBHelper {
 				return false;
 			}
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 			close(rs);
 			return false;
 		} finally {
@@ -206,7 +207,7 @@ public final class DBHelper {
 				return false;
 			}
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 			close(rs);
 			return false;
 		} finally {
@@ -234,7 +235,7 @@ public final class DBHelper {
 			result = rs.getRow();
 		} catch (SQLException err) {
 			close(rs);
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 		} finally {
 			close(rs);
 		}
@@ -262,7 +263,7 @@ public final class DBHelper {
 			rs.last();
 			result = rs.getRow();
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 		} finally {
 			close(rs);
 		}
@@ -284,7 +285,7 @@ public final class DBHelper {
 				rs.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 		}
 	}
 
@@ -303,7 +304,7 @@ public final class DBHelper {
 				st.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 		}
 	}
 
@@ -322,7 +323,7 @@ public final class DBHelper {
 				conn.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err.getLocalizedMessage());
+			logger.error(err);
 		}
 	}
 
@@ -340,17 +341,19 @@ public final class DBHelper {
 	 */
 	public static void closeAll(ResultSet rs) {
 		try {
-//			if (rs != null) {
-//				rs.close();
-//			}
-			if (rs.getStatement() != null) {
-				rs.getStatement().close();
-			}
-			if (rs.getStatement().getConnection() != null) {
-				rs.getStatement().getConnection().close();
+			// if (rs != null) {
+			// rs.close();
+			// }
+			if (rs != null) {
+				if (rs.getStatement() != null) {
+					rs.getStatement().close();
+				}
+				if (rs.getStatement().getConnection() != null) {
+					rs.getStatement().getConnection().close();
+				}
 			}
 		} catch (SQLException e) {
-			logger.error(e.getLocalizedMessage());
+			logger.error(e);
 		}
 	}
 

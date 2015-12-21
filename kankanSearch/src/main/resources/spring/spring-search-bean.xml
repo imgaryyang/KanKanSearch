@@ -16,7 +16,7 @@
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
-				<value>classpath*:GlobalSQL.properties</value>
+				<value>classpath*:GlobalSql.properties</value>
 			</list>
 		</property>
 	</bean>

@@ -1,20 +1,17 @@
 package com.kankanews.search.action;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.db.model.SearchResult;
-import com.kankanews.search.db.model.Video;
 import com.kankanews.search.service.QueryService;
 
 @Controller
@@ -29,7 +26,7 @@ public class QueryAction {
 	/**
 	 * 
 	 * @param word
-	 *            title + keywords
+	 *            title + keywords + intro
 	 * @param type
 	 *            0 图文 1 视频 3 图集
 	 * @param page
@@ -46,32 +43,39 @@ public class QueryAction {
 	 */
 	@RequestMapping("/query")
 	@ResponseBody
-	public List<SearchResult> query(String word, String type, Integer page,
-			Integer rows, boolean highlight, boolean iswholeword,
-			boolean isduplicate) {
-		// QueryResponse response = queryService.Search(new String[] { "all",
-		// "docversion" }, new String[] { word, "0" }, 0, 100,
-		// new String[0], new Boolean[0], false);
-		// List<SolrDocument> list = response.getResults();
-		// Map<String, Map<String, List<String>>> map =
-		// response.getHighlighting();
-		// System.out.println(map.get("643564").get("keywords").get(0));
-		// for (SolrDocument solrDocument : list) {
-		// if (map.get(solrDocument.get("id").toString()) != null &&
-		// !map.get(solrDocument.get("id").toString()).get("keywords")
-		// .isEmpty()) {
-		// System.out.println(map.get(solrDocument.get("id"))
-		// .get("keywords").get(0));
-		// System.out.println(map.get(solrDocument.get("id")).get("title")
-		// .get(0));
-		// }
-		// System.out.println(solrDocument.get("id"));
-		// }
-
-		List<SearchResult> results = queryService.searchGroup(word, page, rows,
-				highlight);
-		return results;
-		// return new ArrayList<SearchResult>();
+	public Map<String, Object> query(
+			@RequestParam(defaultValue = "") String word,
+			@RequestParam(defaultValue = "") String title,
+			@RequestParam(defaultValue = "") String newsid,
+			@RequestParam(defaultValue = "") String type,
+			@RequestParam(defaultValue = "") String author,
+			@RequestParam(defaultValue = "") String authorid,
+			@RequestParam(defaultValue = "1") Integer page,
+			@RequestParam(defaultValue = "10") Integer rows,
+			@RequestParam(defaultValue = "false") boolean highlight,
+			@RequestParam(defaultValue = "true") boolean isduplicate) {
+		Map<String, String> searchTerm = new HashMap<String, String>();
+		if (word != null && !word.trim().equals(""))
+			searchTerm.put("all", word);
+		if (newsid != null && !newsid.trim().equals(""))
+			searchTerm.put("id", newsid);
+		if (type != null && !type.trim().equals(""))
+			searchTerm.put("type", type);
+		if (author != null && !author.trim().equals(""))
+			searchTerm.put("author", author);
+		if (authorid != null && !authorid.trim().equals(""))
+			searchTerm.put("type", authorid);
+		if (title != null && !title.trim().equals(""))
+			searchTerm.put("titleGroup", title);
+		Map<String, Object> result;
+		if (isduplicate) {
+			result = queryService.search(searchTerm, page, rows,
+					new String[0], new Boolean[0], highlight);
+		} else {
+			result = queryService.searchGroup(searchTerm, page, rows,
+					highlight);
+		}
+		return result;
 	}
 
 	@RequestMapping("/queryGroup")

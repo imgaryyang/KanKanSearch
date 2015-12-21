@@ -1,5 +1,7 @@
 package test.kankanews.search.action;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -15,13 +17,18 @@ public class QueryActionTest extends JUnitActionBase {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		request.setServletPath("/search/query");
-		request.setParameter("word", "东电将赔付巨额精神损失费");
+		request.setParameter("word", "胡锦涛");
+		// request.setParameter("author", "天脉素材");
 		request.setParameter("page", "1");
-		request.setParameter("rows", "20");
+		request.setParameter("rows", "1");
 		request.setParameter("highlight", "true");
+		request.setParameter("isduplicate", "true");
+		request.setParameter("iswholeword", "true");
+		System.out.println(new Date());
 		final ModelAndView mav = this.excuteAction(request, response);
 		response.setCharacterEncoding("UTF-8");
 		System.out.println(response.getContentAsString());
+		System.out.println(new Date());
 	}
 
 	@Test

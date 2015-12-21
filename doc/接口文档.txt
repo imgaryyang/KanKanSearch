@@ -1,0 +1,37 @@
+搜索接口:/kankanSearch/search/query
+参数: 
+	word : 主要搜索字段包含(title,keywords,intro)(string) 默认("")
+	title : 标题(全匹配不分词查询)
+	newsid : 新闻id(string) 默认("")
+	type ： 新闻类型(0 图文, 1 视频, 3 图集)(int) 默认("")
+	author : 编者(string) 默认("")
+	authorid : 编者id(string) 默认("")
+	taskid : 作者id(string) 默认("")
+	page : 第几页(int) 默认(1)
+	rows : 每页几行(int) 默认(10)
+	highlight : 高亮(true 高亮, false 不高亮)(string) 默认(false)
+	isduplicate : 查询结果是否允许重复(true 允许, false 不允许)(string) 默认(true)
+	
+返回结果
+	num : 查询结果总数
+	qtime : 搜索时间
+	queryresult  :  返回结果(Array)
+					字段 	id
+							classid
+							type
+							title 
+							titleGroup
+							onclick
+							titlepic
+							newstime 
+							keywords
+							videourl
+							titleurl
+							authorid
+							author
+							intro 
+							imagegroup 
+							
+
+	
+	
