@@ -43,6 +43,7 @@ public class IndexService {
 				doc.addField("id", rs.getObject("id"));
 				doc.addField("classid", rs.getObject("classid"));
 				doc.addField("type", rs.getObject("type"));
+				doc.addField("checked", rs.getObject("checked"));
 				doc.addField("title", rs.getObject("title"));
 				doc.addField("titleGroup", rs.getObject("title"));
 				doc.addField("onclick", rs.getObject("onclick"));

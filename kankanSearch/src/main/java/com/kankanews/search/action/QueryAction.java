@@ -48,6 +48,7 @@ public class QueryAction {
 			@RequestParam(defaultValue = "") String title,
 			@RequestParam(defaultValue = "") String newsid,
 			@RequestParam(defaultValue = "") String type,
+			@RequestParam(defaultValue = "") String checked,
 			@RequestParam(defaultValue = "") String author,
 			@RequestParam(defaultValue = "") String authorid,
 			@RequestParam(defaultValue = "1") Integer page,
@@ -61,6 +62,8 @@ public class QueryAction {
 			searchTerm.put("id", newsid);
 		if (type != null && !type.trim().equals(""))
 			searchTerm.put("type", type);
+		if (checked != null && !checked.trim().equals(""))
+			searchTerm.put("checked", checked);
 		if (author != null && !author.trim().equals(""))
 			searchTerm.put("author", author);
 		if (authorid != null && !authorid.trim().equals(""))
@@ -69,11 +72,11 @@ public class QueryAction {
 			searchTerm.put("titleGroup", title);
 		Map<String, Object> result;
 		if (isduplicate) {
-			result = queryService.search(searchTerm, page, rows,
-					new String[0], new Boolean[0], highlight);
+			result = queryService.search(searchTerm, page, rows, new String[0],
+					new Boolean[0], highlight);
 		} else {
-			result = queryService.searchGroup(searchTerm, page, rows,
-					highlight);
+			result = queryService
+					.searchGroup(searchTerm, page, rows, highlight);
 		}
 		return result;
 	}
