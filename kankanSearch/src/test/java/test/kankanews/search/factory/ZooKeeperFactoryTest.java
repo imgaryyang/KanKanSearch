@@ -19,20 +19,48 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void clientTest() {
-		// zookeeperClient = zookeeperClient.usingNamespace(null);
+//		zookeeperClient = zookeeperClient.usingNamespace(null);
 		try {
-			// zookeeperClient.delete().deletingChildrenIfNeeded()
-			// .forPath("/myconf");
-//			zookeeperClient.delete().forPath("/schema.xml");
-//			 zookeeperClient.create().forPath("/myconf");
-			 zookeeperClient.create().forPath("/myconf/schema.xml");
-//			 zookeeperClient.create().forPath("/myconf/solrconfig.xml");
+//			zookeeperClient.delete().deletingChildrenIfNeeded()
+//					.forPath("/aliases.json");
+//			zookeeperClient.delete().deletingChildrenIfNeeded()
+//					.forPath("/clusterstate.json"); 
+			// zookeeperClient.delete().forPath("/schema.xml");
+			// zookeeperClient.create().forPath("/myconf");
+			// zookeeperClient.create().forPath("/myconf/schema.xml");
+			// zookeeperClient.create().forPath("/myconf/solrconfig.xml");
 			byte[] schema = FileUtils.readFileToByteArray(new File(
-					"G://KanKanServer/solr-1/solr-conf/schema.xml"));
-			zookeeperClient.setData().forPath("/myconf/schema.xml", schema);
-			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-					"G://KanKanServer/solr-1/solr-conf/solrconfig.xml"));
-			zookeeperClient.setData().forPath("/myconf/solrconfig.xml", solrconfig);
+					"G://solr/conf/schema.xml"));
+			zookeeperClient.setData().forPath("/solrConf/schema.xml", schema);
+			//
+			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
+			// "G://solr/conf/solrconfig.xml"));
+			// zookeeperClient.setData().forPath("/solrConf/solrconfig.xml",
+			// solrconfig);
+
+			// zookeeperClient.create().forPath("/solrConf/admin-extra.html");
+			// byte[] admin_extra = FileUtils.readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.html"));
+			// zookeeperClient.setData().forPath("/solrConf/admin-extra.html",
+			// admin_extra);
+			//
+			// zookeeperClient.create().forPath(
+			// "/solrConf/admin-extra.menu-bottom.html");
+			// byte[] admin_extra_menu_bottom = FileUtils
+			// .readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.menu-bottom.html"));
+			// zookeeperClient.setData().forPath(
+			// "/solrConf/admin-extra.menu-bottom.html",
+			// admin_extra_menu_bottom);
+			//
+			// zookeeperClient.create().forPath(
+			// "/solrConf/admin-extra.menu-top.html");
+			// byte[] admin_extra_menu_top = FileUtils
+			// .readFileToByteArray(new File(
+			// "G://solr/conf/admin-extra.menu-top.html"));
+			// zookeeperClient.setData()
+			// .forPath("/solrConf/admin-extra.menu-top.html",
+			// admin_extra_menu_top);
 			// zookeeperClient.getData().forPath("");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

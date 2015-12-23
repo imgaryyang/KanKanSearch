@@ -5,6 +5,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+
+import org.apache.solr.common.SolrDocument;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @javax.persistence.Table(name = "kk_ecms_kankanvideos")
@@ -13,20 +18,40 @@ public class Video implements Serializable {
 
 	@Id
 	private String id;
+	@Column(name = "classid")
+	private String classId;
 	@Column(name = "onclick")
 	private String onclick;
 	@Column(name = "title")
 	private String title;
 	@Column(name = "titlepic")
 	private String titlePic;
-	@Column(name = "newsTime")
+	@Column(name = "titleurl")
+	private String titleUrl;
+	@Column(name = "newstime")
 	private String newsTime;
 	@Column(name = "keywords")
 	private String keyWords;
-	@Column(name = "createtime")
-	private String createTime;
+	@Column(name = "type")
+	private String type;
 	@Column(name = "videourl")
 	private String videoUrl;
+
+	@Transient
+	@JsonIgnore
+	private String docVersion;
+
+	public Video(SolrDocument doc) {
+		super();
+		this.id = "" + doc.get("id");
+		this.onclick = (String) doc.get("onclick");
+		this.title = (String) doc.get("title");
+		this.titlePic = (String) doc.get("titlepic");
+		this.newsTime = (String) doc.get("newstime");
+		this.keyWords = (String) doc.get("keywords");
+		this.videoUrl = (String) doc.get("videourl");
+		this.docVersion = "" + doc.get("docversion");
+	}
 
 	public String getId() {
 		return id;
@@ -76,20 +101,28 @@ public class Video implements Serializable {
 		this.keyWords = keyWords;
 	}
 
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
-
 	public String getVideoUrl() {
 		return videoUrl;
 	}
 
 	public void setVideoUrl(String videoUrl) {
 		this.videoUrl = videoUrl;
+	}
+
+	public String getDocVersion() {
+		return docVersion;
+	}
+
+	public void setDocVersion(String docVersion) {
+		this.docVersion = docVersion;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

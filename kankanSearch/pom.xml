@@ -7,7 +7,32 @@
 	<packaging>war</packaging>
 	<name>search</name>
 	<build>
-		<finalName>KanKanSearch</finalName>
+		<finalName>kankanSearch</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>
+					tomcat7-maven-plugin
+				</artifactId>
+				<version>
+					2.2
+				</version>
+				<configuration>
+					<url>http://172.16.10.74:8080/manager/text</url>
+					<server>tomcat</server>
+					<username>smg</username>
+					<password>smg</password>
+					<path>/${project.build.finalName}</path>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -164,7 +189,7 @@
 		<dependency>
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
-			<version>3.4.7</version>
+			<version>3.4.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
@@ -175,6 +200,16 @@
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-recipes</artifactId>
 			<version>2.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -11,10 +11,19 @@ import test.kankanews.search.action.base.JUnitActionBase;
 public class IndexActionTest extends JUnitActionBase {
 
 	@Test
-	public void testUserShow() throws Exception {
+	public void testAddWhole() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		request.setServletPath("/index/test");
+		request.setServletPath("/index/add/whole");
 		final ModelAndView mav = this.excuteAction(request, response);
 	}
+
+	@Test
+	public void testDeleteWhole() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		request.setServletPath("/index/delete/whole");
+		final ModelAndView mav = this.excuteAction(request, response);
+	}
+
 }
