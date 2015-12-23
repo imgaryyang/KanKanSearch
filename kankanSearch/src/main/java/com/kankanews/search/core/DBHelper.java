@@ -26,11 +26,11 @@ public final class DBHelper {
 				conn = DriverManager.getConnection(url, user, password);
 			}
 		} catch (ClassNotFoundException e) {
-			logger.error(e);
+			logger.error("", e);
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("", e);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 		}
 		return conn;
 	}
@@ -54,7 +54,7 @@ public final class DBHelper {
 			stmt = conn.createStatement();
 			result = stmt.executeUpdate(sql);
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 			closeAll(null, stmt, conn);
 		} finally {
 			closeAll(null, stmt, conn);
@@ -147,7 +147,7 @@ public final class DBHelper {
 			}
 			rs = pstmt.executeQuery();
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 			closeAll(rs, pstmt, conn);
 		}
 		return rs;
@@ -176,7 +176,7 @@ public final class DBHelper {
 				return false;
 			}
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 			close(rs);
 			return false;
 		} finally {
@@ -207,7 +207,7 @@ public final class DBHelper {
 				return false;
 			}
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 			close(rs);
 			return false;
 		} finally {
@@ -235,7 +235,7 @@ public final class DBHelper {
 			result = rs.getRow();
 		} catch (SQLException err) {
 			close(rs);
-			logger.error(err);
+			logger.error("", err);
 		} finally {
 			close(rs);
 		}
@@ -263,7 +263,7 @@ public final class DBHelper {
 			rs.last();
 			result = rs.getRow();
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 		} finally {
 			close(rs);
 		}
@@ -285,7 +285,17 @@ public final class DBHelper {
 				rs.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
+		}
+	}
+
+	public static void closeConn(ResultSet rs) {
+		try {
+			if (rs != null) {
+				rs.getStatement().getConnection().close();
+			}
+		} catch (SQLException err) {
+			logger.error("", err);
 		}
 	}
 
@@ -304,7 +314,7 @@ public final class DBHelper {
 				st.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 		}
 	}
 
@@ -323,7 +333,7 @@ public final class DBHelper {
 				conn.close();
 			}
 		} catch (SQLException err) {
-			logger.error(err);
+			logger.error("", err);
 		}
 	}
 
@@ -348,12 +358,18 @@ public final class DBHelper {
 				if (rs.getStatement() != null) {
 					rs.getStatement().close();
 				}
+			}
+		} catch (SQLException e) {
+			logger.error("", e);
+		}
+		try {
+			if (rs != null) {
 				if (rs.getStatement().getConnection() != null) {
 					rs.getStatement().getConnection().close();
 				}
 			}
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("", e);
 		}
 	}
 

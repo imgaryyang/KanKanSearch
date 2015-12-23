@@ -1,6 +1,7 @@
 package com.kankanews.search.service;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -61,11 +62,13 @@ public class IndexService {
 				_docs.add(doc);
 				if (_docs.size() >= 30000) {
 					solrClient.add(_docs);
+					Thread.sleep(1000);
 					logger.info("提交");
 					solrClient.commit();
+					Thread.sleep(1000);
 					_docs.clear();
 				}
-				// if (i >= 300000) {
+				// if (docIndexNum >= 300000) {
 				// break;
 				// }
 			}
@@ -86,7 +89,7 @@ public class IndexService {
 			}
 			return false;
 		} finally {
-			DBHelper.closeAll(rs);
+			DBHelper.closeConn(rs);
 		}
 		// deleteWhole();
 		globalConfig.setProperty("_INDEX_VERSION_", "" + curIndexVersion);

@@ -48,13 +48,14 @@ public class QueryAction {
 			@RequestParam(defaultValue = "") String title,
 			@RequestParam(defaultValue = "") String newsid,
 			@RequestParam(defaultValue = "") String type,
-			@RequestParam(defaultValue = "") String checked,
+			@RequestParam(defaultValue = "1") String checked,
 			@RequestParam(defaultValue = "") String author,
 			@RequestParam(defaultValue = "") String authorid,
 			@RequestParam(defaultValue = "1") Integer page,
 			@RequestParam(defaultValue = "10") Integer rows,
 			@RequestParam(defaultValue = "false") boolean highlight,
-			@RequestParam(defaultValue = "true") boolean isduplicate) {
+			@RequestParam(defaultValue = "false") boolean isduplicate,
+			@RequestParam(defaultValue = "em") String highlighttag) {
 		Map<String, String> searchTerm = new HashMap<String, String>();
 		if (word != null && !word.trim().equals(""))
 			searchTerm.put("all", word);
@@ -73,10 +74,10 @@ public class QueryAction {
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = queryService.search(searchTerm, page, rows, new String[0],
-					new Boolean[0], highlight);
+					new Boolean[0], highlight, highlighttag);
 		} else {
-			result = queryService
-					.searchGroup(searchTerm, page, rows, highlight);
+			result = queryService.searchGroup(searchTerm, page, rows,
+					highlight, highlighttag);
 		}
 		return result;
 	}

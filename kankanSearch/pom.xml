@@ -16,9 +16,25 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>
+					tomcat7-maven-plugin
+				</artifactId>
+				<version>
+					2.2
+				</version>
+				<configuration>
+					<url>http://172.16.10.74:8080/manager/text</url>
+					<server>tomcat</server>
+					<username>smg</username>
+					<password>smg</password>
+					<path>/${project.build.finalName}</path>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-	<properties> 
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.1.6.RELEASE</spring.version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>

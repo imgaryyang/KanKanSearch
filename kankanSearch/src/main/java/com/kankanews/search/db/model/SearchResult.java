@@ -14,6 +14,7 @@ public class SearchResult {
 	private String newstime;
 	private String keywords;
 	private String type;
+	private String checked;
 	private String videourl;
 	private String imagegroup;
 	private String author;
@@ -28,6 +29,7 @@ public class SearchResult {
 		this.classid = (String) doc.get("classid");
 		this.onclick = (String) doc.get("onclick");
 		this.title = (String) doc.get("title");
+		this.checked = (String) doc.get("checked");
 		this.titlepic = (String) doc.get("titlepic");
 		this.titleurl = (String) doc.get("titleurl");
 		this.newstime = (String) doc.get("newstime");
@@ -111,6 +113,14 @@ public class SearchResult {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
 	}
 
 	public String getVideourl() {

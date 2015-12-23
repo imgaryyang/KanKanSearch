@@ -19,11 +19,11 @@ public class QueryActionTest extends JUnitActionBase {
 		request.setServletPath("/search/query");
 		request.setParameter("word", "胡锦涛");
 		// request.setParameter("author", "天脉素材");
-		request.setParameter("page", "1");
-		request.setParameter("rows", "1");
+		request.setParameter("page", "130");
+		request.setParameter("rows", "20");
+		request.setParameter("type", "1");
 		request.setParameter("highlight", "true");
-		request.setParameter("isduplicate", "true");
-		request.setParameter("iswholeword", "true");
+		request.setParameter("isduplicate", "false");
 		System.out.println(new Date());
 		final ModelAndView mav = this.excuteAction(request, response);
 		response.setCharacterEncoding("UTF-8");

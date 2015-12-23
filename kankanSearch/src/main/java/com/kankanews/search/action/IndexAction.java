@@ -34,7 +34,7 @@ public class IndexAction {
 				indexService.addWhole();
 			}
 		}).start();
-		return "已开始";
+		return "begin";
 	}
 
 	@RequestMapping("/get/curIndexNum")
