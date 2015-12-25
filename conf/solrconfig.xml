@@ -464,7 +464,21 @@
       <str>query</str>
     </arr>
   </requestHandler>
+  
+  <requestHandler name="/update" class="solr.UpdateRequestHandler">
+     <lst name="defaults">
+          <str name="update.chain">dispup</str>
+     </lst>
+  </requestHandler>
 
+  <updateRequestProcessorChain name="dispup">
+     <processor class="solr.UUIDUpdateProcessorFactory">
+          <str name="fieldName">docId</str>
+     </processor>
+     <processor class="solr.LogUpdateProcessorFactory" />
+     <processor class="solr.DistributedUpdateProcessorFactory" />
+     <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
 
   <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell">
     <lst name="defaults">
