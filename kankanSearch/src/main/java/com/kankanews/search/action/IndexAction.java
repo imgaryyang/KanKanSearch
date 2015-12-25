@@ -37,6 +37,18 @@ public class IndexAction {
 		return "begin";
 	}
 
+	@RequestMapping("/optimized")
+	@ResponseBody
+	public String optimized() {
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+				return	indexService.optimized() + "";
+//			}
+//		}).start();
+//		return "begin";
+	}
+
 	@RequestMapping("/get/curIndexNum")
 	@ResponseBody
 	public String getCurIndexNum() {

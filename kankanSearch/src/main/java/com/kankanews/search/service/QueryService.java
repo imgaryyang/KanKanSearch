@@ -110,6 +110,11 @@ public class QueryService {
 					video.setTitle(map.get(solrDocument.get("docId"))
 							.get("title").get(0).toString());
 				}
+				if (highFields != null && highFields.get("intro") != null
+						&& !highFields.get("intro").isEmpty()) {
+					video.setIntro(map.get(solrDocument.get("docId"))
+							.get("intro").get(0).toString());
+				}
 			}
 			queryResult.add(video);
 		}
@@ -220,6 +225,13 @@ public class QueryService {
 								video.setTitle(map
 										.get(solrDocument.get("docId"))
 										.get("title").get(0).toString());
+							}
+							if (highFields != null
+									&& highFields.get("intro") != null
+									&& !highFields.get("intro").isEmpty()) {
+								video.setIntro(map
+										.get(solrDocument.get("docId"))
+										.get("intro").get(0).toString());
 							}
 						}
 					}

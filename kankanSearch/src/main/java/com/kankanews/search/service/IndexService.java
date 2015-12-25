@@ -1,5 +1,6 @@
 package com.kankanews.search.service;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Collection;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +96,17 @@ public class IndexService {
 		// deleteWhole();
 		globalConfig.setProperty("_INDEX_VERSION_", "" + curIndexVersion);
 		logger.info("建立索引结束");
+		return true;
+	}
+
+	public boolean optimized() {
+		solrClient.connect();
+		try {
+			solrClient.optimize();
+		} catch (Exception e) {
+			logger.error(e);
+			return false;
+		}
 		return true;
 	}
 

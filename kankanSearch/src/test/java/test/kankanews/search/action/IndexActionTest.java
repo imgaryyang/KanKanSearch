@@ -26,4 +26,12 @@ public class IndexActionTest extends JUnitActionBase {
 		final ModelAndView mav = this.excuteAction(request, response);
 	}
 
+	@Test
+	public void testOptimized() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		request.setServletPath("/index/optimized");
+		final ModelAndView mav = this.excuteAction(request, response);
+	}
+
 }

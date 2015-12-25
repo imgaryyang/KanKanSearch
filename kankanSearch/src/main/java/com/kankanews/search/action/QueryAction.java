@@ -45,10 +45,11 @@ public class QueryAction {
 	@ResponseBody
 	public Map<String, Object> query(
 			@RequestParam(defaultValue = "") String word,
+			@RequestParam(defaultValue = "") String word2,
 			@RequestParam(defaultValue = "") String title,
 			@RequestParam(defaultValue = "") String newsid,
 			@RequestParam(defaultValue = "") String type,
-			@RequestParam(defaultValue = "1") String checked,
+			@RequestParam(defaultValue = "") String checked,
 			@RequestParam(defaultValue = "") String author,
 			@RequestParam(defaultValue = "") String authorid,
 			@RequestParam(defaultValue = "1") Integer page,
@@ -59,6 +60,8 @@ public class QueryAction {
 		Map<String, String> searchTerm = new HashMap<String, String>();
 		if (word != null && !word.trim().equals(""))
 			searchTerm.put("all", word);
+		if (word2 != null && !word2.trim().equals(""))
+			searchTerm.put("all2", word2);
 		if (newsid != null && !newsid.trim().equals(""))
 			searchTerm.put("id", newsid);
 		if (type != null && !type.trim().equals(""))
