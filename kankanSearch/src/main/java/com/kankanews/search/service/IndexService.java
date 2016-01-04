@@ -33,7 +33,7 @@ public class IndexService {
 		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
 		int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
-		Collection _docs = new ArrayList();
+		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
 		ResultSet rs = videoDAO.getAllVideo();
 		solrClient.connect();
 		logger.info("建立连接");
@@ -58,6 +58,8 @@ public class IndexService {
 				doc.addField("authorid", rs.getObject("authorid"));
 				doc.addField("author", rs.getObject("author"));
 				doc.addField("intro", rs.getObject("intro"));
+				doc.addField("taskid", rs.getObject("taskid"));
+				doc.addField("sourceid", rs.getObject("sourceid"));
 				doc.addField("imagegroup", rs.getObject("imagegroup"));
 				doc.addField("docversion", curIndexVersion);
 				docIndexNum++;
@@ -69,6 +71,7 @@ public class IndexService {
 					solrClient.commit();
 					Thread.sleep(1000);
 					_docs.clear();
+					System.gc();
 				}
 				// if (docIndexNum >= 300000) {
 				// break;
@@ -80,6 +83,8 @@ public class IndexService {
 				solrClient.commit();
 				_docs.clear();
 			}
+			_docs = null;
+			System.gc();
 		} catch (Exception e) {
 			logger.error("", e);
 			try {

@@ -40,13 +40,13 @@ public class IndexAction {
 	@RequestMapping("/optimized")
 	@ResponseBody
 	public String optimized() {
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-				return	indexService.optimized() + "";
-//			}
-//		}).start();
-//		return "begin";
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				indexService.optimized();
+			}
+		}).start();
+		return "begin";
 	}
 
 	@RequestMapping("/get/curIndexNum")

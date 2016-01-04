@@ -20,6 +20,8 @@ public class SearchResult {
 	private String author;
 	private String authorid;
 	private String intro;
+	private String taskid;
+	private String sourceid;
 	@JsonIgnore
 	private String docVersion;
 
@@ -40,6 +42,8 @@ public class SearchResult {
 		this.author = (String) doc.get("author");
 		this.authorid = (String) doc.get("authorid");
 		this.intro = (String) doc.get("intro");
+		this.taskid = (String) doc.get("taskid");
+		this.sourceid = (String) doc.get("sourceid");
 		this.docVersion = "" + doc.get("docversion");
 	}
 
@@ -169,6 +173,22 @@ public class SearchResult {
 
 	public void setDocVersion(String docVersion) {
 		this.docVersion = docVersion;
+	}
+
+	public String getTaskid() {
+		return taskid;
+	}
+
+	public void setTaskid(String taskid) {
+		this.taskid = taskid;
+	}
+
+	public String getSourceid() {
+		return sourceid;
+	}
+
+	public void setSourceid(String sourceid) {
+		this.sourceid = sourceid;
 	}
 
 }
