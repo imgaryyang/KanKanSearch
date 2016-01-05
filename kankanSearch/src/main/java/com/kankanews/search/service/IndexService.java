@@ -1,17 +1,13 @@
 package com.kankanews.search.service;
 
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +16,6 @@ import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.db.dao.PhotoDAO;
 import com.kankanews.search.db.dao.VideoDAO;
 import com.kankanews.search.db.model.IncrementNew;
-import com.kankanews.search.db.model.Video;
 
 public class IndexService {
 	Logger logger = Logger.getLogger(IndexService.class);
