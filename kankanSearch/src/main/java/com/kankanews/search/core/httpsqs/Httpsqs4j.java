@@ -7,7 +7,7 @@ public class Httpsqs4j {
 	
 	protected static String charset="UTF-8";
 	
-	protected static boolean configured = false;
+//	protected static boolean configured = false;
 	protected static String password="kevin";
 	protected static String queuename="q1";
 	static
@@ -18,7 +18,7 @@ public class Httpsqs4j {
 		if(password!="")
 			Httpsqs4j.prefix=prefix+"?auth="+password+"&";
 			Httpsqs4j.charset = charset;
-			Httpsqs4j.configured = true;
+//			Httpsqs4j.configured = true;
 			Httpsqs4j.password=password;
 			Httpsqs4j.queuename=queuename;
 		

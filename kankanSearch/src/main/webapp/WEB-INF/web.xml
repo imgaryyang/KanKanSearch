@@ -53,6 +53,10 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<!-- init listener -->
+	<listener>
+		<listener-class>com.kankanews.search.listener.InitListener</listener-class>
+	</listener>
 
 
 	<servlet>

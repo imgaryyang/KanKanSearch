@@ -12,6 +12,12 @@ import java.util.regex.Matcher;
 
 public class HttpsqsClient {
 
+	private String prefix;
+
+	private String charset = "UTF-8";
+
+	private String queueName;
+
 	private long pos;
 
 	protected HttpsqsClient() {
@@ -37,7 +43,8 @@ public class HttpsqsClient {
 		OutputStreamWriter osw = null;
 		StringBuffer sb = new StringBuffer();
 		try {
-			URL url = new URL(Httpsqs4j.prefix + urlStr);
+			System.out.println(prefix + urlStr);
+			URL url = new URL(prefix + urlStr);
 			connection = (HttpURLConnection) url.openConnection();
 			if (postData != null) {
 				try {
@@ -59,7 +66,7 @@ public class HttpsqsClient {
 				}
 			}
 			is = connection.getInputStream();
-			isr = new InputStreamReader(is, Httpsqs4j.charset);
+			isr = new InputStreamReader(is, charset);
 			reader = new BufferedReader(isr);
 			String line = "";
 			while ((line = reader.readLine()) != null) {
@@ -172,9 +179,8 @@ public class HttpsqsClient {
 	 * @throws HttpsqsException
 	 */
 	public void putString(String str) {
-
 		try {
-			putString(Httpsqs4j.queuename, str);
+			putString(queueName, str);
 		} catch (HttpsqsException e) {
 			e.printStackTrace();
 		}
@@ -189,8 +195,7 @@ public class HttpsqsClient {
 	 * @throws HttpsqsException
 	 */
 	public String getString(String queueName) throws HttpsqsException {
-		String urlStr = "opt=get&charset=" + Httpsqs4j.charset + "&name="
-				+ queueName;
+		String urlStr = "opt=get&charset=" + charset + "&name=" + queueName;
 		String source = this.httpGet(urlStr);
 		if (source.contains("HTTPSQS_GET_END")) {
 			// throw new HttpsqsException("There's no data in queue [" +
@@ -209,7 +214,7 @@ public class HttpsqsClient {
 	 */
 	public String getString() {
 		try {
-			return getString(Httpsqs4j.queuename);
+			return getString(queueName);
 		} catch (HttpsqsException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -232,8 +237,8 @@ public class HttpsqsClient {
 		if (pos < 1 || pos > 1000000000l) {
 			throw new HttpsqsException("Pos' out of range[1 - 1000000000].");
 		}
-		String urlStr = "opt=view&charset=" + Httpsqs4j.charset + "&name="
-				+ queueName + "&pos=" + pos;
+		String urlStr = "opt=view&charset=" + charset + "&name=" + queueName
+				+ "&pos=" + pos;
 		return this.httpGet(urlStr);
 	}
 
@@ -271,9 +276,28 @@ public class HttpsqsClient {
 		return source.contains("HTTPSQS_MAXQUEUE_OK");
 	}
 
-	public void setQueueName(String queueName) {
-		Httpsqs4j.queuename = queueName;
+	public String getPrefix() {
+		return prefix;
+	}
 
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	public String getCharset() {
+		return charset;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public String getQueueName() {
+		return queueName;
+	}
+
+	public void setQueueName(String queuename) {
+		this.queueName = queuename;
 	}
 
 }

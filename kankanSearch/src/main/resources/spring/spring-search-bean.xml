@@ -22,7 +22,7 @@
 	</bean>
 
 	<bean id="globalConfig"
-	class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
 				<value>classpath*:GlobalConfig.properties</value>
@@ -38,6 +38,11 @@
 	</bean>
 
 	<bean id="videoDAO" class="com.kankanews.search.db.dao.VideoDAO">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="dbHepler" ref="dbHepler"></property>
+	</bean>
+
+	<bean id="photoDAO" class="com.kankanews.search.db.dao.PhotoDAO">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 		<property name="dbHepler" ref="dbHepler"></property>
 	</bean>
@@ -58,14 +63,24 @@
 	<bean id="zookeeperClient" factory-bean="zookeeperFactory"
 		factory-method="instanceClient">
 	</bean>
+	<bean id="httpsqsClient" class="com.kankanews.search.core.httpsqs.HttpsqsClient">
+		<property name="prefix" value="${httpsqs.prefix}"></property>
+		<property name="queueName" value="${httpsqs.queuename}"></property>
+	</bean>
 
 	<bean id="indexService" class="com.kankanews.search.service.IndexService">
 		<property name="videoDAO" ref="videoDAO"></property>
+		<property name="photoDAO" ref="photoDAO"></property>
 		<property name="solrClient" ref="solrClient"></property>
 	</bean>
 
 	<bean id="queryService" class="com.kankanews.search.service.QueryService">
 		<property name="solrClient" ref="solrClient"></property>
+	</bean>
+
+	<bean id="incrementIndexTask" class="com.kankanews.search.task.IncrementIndexTask">
+		<property name="httpsqsClient" ref="httpsqsClient"></property>
+		<property name="indexService" ref="indexService"></property>
 	</bean>
 
 </beans>

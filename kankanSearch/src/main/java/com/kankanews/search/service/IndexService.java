@@ -10,58 +10,54 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.core.DBHelper;
+import com.kankanews.search.core.GsonUtil;
+import com.kankanews.search.db.dao.PhotoDAO;
 import com.kankanews.search.db.dao.VideoDAO;
+import com.kankanews.search.db.model.IncrementNew;
 import com.kankanews.search.db.model.Video;
 
 public class IndexService {
 	Logger logger = Logger.getLogger(IndexService.class);
 
 	private VideoDAO videoDAO;
+	private PhotoDAO photoDAO;
 	private CloudSolrClient solrClient;
 
 	@Autowired
 	private Properties globalConfig;
 
 	private static int docIndexNum;
+	private static boolean isIndexingWhole = false;
 
 	public boolean addWhole() {
 		logger.info("建立索引启动");
+		isIndexingWhole = true;
 		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
 		int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
 		ResultSet rs = videoDAO.getAllVideo();
-		solrClient.connect();
-		logger.info("建立连接");
+		if (rs == null) {
+			isIndexingWhole = false;
+			return false;
+		}
 		try {
+			solrClient.connect();
+			logger.info("建立连接");
 			// select id, onclick, title, titlepic, newstime, keywords,
 			// createtime, videourl
 			docIndexNum = 0;
 			while (rs.next()) {
-				SolrInputDocument doc = new SolrInputDocument();
-				doc.addField("id", rs.getObject("id"));
-				doc.addField("classid", rs.getObject("classid"));
-				doc.addField("type", rs.getObject("type"));
-				doc.addField("checked", rs.getObject("checked"));
-				doc.addField("title", rs.getObject("title"));
-				doc.addField("titleGroup", rs.getObject("title"));
-				doc.addField("onclick", rs.getObject("onclick"));
-				doc.addField("titlepic", rs.getObject("titlepic"));
-				doc.addField("newstime", rs.getObject("newstime"));
-				doc.addField("keywords", rs.getObject("keywords"));
-				doc.addField("videourl", rs.getObject("videourl"));
-				doc.addField("titleurl", rs.getObject("titleurl"));
-				doc.addField("authorid", rs.getObject("authorid"));
-				doc.addField("author", rs.getObject("author"));
-				doc.addField("intro", rs.getObject("intro"));
-				doc.addField("taskid", rs.getObject("taskid"));
-				doc.addField("sourceid", rs.getObject("sourceid"));
-				doc.addField("imagegroup", rs.getObject("imagegroup"));
-				doc.addField("docversion", curIndexVersion);
+				SolrInputDocument doc = resultSet2SolrDoc(rs, curIndexVersion
+						+ "");
+				if (doc != null)
+					solrClient.add(doc);
 				docIndexNum++;
 				_docs.add(doc);
 				if (_docs.size() >= 30000) {
@@ -96,6 +92,7 @@ public class IndexService {
 			}
 			return false;
 		} finally {
+			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
 		}
 		// deleteWhole();
@@ -115,50 +112,55 @@ public class IndexService {
 		return true;
 	}
 
-	public boolean addOne(String id) {
-		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
-		Video video = videoDAO.get(id);
+	public boolean addOne(IncrementNew incrementNew) {
+		String curIndexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String table = incrementNew.getTable();
+		ResultSet rs = null;
+		if (table.trim().equals("kk_ecms_kankanvideos")) {
+			rs = videoDAO.getOne(incrementNew.getId());
+		} else if (table.trim().equals("kk_ecms_photo")) {
+			rs = photoDAO.getOne(incrementNew.getId());
+		}
 		solrClient.connect();
 		try {
-			if (video != null) {
-				SolrInputDocument doc = new SolrInputDocument();
-				doc.addField("id", video.getId());
-				doc.addField("title", video.getTitle());
-				doc.addField("onclick", video.getOnclick());
-				doc.addField("titlepic", video.getTitlePic());
-				doc.addField("newstime", video.getNewsTime());
-				doc.addField("keywords", video.getKeyWords());
-				doc.addField("videourl", video.getVideoUrl());
-				doc.addField("docversion", indexVersion);
-				solrClient.add(doc);
-				logger.info("提交");
+			if (rs != null) {
+				while (rs.next()) {
+					SolrInputDocument doc = resultSet2SolrDoc(rs,
+							curIndexVersion);
+					if (doc != null)
+						solrClient.add(doc);
+				}
 				solrClient.commit();
 			} else {
-				logger.error("id:" + id + "未查询到任何记录");
+				logger.error(GsonUtil.toString(incrementNew) + "未查询到任何记录");
 				return false;
 			}
 		} catch (Exception e) {
 			logger.error(e);
 			return false;
+		} finally {
+			DBHelper.closeConn(rs);
 		}
-		logger.info("新增索引结束");
+		logger.info("提交" + incrementNew.getId());
 		return true;
 	}
 
-	public boolean deleteOne(String id) {
+	public boolean deleteOne(IncrementNew incrementNew) {
 		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
 		solrClient.connect();
 		try {
-			solrClient.deleteByQuery("id:" + id + " AND docversion:"
-					+ indexVersion);
-			solrClient.commit();
-			logger.info("删除索引结束");
+			UpdateResponse response = solrClient.deleteByQuery("id:"
+					+ incrementNew.getId() + " AND docversion:" + indexVersion);
+			if ((Integer) response.getResponseHeader().get("status") == 0) {
+				solrClient.commit();
+				logger.info("删除索引结束" + incrementNew.getId());
+				return true;
+			} else
+				return false;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 			return false;
 		}
-		logger.info("删除索引结束");
-		return true;
 	}
 
 	public boolean deleteWhole() {
@@ -199,6 +201,53 @@ public class IndexService {
 
 	public void setDocIndexNum(int docIndexNum) {
 		this.docIndexNum = docIndexNum;
+	}
+
+	public static boolean isIndexingWhole() {
+		return isIndexingWhole;
+	}
+
+	public static void setIndexingWhole(boolean isIndexingWhole) {
+		IndexService.isIndexingWhole = isIndexingWhole;
+	}
+
+	public PhotoDAO getPhotoDAO() {
+		return photoDAO;
+	}
+
+	public void setPhotoDAO(PhotoDAO photoDAO) {
+		this.photoDAO = photoDAO;
+	}
+
+	private SolrInputDocument resultSet2SolrDoc(ResultSet rs,
+			String curIndexVersion) {
+		try {
+			SolrInputDocument doc = new SolrInputDocument();
+			doc.addField("id", rs.getObject("id"));
+			doc.addField("classid", rs.getObject("classid"));
+			doc.addField("type", rs.getObject("type"));
+			doc.addField("checked", rs.getObject("checked"));
+			doc.addField("title", rs.getObject("title"));
+			doc.addField("titleGroup", rs.getObject("title"));
+			doc.addField("onclick", rs.getObject("onclick"));
+			doc.addField("titlepic", rs.getObject("titlepic"));
+			doc.addField("newstime", rs.getObject("newstime"));
+			doc.addField("keywords", rs.getObject("keywords"));
+			doc.addField("videourl", rs.getObject("videourl"));
+			doc.addField("titleurl", rs.getObject("titleurl"));
+			doc.addField("authorid", rs.getObject("authorid"));
+			doc.addField("author", rs.getObject("author"));
+			doc.addField("intro", rs.getObject("intro"));
+			doc.addField("taskid", rs.getObject("taskid"));
+			doc.addField("sourceid", rs.getObject("sourceid"));
+			doc.addField("imagegroup", rs.getObject("imagegroup"));
+			doc.addField("docversion", curIndexVersion);
+			doc.addField("docTable", rs.getObject("docTable"));
+			return doc;
+		} catch (Exception e) {
+			logger.error(e);
+			return null;
+		}
 	}
 
 }

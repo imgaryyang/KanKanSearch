@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.core.DBHelper;
 import com.kankanews.search.db.base.BaseDao;
-import com.kankanews.search.db.model.Video;
+import com.kankanews.search.db.model.Photo;
 
-public class VideoDAO extends BaseDao<Video, String> {
+public class PhotoDAO extends BaseDao<Photo, String> {
 
 	@Autowired
 	private Properties globalSQL;
@@ -27,12 +27,8 @@ public class VideoDAO extends BaseDao<Video, String> {
 		this.dbHepler = dbHepler;
 	}
 
-	public ResultSet getAllVideo() {
-		return dbHepler.executeQuery(globalSQL.getProperty("_WHOLE_INDEX_"));
-	}
-
 	public ResultSet getOne(String id) {
-		return dbHepler.executeQuery(globalSQL.getProperty("_VIDEO_SELECT_"),
+		return dbHepler.executeQuery(globalSQL.getProperty("_PHOTO_SELECT_"),
 				new Object[] { id });
 	}
 }
