@@ -32,6 +32,7 @@ public class IndexAction {
 			@Override
 			public void run() {
 				indexService.addWhole();
+				indexService.optimized();
 			}
 		}).start();
 		return "begin";

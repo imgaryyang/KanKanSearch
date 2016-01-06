@@ -20,9 +20,9 @@ public class InitListener implements ServletContextListener {
 				.getServletContext()); // 获取spring上下文！
 		IncrementIndexTask task = (IncrementIndexTask) app
 				.getBean("incrementIndexTask");
-		if (incrementIndexTask == null)
-			incrementIndexTask = new Thread(task);
-		incrementIndexTask.start();
+//		if (incrementIndexTask == null)
+//			incrementIndexTask = new Thread(task);
+//		incrementIndexTask.start();
 	}
 
 	@Override

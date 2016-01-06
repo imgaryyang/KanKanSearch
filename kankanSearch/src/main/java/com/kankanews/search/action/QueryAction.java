@@ -52,6 +52,9 @@ public class QueryAction {
 			@RequestParam(defaultValue = "") String checked,
 			@RequestParam(defaultValue = "") String author,
 			@RequestParam(defaultValue = "") String authorid,
+			@RequestParam(defaultValue = "") String contentid,
+			@RequestParam(defaultValue = "") String nreinfo,
+			@RequestParam(defaultValue = "") String taskid,
 			@RequestParam(defaultValue = "1") Integer page,
 			@RequestParam(defaultValue = "10") Integer rows,
 			@RequestParam(defaultValue = "false") boolean highlight,
@@ -74,6 +77,12 @@ public class QueryAction {
 			searchTerm.put("type", authorid);
 		if (title != null && !title.trim().equals(""))
 			searchTerm.put("titleGroup", title);
+		if (contentid != null && !contentid.trim().equals(""))
+			searchTerm.put("contentid", contentid);
+		if (nreinfo != null && !nreinfo.trim().equals(""))
+			searchTerm.put("nreinfo", nreinfo);
+		if (taskid != null && !taskid.trim().equals(""))
+			searchTerm.put("taskid", taskid);
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = queryService.search(searchTerm, page, rows, new String[0],

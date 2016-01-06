@@ -20,6 +20,11 @@ public class IndexServiceTest extends JUnitDaoBase {
 	private IndexService indexService;
 
 	@Test
+	public void testAddAll() {
+		indexService.addWhole();
+	}
+
+	@Test
 	public void testAddOne() {
 		IncrementNew news = new IncrementNew();
 		news.setId("1096903");

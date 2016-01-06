@@ -47,7 +47,7 @@
 		<property name="dbHepler" ref="dbHepler"></property>
 	</bean>
 
-	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient">
+	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient" scope="prototype">
 		<constructor-arg value="${zk.host}"></constructor-arg>
 		<property name="zkConnectTimeout" value="${solr.connect_timeout}"></property>
 		<property name="zkClientTimeout" value="${solr.client_timeout}"></property>

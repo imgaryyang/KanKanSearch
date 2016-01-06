@@ -16,8 +16,8 @@ public class IncrementIndexTask implements Runnable {
 
 	@Override
 	public void run() {
-		if(true)
-		return;
+//		if(true)
+//		return;
 		logger.info("增量索引服务开启");
 		while (true) {
 			if (IndexService.isIndexingWhole()) {

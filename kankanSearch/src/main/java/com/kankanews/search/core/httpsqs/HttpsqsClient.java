@@ -10,7 +10,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
 
+import org.apache.log4j.Logger;
+
+import com.kankanews.search.task.IncrementIndexTask;
+
 public class HttpsqsClient {
+	Logger logger = Logger.getLogger(HttpsqsClient.class);
 
 	private String prefix;
 
@@ -43,7 +48,6 @@ public class HttpsqsClient {
 		OutputStreamWriter osw = null;
 		StringBuffer sb = new StringBuffer();
 		try {
-			System.out.println(prefix + urlStr);
 			URL url = new URL(prefix + urlStr);
 			connection = (HttpURLConnection) url.openConnection();
 			if (postData != null) {
@@ -84,21 +88,21 @@ public class HttpsqsClient {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("", e);
 				}
 			}
 			if (isr != null) {
 				try {
 					isr.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("", e);
 				}
 			}
 			if (is != null) {
 				try {
 					is.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("", e);
 				}
 			}
 			if (connection != null) {
@@ -182,7 +186,7 @@ public class HttpsqsClient {
 		try {
 			putString(queueName, str);
 		} catch (HttpsqsException e) {
-			e.printStackTrace();
+			logger.error("", e);
 		}
 	}
 
@@ -217,7 +221,7 @@ public class HttpsqsClient {
 			return getString(queueName);
 		} catch (HttpsqsException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("", e);
 			return null;
 		}
 	}

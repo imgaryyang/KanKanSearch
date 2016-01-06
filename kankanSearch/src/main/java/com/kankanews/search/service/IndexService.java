@@ -1,8 +1,10 @@
 package com.kankanews.search.service;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -51,10 +53,30 @@ public class IndexService {
 			while (rs.next()) {
 				SolrInputDocument doc = resultSet2SolrDoc(rs, curIndexVersion
 						+ "");
-				if (doc != null)
-					solrClient.add(doc);
+				// SolrInputDocument doc = new SolrInputDocument();
+				// doc.addField("id", rs.getObject("id"));
+				// doc.addField("classid", rs.getObject("classid"));
+				// doc.addField("type", rs.getObject("type"));
+				// doc.addField("checked", rs.getObject("checked"));
+				// doc.addField("title", rs.getObject("title"));
+				// doc.addField("titleGroup", rs.getObject("title"));
+				// doc.addField("onclick", rs.getObject("onclick"));
+				// doc.addField("titlepic", rs.getObject("titlepic"));
+				// doc.addField("newstime", rs.getObject("newstime"));
+				// doc.addField("keywords", rs.getObject("keywords"));
+				// doc.addField("videourl", rs.getObject("videourl"));
+				// doc.addField("titleurl", rs.getObject("titleurl"));
+				// doc.addField("authorid", rs.getObject("authorid"));
+				// doc.addField("author", rs.getObject("author"));
+				// doc.addField("intro", rs.getObject("intro"));
+				// doc.addField("taskid", rs.getObject("taskid"));
+				// doc.addField("sourceid", rs.getObject("sourceid"));
+				// doc.addField("imagegroup", rs.getObject("imagegroup"));
+				// doc.addField("docversion", curIndexVersion);
+				// doc.addField("docTable", rs.getObject("docTable"));
 				docIndexNum++;
-				_docs.add(doc);
+				if (doc != null)
+					_docs.add(doc);
 				if (_docs.size() >= 30000) {
 					solrClient.add(_docs);
 					Thread.sleep(1000);
@@ -62,7 +84,6 @@ public class IndexService {
 					solrClient.commit();
 					Thread.sleep(1000);
 					_docs.clear();
-					System.gc();
 				}
 				// if (docIndexNum >= 300000) {
 				// break;
@@ -82,13 +103,18 @@ public class IndexService {
 				solrClient.deleteByQuery("docversion:" + curIndexVersion);
 				solrClient.commit();
 			} catch (Exception err) {
-				logger.error(err);
+				logger.error("", err);
 				return false;
 			}
 			return false;
 		} finally {
 			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
+			try {
+				solrClient.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
 		}
 		// deleteWhole();
 		globalConfig.setProperty("_INDEX_VERSION_", "" + curIndexVersion);
@@ -103,6 +129,12 @@ public class IndexService {
 		} catch (Exception e) {
 			logger.error(e);
 			return false;
+		} finally {
+			try {
+				solrClient.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
 		}
 		return true;
 	}
@@ -135,6 +167,11 @@ public class IndexService {
 			return false;
 		} finally {
 			DBHelper.closeConn(rs);
+			try {
+				solrClient.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
 		}
 		logger.info("提交" + incrementNew.getId());
 		return true;
@@ -155,11 +192,18 @@ public class IndexService {
 		} catch (Exception e) {
 			logger.error("", e);
 			return false;
+		} finally {
+			try {
+				solrClient.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
 		}
 	}
 
 	public boolean deleteWhole() {
 		try {
+			solrClient.connect();
 			String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
 			// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 			// 删除所有的索引
@@ -170,6 +214,12 @@ public class IndexService {
 		} catch (Exception e) {
 			logger.error(e);
 			return false;
+		} finally {
+			try {
+				solrClient.close();
+			} catch (IOException e) {
+				logger.error("", e);
+			}
 		}
 		return true;
 	}
@@ -236,6 +286,8 @@ public class IndexService {
 			doc.addField("taskid", rs.getObject("taskid"));
 			doc.addField("sourceid", rs.getObject("sourceid"));
 			doc.addField("imagegroup", rs.getObject("imagegroup"));
+			doc.addField("nreinfo", rs.getObject("nreinfo"));
+			doc.addField("contentid", rs.getObject("contentid"));
 			doc.addField("docversion", curIndexVersion);
 			doc.addField("docTable", rs.getObject("docTable"));
 			return doc;
