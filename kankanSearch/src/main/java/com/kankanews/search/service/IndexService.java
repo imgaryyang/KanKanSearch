@@ -13,6 +13,7 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kankanews.search.config.GlobalConfig;
 import com.kankanews.search.core.DBHelper;
 import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.db.dao.PhotoDAO;
@@ -26,16 +27,13 @@ public class IndexService {
 	private PhotoDAO photoDAO;
 	private CloudSolrClient solrClient;
 
-	@Autowired
-	private Properties globalConfig;
-
 	private static int docIndexNum;
 	private static boolean isIndexingWhole = false;
 
 	public boolean addWhole() {
 		logger.info("建立索引启动");
 		isIndexingWhole = true;
-		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
@@ -110,14 +108,13 @@ public class IndexService {
 		} finally {
 			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
-			try {
-				solrClient.close();
-			} catch (IOException e) {
-				logger.error("", e);
-			}
+//			try {
+//				solrClient.close();
+//			} catch (IOException e) {
+//				logger.error("", e);
+//			}
 		}
 		// deleteWhole();
-		globalConfig.setProperty("_INDEX_VERSION_", "" + curIndexVersion);
 		logger.info("建立索引结束");
 		return true;
 	}
@@ -130,17 +127,17 @@ public class IndexService {
 			logger.error(e);
 			return false;
 		} finally {
-			try {
-				solrClient.close();
-			} catch (IOException e) {
-				logger.error("", e);
-			}
+//			try {
+//				solrClient.close();
+//			} catch (IOException e) {
+//				logger.error("", e);
+//			}
 		}
 		return true;
 	}
 
 	public boolean addOne(IncrementNew incrementNew) {
-		String curIndexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String curIndexVersion = GlobalConfig._INDEX_VERSION_;
 		String table = incrementNew.getTable();
 		ResultSet rs = null;
 		if (table.trim().equals("kk_ecms_kankanvideos")) {
@@ -167,18 +164,18 @@ public class IndexService {
 			return false;
 		} finally {
 			DBHelper.closeConn(rs);
-			try {
-				solrClient.close();
-			} catch (IOException e) {
-				logger.error("", e);
-			}
+//			try {
+//				solrClient.close();
+//			} catch (IOException e) {
+//				logger.error("", e);
+//			}
 		}
 		logger.info("提交" + incrementNew.getId());
 		return true;
 	}
 
 	public boolean deleteOne(IncrementNew incrementNew) {
-		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		solrClient.connect();
 		try {
 			UpdateResponse response = solrClient.deleteByQuery("id:"
@@ -193,18 +190,18 @@ public class IndexService {
 			logger.error("", e);
 			return false;
 		} finally {
-			try {
-				solrClient.close();
-			} catch (IOException e) {
-				logger.error("", e);
-			}
+//			try {
+//				solrClient.close();
+//			} catch (IOException e) {
+//				logger.error("", e);
+//			}
 		}
 	}
 
 	public boolean deleteWhole() {
 		try {
 			solrClient.connect();
-			String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+			String indexVersion = GlobalConfig._INDEX_VERSION_;
 			// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 			// 删除所有的索引
 			solrClient.deleteByQuery("docversion:" + indexVersion);
@@ -215,11 +212,11 @@ public class IndexService {
 			logger.error(e);
 			return false;
 		} finally {
-			try {
-				solrClient.close();
-			} catch (IOException e) {
-				logger.error("", e);
-			}
+			// try {
+			// solrClient.close();
+			// } catch (IOException e) {
+			// logger.error("", e);
+			// }
 		}
 		return true;
 	}

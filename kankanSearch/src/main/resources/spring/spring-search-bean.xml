@@ -21,13 +21,8 @@
 		</property>
 	</bean>
 
-	<bean id="globalConfig"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath*:GlobalConfig.properties</value>
-			</list>
-		</property>
+	<bean id="taskManager" class="com.kankanews.search.task.TaskManager"
+		scope="singleton">
 	</bean>
 
 	<bean id="dbHepler" class="com.kankanews.search.core.DBHelper">
@@ -47,7 +42,8 @@
 		<property name="dbHepler" ref="dbHepler"></property>
 	</bean>
 
-	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient" scope="prototype">
+	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient"
+		scope="singleton">
 		<constructor-arg value="${zk.host}"></constructor-arg>
 		<property name="zkConnectTimeout" value="${solr.connect_timeout}"></property>
 		<property name="zkClientTimeout" value="${solr.client_timeout}"></property>

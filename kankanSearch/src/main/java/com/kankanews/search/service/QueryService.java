@@ -18,6 +18,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.GroupParams;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kankanews.search.config.GlobalConfig;
 import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.core.JacksonUtil;
 import com.kankanews.search.db.model.SearchResult;
@@ -26,15 +27,13 @@ import com.kankanews.search.db.model.Video;
 public class QueryService {
 	Logger logger = Logger.getLogger(QueryService.class);
 
-	@Autowired
-	private Properties globalConfig;
 	private CloudSolrClient solrClient;
 
 	public Map<String, Object> search(Map<String, String> searchTerm, int page,
 			int rows, String[] sortfield, Boolean[] flag, Boolean isHighLight,
 			String highlighttag) {
 		// 检测输入是否合法
-		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("num", "0");
 		result.put("qtime", "0");
@@ -146,7 +145,7 @@ public class QueryService {
 	 */
 	public Map<String, Object> searchGroup(Map<String, String> searchTerm,
 			int page, int rows, boolean isHighLight, String highlighttag) {
-		String indexVersion = globalConfig.getProperty("_INDEX_VERSION_");
+		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("num", "0");
 		result.put("qtime", "0");

@@ -3,6 +3,7 @@ package com.kankanews.search.task;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kankanews.search.config.GlobalConfig;
 import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.core.httpsqs.HttpsqsClient;
 import com.kankanews.search.db.model.IncrementNew;
@@ -16,11 +17,12 @@ public class IncrementIndexTask implements Runnable {
 
 	@Override
 	public void run() {
-//		if(true)
-//		return;
+		// if(true)
+		// return;
 		logger.info("增量索引服务开启");
 		while (true) {
-			if (IndexService.isIndexingWhole()) {
+			if (!GlobalConfig._IS_INCREMENT_INDEX_
+					|| IndexService.isIndexingWhole()) {
 				try {
 					Thread.currentThread().sleep(60000);
 					continue;

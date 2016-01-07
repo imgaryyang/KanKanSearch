@@ -59,7 +59,8 @@ public class QueryAction {
 			@RequestParam(defaultValue = "10") Integer rows,
 			@RequestParam(defaultValue = "false") boolean highlight,
 			@RequestParam(defaultValue = "false") boolean isduplicate,
-			@RequestParam(defaultValue = "em") String highlighttag) {
+			@RequestParam(defaultValue = "em") String highlighttag,
+			@RequestParam(defaultValue = "") String analyse) {
 		Map<String, String> searchTerm = new HashMap<String, String>();
 		if (word != null && !word.trim().equals(""))
 			searchTerm.put("all", word);
@@ -83,6 +84,7 @@ public class QueryAction {
 			searchTerm.put("nreinfo", nreinfo);
 		if (taskid != null && !taskid.trim().equals(""))
 			searchTerm.put("taskid", taskid);
+		logger.info("|" + searchTerm.toString() + "|" + analyse);
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = queryService.search(searchTerm, page, rows, new String[0],
