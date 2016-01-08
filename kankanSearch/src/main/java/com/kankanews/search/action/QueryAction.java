@@ -61,36 +61,59 @@ public class QueryAction {
 			@RequestParam(defaultValue = "false") boolean isduplicate,
 			@RequestParam(defaultValue = "em") String highlighttag,
 			@RequestParam(defaultValue = "") String analyse) {
+		StringBuffer buf = new StringBuffer();
 		Map<String, String> searchTerm = new HashMap<String, String>();
-		if (word != null && !word.trim().equals(""))
-			searchTerm.put("all", word);
-		if (word2 != null && !word2.trim().equals(""))
-			searchTerm.put("all2", word2);
+		if (word2 != null && !word2.trim().equals("")) {
+			// searchTerm.put("all", word);
+			// searchTerm.put("title", word2);
+			// searchTerm.put("intro", word2);
+			// searchTerm.put("keywords", word2);
+			buf.append(" AND (title_smart:").append(word + "^2");
+			buf.append(" AND keywords_smart:").append(word + "^1");
+			buf.append(" OR intro_smart:").append(word + "^0.2)");
+		}
+		if (word != null && !word.trim().equals("")) {
+			// searchTerm.put("all2", word2);
+			// searchTerm.put("title_smart", word + "^2");
+			// searchTerm.put("intro_smart", word + "^1");
+			// searchTerm.put("keywords_smart", word + "^0.5");
+			buf.append(" AND (title:").append(word + "^2");
+			buf.append(" AND keywords:").append(word + "^1");
+			buf.append(" OR intro:").append(word + "^0.2)");
+		}
 		if (newsid != null && !newsid.trim().equals(""))
-			searchTerm.put("id", newsid);
+			// searchTerm.put("id", newsid);
+			buf.append(" AND id:").append(newsid);
 		if (type != null && !type.trim().equals(""))
-			searchTerm.put("type", type);
+			// searchTerm.put("type", type);
+			buf.append(" AND type:").append(type);
 		if (checked != null && !checked.trim().equals(""))
-			searchTerm.put("checked", checked);
+			// searchTerm.put("checked", checked);
+			buf.append(" AND checked:").append(checked);
 		if (author != null && !author.trim().equals(""))
-			searchTerm.put("author", author);
+			// searchTerm.put("author", author);
+			buf.append(" AND author:").append(author);
 		if (authorid != null && !authorid.trim().equals(""))
-			searchTerm.put("type", authorid);
+			// searchTerm.put("authorid", authorid);
+			buf.append(" AND authorid:").append(authorid);
 		if (title != null && !title.trim().equals(""))
-			searchTerm.put("titleGroup", title);
+			// searchTerm.put("titleGroup", title);
+			buf.append(" AND titleGroup:").append(title);
 		if (contentid != null && !contentid.trim().equals(""))
-			searchTerm.put("contentid", contentid);
+			// searchTerm.put("contentid", contentid);
+			buf.append(" AND contentid:").append(contentid);
 		if (nreinfo != null && !nreinfo.trim().equals(""))
-			searchTerm.put("nreinfo", nreinfo);
+			// searchTerm.put("nreinfo", nreinfo);
+			buf.append(" AND nreinfo:").append(nreinfo);
 		if (taskid != null && !taskid.trim().equals(""))
-			searchTerm.put("taskid", taskid);
-		logger.info("|" + searchTerm.toString() + "|" + analyse);
+			// searchTerm.put("taskid", taskid);
+			buf.append(" AND taskid:").append(taskid);
 		Map<String, Object> result;
 		if (isduplicate) {
-			result = queryService.search(searchTerm, page, rows, new String[0],
-					new Boolean[0], highlight, highlighttag);
+			result = queryService.search(buf.toString(), page, rows,
+					new String[0], new Boolean[0], highlight, highlighttag);
 		} else {
-			result = queryService.searchGroup(searchTerm, page, rows,
+			result = queryService.searchGroup(buf.toString(), page, rows,
 					highlight, highlighttag);
 		}
 		return result;

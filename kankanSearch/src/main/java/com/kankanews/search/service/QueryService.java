@@ -29,8 +29,8 @@ public class QueryService {
 
 	private CloudSolrClient solrClient;
 
-	public Map<String, Object> search(Map<String, String> searchTerm, int page,
-			int rows, String[] sortfield, Boolean[] flag, Boolean isHighLight,
+	public Map<String, Object> search(String queryStr, int page, int rows,
+			String[] sortfield, Boolean[] flag, Boolean isHighLight,
 			String highlighttag) {
 		// 检测输入是否合法
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
@@ -44,27 +44,34 @@ public class QueryService {
 			return null;
 		}
 		SolrQuery query = null;
+		StringBuffer queryStrBuf = new StringBuffer();
 		try {
 			// 初始化查询对象
 			// query = new SolrQuery(field[0] + ":" + key[0]);
 			// for (int i = 0; i < field.length; i++) {
 			// query.addFilterQuery(field[i] + ":" + key[i]);
 			// }
-			StringBuffer queryStr = new StringBuffer();
-			queryStr.append("docversion:" + indexVersion);
+			queryStrBuf.append("docversion:" + indexVersion);
 			// query = new SolrQuery("docversion:" + indexVersion + " AND " +
 			// "all:习近平");
-			for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
-				// query.addFilterQuery(entry.getKey() + ":" +
-				// entry.getValue());
-				queryStr.append(" AND " + entry.getKey() + ":"
-						+ entry.getValue());
-			}
-			query = new SolrQuery(queryStr.toString());
+			// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
+			// // query.addFilterQuery(entry.getKey() + ":" +
+			// // entry.getValue());
+			// queryStr.append(" AND " + entry.getKey() + ":"
+			// + entry.getValue());
+			// }
+			queryStrBuf.append(queryStr);
+			query = new SolrQuery();
+			// query = new SolrQuery(queryStr.toString());
 			// 设置起始位置与返回结果数
 			query.setStart((page - 1) * rows);
 			query.setRows(rows);
 			query.set("shards.tolerant", true);
+			query.set("q.alt", queryStrBuf.toString());
+			query.set("defType", "dismax");
+			query.set(
+					"bf",
+					"product(sum(div(newstime,ms(NOW)),map(sub(ms(NOW),product(newstime,1000)),0,604800000,3,0),map(sub(ms(NOW),product(newstime,1000)),604800000,1209600000,2,0),map(sub(ms(NOW),product(newstime,1000)),1209600000,2592000000,1.8,0),map(sub(ms(NOW),product(newstime,1000)),2592000000,5184000000,1.6,0),map(sub(ms(NOW),product(newstime,1000)),5184000000,7776000000,1.4,0),map(sub(ms(NOW),product(newstime,1000)),7776000000,10368000000,1.2,0),map(sub(ms(NOW),product(newstime,1000)),10368000000,12960000000,1,0),map(sub(ms(NOW),product(newstime,1000)),12960000000,15552000000,0.8,0),map(sub(ms(NOW),product(newstime,1000)),15552000000,23328000000,0.4,0),map(sub(ms(NOW),product(newstime,1000)),23328000000,31536000000,0.2,0)),20)");
 			// 设置排序
 			// for (int i = 0; i < sortfield.length; i++) {
 			// if (flag[i]) {
@@ -89,6 +96,7 @@ public class QueryService {
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}
+		logger.info("|" + queryStrBuf.toString() + "|");
 
 		QueryResponse rsp = null;
 		try {
@@ -143,8 +151,8 @@ public class QueryService {
 	 * @Throws
 	 * @Date 2015-1-7 输出结果的时候，由于定义的数据索引没有做很好是调整，显示的结果并不理想，不过此方法可以作为参考
 	 */
-	public Map<String, Object> searchGroup(Map<String, String> searchTerm,
-			int page, int rows, boolean isHighLight, String highlighttag) {
+	public Map<String, Object> searchGroup(String queryStr, int page, int rows,
+			boolean isHighLight, String highlighttag) {
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("num", "0");
@@ -158,16 +166,20 @@ public class QueryService {
 		// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
 		// query.addFilterQuery(entry.getKey() + ":" + entry.getValue());
 		// }
-		StringBuffer queryStr = new StringBuffer();
-		queryStr.append("docversion:" + indexVersion);
+		StringBuffer queryStrBuf = new StringBuffer();
+		queryStrBuf.append("docversion:" + indexVersion);
 		// query = new SolrQuery("docversion:" + indexVersion + " AND " +
 		// "all:习近平");
-		for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
-			// query.addFilterQuery(entry.getKey() + ":" +
-			// entry.getValue());
-			queryStr.append(" AND " + entry.getKey() + ":" + entry.getValue());
-		}
-		query = new SolrQuery(queryStr.toString());
+		// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
+		// // query.addFilterQuery(entry.getKey() + ":" +
+		// // entry.getValue());
+		// queryStr.append(" AND " + entry.getKey() + ":" + entry.getValue());
+		// }
+		queryStrBuf.append(queryStr);
+		// query = new SolrQuery(queryStr.toString());
+		query = new SolrQuery();
+		// query = new SolrQuery(queryStr.toString());
+		// 设置起始位置与返回结果数
 		// for (int i = 0; i < field.length; i++) {
 		// query.addFilterQuery(field[i] + ":" + word[i]);
 		// }
@@ -179,6 +191,12 @@ public class QueryService {
 		query.setParam(GroupParams.GROUP_LIMIT, "1");
 		query.setParam(GroupParams.GROUP_TOTAL_COUNT, true);
 		query.setParam("hl", isHighLight);
+
+		query.set("q.alt", queryStrBuf.toString());
+		query.set("defType", "dismax");
+		query.set(
+				"bf",
+				"product(sum(div(product(newstime,1000),ms(NOW)),map(sub(ms(NOW),product(newstime,1000)),0,604800000,3,0),map(sub(ms(NOW),product(newstime,1000)),604800000,1209600000,2,0),map(sub(ms(NOW),product(newstime,1000)),1209600000,2592000000,1.8,0),map(sub(ms(NOW),product(newstime,1000)),2592000000,5184000000,1.6,0),map(sub(ms(NOW),product(newstime,1000)),5184000000,7776000000,1.4,0),map(sub(ms(NOW),product(newstime,1000)),7776000000,10368000000,1.2,0),map(sub(ms(NOW),product(newstime,1000)),10368000000,12960000000,1,0),map(sub(ms(NOW),product(newstime,1000)),12960000000,15552000000,0.8,0),map(sub(ms(NOW),product(newstime,1000)),15552000000,23328000000,0.4,0),map(sub(ms(NOW),product(newstime,1000)),23328000000,31536000000,0.2,0)),20)");
 
 		// 设置高亮
 		if (isHighLight) {
@@ -197,6 +215,7 @@ public class QueryService {
 			// query.setHighlightSnippets(1);// 结果分片数，默认为1
 			// query.setHighlightFragsize(1000);// 每个分片的最大长度，默认为100
 		}
+		logger.info("|" + queryStrBuf.toString() + "|");
 		QueryResponse response = null;
 		try {
 			response = solrClient.query(query);

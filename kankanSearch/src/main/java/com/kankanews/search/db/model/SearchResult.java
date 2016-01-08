@@ -34,7 +34,7 @@ public class SearchResult {
 		this.checked = (String) doc.get("checked");
 		this.titlepic = (String) doc.get("titlepic");
 		this.titleurl = (String) doc.get("titleurl");
-		this.newstime = (String) doc.get("newstime");
+		this.newstime = "" + doc.get("newstime");
 		this.keywords = (String) doc.get("keywords");
 		this.type = (String) doc.get("type");
 		this.videourl = (String) doc.get("videourl");

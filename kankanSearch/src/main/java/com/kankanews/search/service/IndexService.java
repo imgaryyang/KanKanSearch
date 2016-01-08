@@ -45,6 +45,7 @@ public class IndexService {
 		try {
 			solrClient.connect();
 			logger.info("建立连接");
+			System.gc();
 			// select id, onclick, title, titlepic, newstime, keywords,
 			// createtime, videourl
 			docIndexNum = 0;
@@ -94,7 +95,6 @@ public class IndexService {
 				_docs.clear();
 			}
 			_docs = null;
-			System.gc();
 		} catch (Exception e) {
 			logger.error("", e);
 			try {
@@ -108,11 +108,12 @@ public class IndexService {
 		} finally {
 			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
-//			try {
-//				solrClient.close();
-//			} catch (IOException e) {
-//				logger.error("", e);
-//			}
+			System.gc();
+			// try {
+			// solrClient.close();
+			// } catch (IOException e) {
+			// logger.error("", e);
+			// }
 		}
 		// deleteWhole();
 		logger.info("建立索引结束");
@@ -124,14 +125,14 @@ public class IndexService {
 		try {
 			solrClient.optimize();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 			return false;
 		} finally {
-//			try {
-//				solrClient.close();
-//			} catch (IOException e) {
-//				logger.error("", e);
-//			}
+			// try {
+			// solrClient.close();
+			// } catch (IOException e) {
+			// logger.error("", e);
+			// }
 		}
 		return true;
 	}
@@ -160,15 +161,15 @@ public class IndexService {
 				return false;
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 			return false;
 		} finally {
 			DBHelper.closeConn(rs);
-//			try {
-//				solrClient.close();
-//			} catch (IOException e) {
-//				logger.error("", e);
-//			}
+			// try {
+			// solrClient.close();
+			// } catch (IOException e) {
+			// logger.error("", e);
+			// }
 		}
 		logger.info("提交" + incrementNew.getId());
 		return true;
@@ -190,11 +191,11 @@ public class IndexService {
 			logger.error("", e);
 			return false;
 		} finally {
-//			try {
-//				solrClient.close();
-//			} catch (IOException e) {
-//				logger.error("", e);
-//			}
+			// try {
+			// solrClient.close();
+			// } catch (IOException e) {
+			// logger.error("", e);
+			// }
 		}
 	}
 
@@ -209,7 +210,7 @@ public class IndexService {
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 			return false;
 		} finally {
 			// try {
@@ -270,16 +271,19 @@ public class IndexService {
 			doc.addField("type", rs.getObject("type"));
 			doc.addField("checked", rs.getObject("checked"));
 			doc.addField("title", rs.getObject("title"));
+			doc.addField("title_smart", rs.getObject("title"));
 			doc.addField("titleGroup", rs.getObject("title"));
 			doc.addField("onclick", rs.getObject("onclick"));
 			doc.addField("titlepic", rs.getObject("titlepic"));
 			doc.addField("newstime", rs.getObject("newstime"));
 			doc.addField("keywords", rs.getObject("keywords"));
+			doc.addField("keywords_smart", rs.getObject("keywords"));
 			doc.addField("videourl", rs.getObject("videourl"));
 			doc.addField("titleurl", rs.getObject("titleurl"));
 			doc.addField("authorid", rs.getObject("authorid"));
 			doc.addField("author", rs.getObject("author"));
 			doc.addField("intro", rs.getObject("intro"));
+			doc.addField("intro_smart", rs.getObject("intro"));
 			doc.addField("taskid", rs.getObject("taskid"));
 			doc.addField("sourceid", rs.getObject("sourceid"));
 			doc.addField("imagegroup", rs.getObject("imagegroup"));
@@ -289,7 +293,7 @@ public class IndexService {
 			doc.addField("docTable", rs.getObject("docTable"));
 			return doc;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 			return null;
 		}
 	}
