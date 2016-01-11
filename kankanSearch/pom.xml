@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -38,6 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.1.6.RELEASE</spring.version>
 		<org.slf4j-version>1.6.1</org.slf4j-version>
+		<org.apache.lucene-version>5.2.1</org.apache.lucene-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -210,6 +212,28 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
+		</dependency>
+
+		<!--ik分词 -->
+		<dependency>
+			<groupId>com.kankanews.search</groupId>
+			<artifactId>IKAnalyzer</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${org.apache.lucene-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>${org.apache.lucene-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>${org.apache.lucene-version}</version>
 		</dependency>
 	</dependencies>
 </project>

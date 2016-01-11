@@ -15,7 +15,6 @@ public class IncrementIndexTask implements Runnable {
 	private HttpsqsClient httpsqsClient;
 	private IndexService indexService;
 
-	@Override
 	public void run() {
 		// if(true)
 		// return;

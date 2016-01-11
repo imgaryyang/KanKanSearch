@@ -1,6 +1,7 @@
 package test.kankanews.search.action;
 
 import java.util.Date;
+import org.apache.lucene.search.similarities.DefaultSimilarity;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ public class QueryActionTest extends JUnitActionBase {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		request.setServletPath("/search/query");
-		request.setParameter("word", "乌镇大会");
+		request.setParameter("word", "(乌镇)");
 		// request.setParameter("author", "天脉素材");
 		request.setParameter("page", "1");
 		request.setParameter("rows", "20");
 		request.setParameter("type", "1");
 		request.setParameter("highlight", "true");
-		request.setParameter("isduplicate", "false");
+		request.setParameter("isduplicate", "true");
 		System.out.println(new Date());
 		final ModelAndView mav = this.excuteAction(request, response);
 		response.setCharacterEncoding("UTF-8");

@@ -204,6 +204,7 @@ public class Dictionary {
 		// 建立一个主词典实例
 		_MainDict = new DictSegment((char) 0);
 		// 读取主词典文件
+		
 		InputStream is = this.getClass().getClassLoader()
 				.getResourceAsStream(cfg.getMainDictionary());
 		if (is == null) {

@@ -8,6 +8,12 @@
 	<description>IKAnalyzer</description>
 	<build>
 		<finalName>IKAnalyzer5.2.1</finalName>
+		<resources>
+			<resource>
+				<targetPath>${project.build.directory}/classes</targetPath>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

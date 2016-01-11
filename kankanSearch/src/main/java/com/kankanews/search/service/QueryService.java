@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.response.Group;
 import org.apache.solr.client.solrj.response.GroupCommand;
@@ -16,22 +16,21 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.GroupParams;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.config.GlobalConfig;
-import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.core.JacksonUtil;
 import com.kankanews.search.db.model.SearchResult;
-import com.kankanews.search.db.model.Video;
 
 public class QueryService {
 	Logger logger = Logger.getLogger(QueryService.class);
 
 	private CloudSolrClient solrClient;
 
+	private static final String _SCORE_FUN_ = "product(sum(div(newstime,ms(NOW)),map(sub(ms(NOW),product(newstime,1000)),0,604800000,3,0),map(sub(ms(NOW),product(newstime,1000)),604800000,1209600000,2,0),map(sub(ms(NOW),product(newstime,1000)),1209600000,2592000000,1.8,0),map(sub(ms(NOW),product(newstime,1000)),2592000000,5184000000,1.6,0),map(sub(ms(NOW),product(newstime,1000)),5184000000,7776000000,1.4,0),map(sub(ms(NOW),product(newstime,1000)),7776000000,10368000000,1.2,0),map(sub(ms(NOW),product(newstime,1000)),10368000000,12960000000,1,0),map(sub(ms(NOW),product(newstime,1000)),12960000000,15552000000,0.8,0),map(sub(ms(NOW),product(newstime,1000)),15552000000,23328000000,0.4,0),map(sub(ms(NOW),product(newstime,1000)),23328000000,31536000000,0.2,0)),100)";
+
 	public Map<String, Object> search(String queryStr, int page, int rows,
 			String[] sortfield, Boolean[] flag, Boolean isHighLight,
-			String highlighttag) {
+			String highlighttag, boolean isSort) {
 		// 检测输入是否合法
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -46,52 +45,26 @@ public class QueryService {
 		SolrQuery query = null;
 		StringBuffer queryStrBuf = new StringBuffer();
 		try {
-			// 初始化查询对象
-			// query = new SolrQuery(field[0] + ":" + key[0]);
-			// for (int i = 0; i < field.length; i++) {
-			// query.addFilterQuery(field[i] + ":" + key[i]);
-			// }
 			queryStrBuf.append("docversion:" + indexVersion);
-			// query = new SolrQuery("docversion:" + indexVersion + " AND " +
-			// "all:习近平");
-			// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
-			// // query.addFilterQuery(entry.getKey() + ":" +
-			// // entry.getValue());
-			// queryStr.append(" AND " + entry.getKey() + ":"
-			// + entry.getValue());
-			// }
 			queryStrBuf.append(queryStr);
 			query = new SolrQuery();
-			// query = new SolrQuery(queryStr.toString());
-			// 设置起始位置与返回结果数
 			query.setStart((page - 1) * rows);
 			query.setRows(rows);
 			query.set("shards.tolerant", true);
-			query.set("q.alt", queryStrBuf.toString());
-			query.set("defType", "dismax");
-			query.set(
-					"bf",
-					"product(sum(div(newstime,ms(NOW)),map(sub(ms(NOW),product(newstime,1000)),0,604800000,3,0),map(sub(ms(NOW),product(newstime,1000)),604800000,1209600000,2,0),map(sub(ms(NOW),product(newstime,1000)),1209600000,2592000000,1.8,0),map(sub(ms(NOW),product(newstime,1000)),2592000000,5184000000,1.6,0),map(sub(ms(NOW),product(newstime,1000)),5184000000,7776000000,1.4,0),map(sub(ms(NOW),product(newstime,1000)),7776000000,10368000000,1.2,0),map(sub(ms(NOW),product(newstime,1000)),10368000000,12960000000,1,0),map(sub(ms(NOW),product(newstime,1000)),12960000000,15552000000,0.8,0),map(sub(ms(NOW),product(newstime,1000)),15552000000,23328000000,0.4,0),map(sub(ms(NOW),product(newstime,1000)),23328000000,31536000000,0.2,0)),20)");
-			// 设置排序
-			// for (int i = 0; i < sortfield.length; i++) {
-			// if (flag[i]) {
-			// query.addSort(sortfield[i], SolrQuery.ORDER.asc);
-			// } else {
-			// query.addSort(sortfield[i], SolrQuery.ORDER.desc);
-			// }
-			// }
-			// 设置高亮
+			if (isSort) {
+				query.setQuery(queryStrBuf.toString());
+				query.setSort("newstime", ORDER.desc);
+			} else {
+				query.set("q.alt", queryStrBuf.toString());
+				query.set("defType", "dismax");
+				query.set("bf", _SCORE_FUN_);
+			}
 			if (isHighLight) {
 				query.setHighlight(true); // 开启高亮组件
 				query.addHighlightField("intro");// 高亮字段
 				query.addHighlightField("title");// 高亮字段
-				// if (highlighttag.trim().equals("")) {
-				// query.setHighlightSimplePre("<em>");// 标记
-				// query.setHighlightSimplePost("</em>");
-				// } else {
 				query.setHighlightSimplePre("<" + highlighttag + ">");// 标记
 				query.setHighlightSimplePost("</" + highlighttag + ">");
-				// }
 			}
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
@@ -152,37 +125,18 @@ public class QueryService {
 	 * @Date 2015-1-7 输出结果的时候，由于定义的数据索引没有做很好是调整，显示的结果并不理想，不过此方法可以作为参考
 	 */
 	public Map<String, Object> searchGroup(String queryStr, int page, int rows,
-			boolean isHighLight, String highlighttag) {
+			boolean isHighLight, String highlighttag, boolean isSort) {
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("num", "0");
 		result.put("qtime", "0");
 		result.put("queryresult", "");
 		List<SearchResult> queryResult = new ArrayList<SearchResult>();
-		// SolrQuery query = new SolrQuery();
 		SolrQuery query = null;
-		// param.addFilterQuery("title:" + QUERY_CONTENT);
-		// query.setQuery("docversion:" + indexVersion);
-		// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
-		// query.addFilterQuery(entry.getKey() + ":" + entry.getValue());
-		// }
 		StringBuffer queryStrBuf = new StringBuffer();
 		queryStrBuf.append("docversion:" + indexVersion);
-		// query = new SolrQuery("docversion:" + indexVersion + " AND " +
-		// "all:习近平");
-		// for (Map.Entry<String, String> entry : searchTerm.entrySet()) {
-		// // query.addFilterQuery(entry.getKey() + ":" +
-		// // entry.getValue());
-		// queryStr.append(" AND " + entry.getKey() + ":" + entry.getValue());
-		// }
 		queryStrBuf.append(queryStr);
-		// query = new SolrQuery(queryStr.toString());
 		query = new SolrQuery();
-		// query = new SolrQuery(queryStr.toString());
-		// 设置起始位置与返回结果数
-		// for (int i = 0; i < field.length; i++) {
-		// query.addFilterQuery(field[i] + ":" + word[i]);
-		// }
 		query.setStart((page - 1) * rows);
 		query.setRows(rows);
 		query.set("shards.tolerant", true);
@@ -192,28 +146,22 @@ public class QueryService {
 		query.setParam(GroupParams.GROUP_TOTAL_COUNT, true);
 		query.setParam("hl", isHighLight);
 
-		query.set("q.alt", queryStrBuf.toString());
-		query.set("defType", "dismax");
-		query.set(
-				"bf",
-				"product(sum(div(product(newstime,1000),ms(NOW)),map(sub(ms(NOW),product(newstime,1000)),0,604800000,3,0),map(sub(ms(NOW),product(newstime,1000)),604800000,1209600000,2,0),map(sub(ms(NOW),product(newstime,1000)),1209600000,2592000000,1.8,0),map(sub(ms(NOW),product(newstime,1000)),2592000000,5184000000,1.6,0),map(sub(ms(NOW),product(newstime,1000)),5184000000,7776000000,1.4,0),map(sub(ms(NOW),product(newstime,1000)),7776000000,10368000000,1.2,0),map(sub(ms(NOW),product(newstime,1000)),10368000000,12960000000,1,0),map(sub(ms(NOW),product(newstime,1000)),12960000000,15552000000,0.8,0),map(sub(ms(NOW),product(newstime,1000)),15552000000,23328000000,0.4,0),map(sub(ms(NOW),product(newstime,1000)),23328000000,31536000000,0.2,0)),20)");
+		if (isSort) {
+			query.setQuery(queryStrBuf.toString());
+			query.setSort("newstime", ORDER.desc);
+		} else {
+			query.set("q.alt", queryStrBuf.toString());
+			query.set("defType", "dismax");
+			query.set("bf", _SCORE_FUN_);
+		}
 
 		// 设置高亮
 		if (isHighLight) {
 			query.setHighlight(true); // 开启高亮组件
 			query.addHighlightField("intro");// 高亮字段
 			query.addHighlightField("title");// 高亮字段
-			// query.setParam("hl.q", "keywords:" + word);
-			// query.addHighlightField("keywords");// 高亮字段
-			// if (highlighttag.trim().equals("")) {
-			// query.setHighlightSimplePre("<em>");// 标记
-			// query.setHighlightSimplePost("</em>");
-			// } else {
 			query.setHighlightSimplePre("<" + highlighttag + ">");// 标记
 			query.setHighlightSimplePost("</" + highlighttag + ">");
-			// }
-			// query.setHighlightSnippets(1);// 结果分片数，默认为1
-			// query.setHighlightFragsize(1000);// 每个分片的最大长度，默认为100
 		}
 		logger.info("|" + queryStrBuf.toString() + "|");
 		QueryResponse response = null;

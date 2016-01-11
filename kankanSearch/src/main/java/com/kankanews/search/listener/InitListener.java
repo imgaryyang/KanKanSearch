@@ -14,7 +14,6 @@ public class InitListener implements ServletContextListener {
 	private ApplicationContext app;
 	private TaskManager manager;
 
-	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		// TODO Auto-generated method stub
 		app = WebApplicationContextUtils.getWebApplicationContext(event
@@ -30,7 +29,6 @@ public class InitListener implements ServletContextListener {
 		incrementIndexTask.start();
 	}
 
-	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
 		manager.getIncrementIndexTask().interrupt();

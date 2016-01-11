@@ -29,7 +29,6 @@ public class IndexAction {
 	@ResponseBody
 	public String addWhole() {
 		new Thread(new Runnable() {
-			@Override
 			public void run() {
 				indexService.addWhole();
 				indexService.optimized();
@@ -42,7 +41,6 @@ public class IndexAction {
 	@ResponseBody
 	public String optimized() {
 		new Thread(new Runnable() {
-			@Override
 			public void run() {
 				indexService.optimized();
 			}
