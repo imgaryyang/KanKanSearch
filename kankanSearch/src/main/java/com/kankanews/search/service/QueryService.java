@@ -51,14 +51,16 @@ public class QueryService {
 			query.setStart((page - 1) * rows);
 			query.setRows(rows);
 			query.set("shards.tolerant", true);
-			if (isSort) {
+//			if (isSort) {
 				query.setQuery(queryStrBuf.toString());
-				query.setSort("newstime", ORDER.desc);
-			} else {
-				query.set("q.alt", queryStrBuf.toString());
-				query.set("defType", "dismax");
-				query.set("bf", _SCORE_FUN_);
-			}
+				query.setParam("sort", "score desc,newstime desc");
+				//				query.setSort("score", ORDER.desc);
+//				query.setSort("newstime", ORDER.desc);
+//			} else {
+//				query.set("q.alt", queryStrBuf.toString());
+//				query.set("defType", "dismax");
+//				query.set("bf", _SCORE_FUN_);
+//			}
 			if (isHighLight) {
 				query.setHighlight(true); // 开启高亮组件
 				query.addHighlightField("intro");// 高亮字段
@@ -146,14 +148,16 @@ public class QueryService {
 		query.setParam(GroupParams.GROUP_TOTAL_COUNT, true);
 		query.setParam("hl", isHighLight);
 
-		if (isSort) {
+//		if (isSort) {
 			query.setQuery(queryStrBuf.toString());
-			query.setSort("newstime", ORDER.desc);
-		} else {
-			query.set("q.alt", queryStrBuf.toString());
-			query.set("defType", "dismax");
-			query.set("bf", _SCORE_FUN_);
-		}
+//			query.setSort("score", ORDER.desc);
+//			query.setSort("newstime", ORDER.desc);
+			query.setParam("sort", "score desc,newstime desc");
+//		} else {
+//			query.set("q.alt", queryStrBuf.toString());
+//			query.set("defType", "dismax");
+//			query.set("bf", _SCORE_FUN_);
+//		}
 
 		// 设置高亮
 		if (isHighLight) {

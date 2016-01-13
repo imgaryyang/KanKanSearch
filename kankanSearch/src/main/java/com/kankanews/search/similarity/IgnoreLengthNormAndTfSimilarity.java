@@ -1,5 +1,6 @@
 package com.kankanews.search.similarity;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.index.FieldInvertState;
 import org.apache.lucene.search.similarities.DefaultSimilarity;
 
@@ -14,6 +15,11 @@ public class IgnoreLengthNormAndTfSimilarity extends DefaultSimilarity {
 
 	@Override
 	public float lengthNorm(FieldInvertState state) {
+		return 1f;
+	}
+
+	@Override
+	public float idf(long docFreq, long numDocs) {
 		return 1f;
 	}
 }

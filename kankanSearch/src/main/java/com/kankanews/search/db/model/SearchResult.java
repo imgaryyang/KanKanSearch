@@ -6,22 +6,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SearchResult {
 	private String id;
+	private String author;
+	private String authorid;
 	private String classid;
+	private String checked;
+	private String imagegroup;
+	private String intro;
+	private String keywords;
+	private String newstime;
 	private String onclick;
+	private String sourceid;
 	private String title;
 	private String titlepic;
 	private String titleurl;
-	private String newstime;
-	private String keywords;
 	private String type;
-	private String checked;
-	private String videourl;
-	private String imagegroup;
-	private String author;
-	private String authorid;
-	private String intro;
 	private String taskid;
-	private String sourceid;
+	private String videourl;
 	@JsonIgnore
 	private String docVersion;
 

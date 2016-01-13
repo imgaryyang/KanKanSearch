@@ -50,7 +50,7 @@ public class IKAnalzyerDemo {
 		try {
 			// ts = analyzer.tokenStream("myfield", new
 			// StringReader("这是一个中国文分词的例子，你可以直接运行它了！IKAnalyer can analysis english text too"));
-			ts = analyzer.tokenStream("myfield", new StringReader("回顾两岸高层会晤：2013年胡锦涛会见连战 "));
+			ts = analyzer.tokenStream("myfield", new StringReader("爸爸去哪儿"));
 			// 获取词元位置属性
 			OffsetAttribute offset = ts.addAttribute(OffsetAttribute.class);
 			// 获取词元文本属性

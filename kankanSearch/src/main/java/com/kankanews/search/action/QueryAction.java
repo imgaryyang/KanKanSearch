@@ -77,9 +77,9 @@ public class QueryAction {
 			if (words.size() == 1)
 				isSort = true;
 			String analysedWord = "(" + wordBuf.toString() + ")";
-			buf.append(" AND (title_smart:").append(analysedWord + "^10");
-			buf.append(" AND keywords_smart:").append(analysedWord + "^0.2");
-			buf.append(" OR intro_smart:").append(analysedWord + "^1)");
+			buf.append(" AND (title_smart:").append(analysedWord + "^1");
+			buf.append(" AND keywords_smart:").append(analysedWord + "");
+			buf.append(" OR intro_smart:").append(analysedWord + ")");
 		}
 		if (word != null && !word.trim().equals("")) {
 			// searchTerm.put("all2", word2);
@@ -95,8 +95,8 @@ public class QueryAction {
 				isSort = true;
 			String analysedWord = "(" + wordBuf.toString() + ")";
 			buf.append(" AND (title:").append(analysedWord + "^10");
-			buf.append(" AND keywords:").append(analysedWord + "^0.2");
-			buf.append(" OR intro:").append(analysedWord + "^1)");
+			buf.append(" AND all:").append(analysedWord + ")");
+//			buf.append(" OR intro:").append(analysedWord + ")");
 		}
 		if (newsid != null && !newsid.trim().equals(""))
 			// searchTerm.put("id", newsid);

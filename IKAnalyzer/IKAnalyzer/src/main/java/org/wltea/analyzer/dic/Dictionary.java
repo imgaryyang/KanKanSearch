@@ -29,17 +29,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.wltea.analyzer.cfg.Configuration;
+
+import com.kankanews.search.analyzer.db.DBHelper;
+import com.kankanews.search.analyzer.db.GlobalSQL;
 
 /**
  * 词典管理类,单子模式
  */
 public class Dictionary {
 	Logger log = Logger.getLogger(Dictionary.class);
+
+	private static int curDBLexiconid = 0;
 
 	/*
 	 * 词典单子实例
@@ -67,9 +78,23 @@ public class Dictionary {
 
 	private Dictionary(Configuration cfg) {
 		this.cfg = cfg;
-		this.loadMainDict();
+		boolean flag = this.loadDbDict();
+		if (!flag)
+			this.loadMainDict();
 		this.loadStopWordDict();
 		this.loadQuantifierDict();
+		Calendar cal = Calendar.getInstance();
+		// 每天定点执行
+		cal.set(Calendar.HOUR_OF_DAY, 2);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				// 执行的内容
+			}
+		}, cal.getTime(), 24 * 60 * 60 * 1000);
 	}
 
 	/**
@@ -204,7 +229,7 @@ public class Dictionary {
 		// 建立一个主词典实例
 		_MainDict = new DictSegment((char) 0);
 		// 读取主词典文件
-		
+
 		InputStream is = this.getClass().getClassLoader()
 				.getResourceAsStream(cfg.getMainDictionary());
 		if (is == null) {
@@ -290,6 +315,58 @@ public class Dictionary {
 				}
 			}
 		}
+	}
+
+	private boolean loadDbDict() {
+		_MainDict = new DictSegment((char) 0);
+		log.info("加载DB");
+		System.out.println("加载DB");
+		// 加载扩展词典配置
+		String driver = cfg.getDBDriver();
+		String host = cfg.getDBHost();
+		String user = cfg.getDBUser();
+		String pw = cfg.getDBPassword();
+		Connection conn = null;
+		if (driver != null && host != null && user != null) {
+			try {
+				int maxLexicon = 0;
+				DBHelper db = DBHelper.getInstance("com.mysql.jdbc.Driver",
+						host, user, pw);
+				conn = db.getConnection();
+				ResultSet res = db.executeQuery(conn,
+						GlobalSQL._GET_LEXICON_MAX_ID_, new Object[] {});
+				if (res.next()) {
+					maxLexicon = res.getInt(1);
+				}
+				System.out.println(maxLexicon);
+				if (curDBLexiconid < maxLexicon) {
+					res = db.executeQuery(conn,
+							GlobalSQL._GET_LEXICON_INCREMENT_, new Object[] {
+									curDBLexiconid, maxLexicon });
+					String word = null;
+					while (res.next()) {
+						word = res.getString(1);
+						if (word != null && !"".equals(word.trim())) {
+							_MainDict.fillSegment(word.trim().toLowerCase()
+									.toCharArray());
+						}
+					}
+					// curDBLexiconid = maxLexicon;
+				}
+				return true;
+			} catch (SQLException e) {
+				log.error("", e);
+				return false;
+			} finally {
+				try {
+					if (conn != null)
+						conn.close();
+				} catch (SQLException e) {
+					log.error("", e);
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

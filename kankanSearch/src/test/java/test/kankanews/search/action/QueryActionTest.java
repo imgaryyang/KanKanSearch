@@ -18,12 +18,14 @@ public class QueryActionTest extends JUnitActionBase {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		request.setServletPath("/search/query");
-		request.setParameter("word", "(乌镇)");
+		request.setParameter("word", "(胡锦涛会见连战)");
 		// request.setParameter("author", "天脉素材");
 		request.setParameter("page", "1");
 		request.setParameter("rows", "20");
-		request.setParameter("type", "1");
-		request.setParameter("highlight", "true");
+//		request.setParameter("type", "1");
+//		request.setParameter("highlight", "true");
+		request.setParameter("nreinfo", "0");
+		request.setParameter("checked", "1");
 		request.setParameter("isduplicate", "true");
 		System.out.println(new Date());
 		final ModelAndView mav = this.excuteAction(request, response);

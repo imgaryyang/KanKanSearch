@@ -108,13 +108,12 @@ public final class DBHelper {
 
 	public static ResultSet executeQuery(String sql) {
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = getConnection();
-			stmt = conn.createStatement();
-			logger.error("简历链接" + stmt + sql);
-			rs = stmt.executeQuery(sql);
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
 		} catch (SQLException err) {
 			logger.error("", err);
 			closeAll(rs, stmt, conn);
