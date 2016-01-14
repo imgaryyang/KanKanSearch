@@ -19,19 +19,12 @@ public class InitListener implements ServletContextListener {
 		app = WebApplicationContextUtils.getWebApplicationContext(event
 				.getServletContext()); // 获取spring上下文！
 		manager = (TaskManager) app.getBean("taskManager");
-		IncrementIndexTask task = (IncrementIndexTask) app
-				.getBean("incrementIndexTask");
-		Thread incrementIndexTask = manager.getIncrementIndexTask();
-		if (incrementIndexTask == null) {
-			incrementIndexTask = new Thread(task);
-			manager.setIncrementIndexTask(incrementIndexTask);
-		}
-		incrementIndexTask.start();
+		manager.start();
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
-		manager.getIncrementIndexTask().interrupt();
+		manager.destroy();
 	}
 
 }

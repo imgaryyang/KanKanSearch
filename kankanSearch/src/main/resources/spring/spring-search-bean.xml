@@ -23,6 +23,7 @@
 
 	<bean id="taskManager" class="com.kankanews.search.task.TaskManager"
 		scope="singleton">
+		<property name="incrementIndexTask" ref="incrementIndexTask"></property>
 	</bean>
 
 	<bean id="dbHepler" class="com.kankanews.search.core.DBHelper">

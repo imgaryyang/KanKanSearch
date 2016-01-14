@@ -2,13 +2,32 @@ package com.kankanews.search.task;
 
 public class TaskManager {
 
-	private static Thread incrementIndexTask;
+	private Thread incrementIndexTaskThread;
+	private IncrementIndexTask incrementIndexTask;
 
-	public Thread getIncrementIndexTask() {
+	public void start() {
+		if (incrementIndexTaskThread == null) {
+			incrementIndexTaskThread = new Thread(incrementIndexTask);
+		}
+		incrementIndexTaskThread.start();
+	}
+
+	public void destroy() {
+		if (incrementIndexTaskThread != null) {
+			incrementIndexTaskThread.interrupt();
+		}
+	}
+
+	public String getTaskInfo() {
+		return "IncrementIndexTask " + incrementIndexTaskThread.getState()
+				+ " " + incrementIndexTaskThread.isAlive();
+	}
+
+	public IncrementIndexTask getIncrementIndexTask() {
 		return incrementIndexTask;
 	}
 
-	public void setIncrementIndexTask(Thread incrementIndexTask) {
+	public void setIncrementIndexTask(IncrementIndexTask incrementIndexTask) {
 		this.incrementIndexTask = incrementIndexTask;
 	}
 

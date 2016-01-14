@@ -22,8 +22,6 @@ public class TaskManagerAction {
 	@RequestMapping("/getTaskInfo")
 	@ResponseBody
 	public String getTaskInfo() {
-		Thread incrementIndexTask = taskManager.getIncrementIndexTask();
-		return "IncrementIndexTask " + incrementIndexTask.getState() + " "
-				+ incrementIndexTask.isAlive();
+		return taskManager.getTaskInfo();
 	}
 }

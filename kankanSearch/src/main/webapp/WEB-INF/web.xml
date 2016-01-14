@@ -54,9 +54,8 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<!-- init listener -->
-	<listener>
-		<listener-class>com.kankanews.search.listener.InitListener</listener-class>
-	</listener>
+	<!-- <listener> <listener-class>com.kankanews.search.listener.InitListener</listener-class> 
+		</listener> -->
 
 
 	<servlet>
@@ -66,6 +65,12 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring/*.xml</param-value>
 		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>initServlet</servlet-name>
+		<servlet-class>com.kankanews.search.servlet.InitServlet</servlet-class>
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 

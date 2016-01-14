@@ -34,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -85,16 +86,19 @@ public class Dictionary {
 		this.loadQuantifierDict();
 		Calendar cal = Calendar.getInstance();
 		// 每天定点执行
-		cal.set(Calendar.HOUR_OF_DAY, 2);
+		cal.set(Calendar.HOUR_OF_DAY, 10);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
-		cal.add(Calendar.DAY_OF_MONTH, 1);
+		// cal.add(Calendar.DAY_OF_MONTH, 1);
+		long delay = cal.getTime().getTime() - new Date().getTime();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				// 执行的内容
+				boolean flag = loadDbDict();
+				System.out.println(flag);
 			}
-		}, cal.getTime(), 24 * 60 * 60 * 1000);
+		}, delay, 24 * 60 * 60 * 1000);
 	}
 
 	/**

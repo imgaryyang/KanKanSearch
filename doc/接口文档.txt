@@ -22,20 +22,22 @@
 	qtime : 搜索时间
 	queryresult  :  返回结果(Array)
 					字段 	id
-							classid
-							type
-							title 
-							onclick
-							checked
-							titlepic
-							newstime 
-							keywords
-							videourl
-							titleurl
-							authorid
 							author
+							authorid
+							classid
+							checked
 							intro 
 							imagegroup 
+							keywords
+							newstime 
+							onclick
+							sourceid
+							type
+							title 
+							titlepic
+							titleurl
+							taskid
+							videourl
 							
 
 	
