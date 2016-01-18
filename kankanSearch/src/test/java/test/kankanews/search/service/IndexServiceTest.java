@@ -29,7 +29,7 @@ public class IndexServiceTest extends JUnitDaoBase {
 		IncrementNew news = new IncrementNew();
 		news.setId("1096903");
 		news.setTable("kk_ecms_kankanvideos");
-		indexService.deleteOne(news);
+//		indexService.deleteOne(news);
 		indexService.addOne(news);
 	}
 }

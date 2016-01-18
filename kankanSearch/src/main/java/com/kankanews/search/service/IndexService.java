@@ -37,7 +37,7 @@ public class IndexService {
 		int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
-		ResultSet rs = videoDAO.getAllVideo();
+		ResultSet rs = videoDAO.getAllNews();
 		if (rs == null) {
 			isIndexingWhole = false;
 			return false;
@@ -46,33 +46,10 @@ public class IndexService {
 			solrClient.connect();
 			logger.info("建立连接");
 			System.gc();
-			// select id, onclick, title, titlepic, newstime, keywords,
-			// createtime, videourl
 			docIndexNum = 0;
 			while (rs.next()) {
 				SolrInputDocument doc = resultSet2SolrDoc(rs, curIndexVersion
 						+ "");
-				// SolrInputDocument doc = new SolrInputDocument();
-				// doc.addField("id", rs.getObject("id"));
-				// doc.addField("classid", rs.getObject("classid"));
-				// doc.addField("type", rs.getObject("type"));
-				// doc.addField("checked", rs.getObject("checked"));
-				// doc.addField("title", rs.getObject("title"));
-				// doc.addField("titleGroup", rs.getObject("title"));
-				// doc.addField("onclick", rs.getObject("onclick"));
-				// doc.addField("titlepic", rs.getObject("titlepic"));
-				// doc.addField("newstime", rs.getObject("newstime"));
-				// doc.addField("keywords", rs.getObject("keywords"));
-				// doc.addField("videourl", rs.getObject("videourl"));
-				// doc.addField("titleurl", rs.getObject("titleurl"));
-				// doc.addField("authorid", rs.getObject("authorid"));
-				// doc.addField("author", rs.getObject("author"));
-				// doc.addField("intro", rs.getObject("intro"));
-				// doc.addField("taskid", rs.getObject("taskid"));
-				// doc.addField("sourceid", rs.getObject("sourceid"));
-				// doc.addField("imagegroup", rs.getObject("imagegroup"));
-				// doc.addField("docversion", curIndexVersion);
-				// doc.addField("docTable", rs.getObject("docTable"));
 				docIndexNum++;
 				if (doc != null)
 					_docs.add(doc);
@@ -84,9 +61,6 @@ public class IndexService {
 					Thread.sleep(1000);
 					_docs.clear();
 				}
-				// if (docIndexNum >= 300000) {
-				// break;
-				// }
 			}
 			if (!_docs.isEmpty()) {
 				solrClient.add(_docs);
@@ -115,7 +89,6 @@ public class IndexService {
 			// logger.error("", e);
 			// }
 		}
-		// deleteWhole();
 		logger.info("建立索引结束");
 		return true;
 	}
@@ -222,6 +195,52 @@ public class IndexService {
 		return true;
 	}
 
+	public boolean reindex(long stTime, long edTime) {
+		String curIndexVersion = GlobalConfig._INDEX_VERSION_;
+		ResultSet rs = null;
+		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
+		try {
+			rs = videoDAO.getRangeNews(stTime, edTime);
+			solrClient.connect();
+			solrClient.deleteByQuery("newstime:[" + stTime + " TO " + edTime
+					+ "]" + " AND docversion:" + curIndexVersion);
+			if (rs != null) {
+				while (rs.next()) {
+					SolrInputDocument doc = resultSet2SolrDoc(rs,
+							curIndexVersion);
+					if (doc != null) {
+						_docs.add(doc);
+						if (_docs.size() >= 5000) {
+							solrClient.add(_docs);
+							Thread.sleep(1000);
+							logger.info("提交");
+							solrClient.commit();
+							Thread.sleep(1000);
+							_docs.clear();
+						}
+					}
+				}
+				if (!_docs.isEmpty()) {
+					solrClient.add(_docs);
+					logger.info("提交");
+					solrClient.commit();
+					_docs.clear();
+				}
+				_docs = null;
+				System.gc();
+			} else {
+				logger.error("重建索引未查询到任何记录");
+				return false;
+			}
+		} catch (Exception e) {
+			logger.error("", e);
+			return false;
+		} finally {
+			DBHelper.closeConn(rs);
+		}
+		return true;
+	}
+
 	public CloudSolrClient getSolrClient() {
 		return solrClient;
 	}
@@ -266,31 +285,31 @@ public class IndexService {
 			String curIndexVersion) {
 		try {
 			SolrInputDocument doc = new SolrInputDocument();
-			doc.addField("id", rs.getObject("id"));
-			doc.addField("classid", rs.getObject("classid"));
-			doc.addField("type", rs.getObject("type"));
-			doc.addField("checked", rs.getObject("checked"));
-			doc.addField("title", rs.getObject("title"));
-			doc.addField("title_smart", rs.getObject("title"));
-			doc.addField("titleGroup", rs.getObject("title"));
-			doc.addField("onclick", rs.getObject("onclick"));
-			doc.addField("titlepic", rs.getObject("titlepic"));
-			doc.addField("newstime", rs.getObject("newstime"));
-			doc.addField("keywords", rs.getObject("keywords"));
-			doc.addField("keywords_smart", rs.getObject("keywords"));
-			doc.addField("videourl", rs.getObject("videourl"));
-			doc.addField("titleurl", rs.getObject("titleurl"));
-			doc.addField("authorid", rs.getObject("authorid"));
-			doc.addField("author", rs.getObject("author"));
-			doc.addField("intro", rs.getObject("intro"));
-			doc.addField("intro_smart", rs.getObject("intro"));
-			doc.addField("taskid", rs.getObject("taskid"));
-			doc.addField("sourceid", rs.getObject("sourceid"));
-			doc.addField("imagegroup", rs.getObject("imagegroup"));
-			doc.addField("nreinfo", rs.getObject("nreinfo"));
-			doc.addField("contentid", rs.getObject("contentid"));
+			doc.addField("id", rs.getString("id"));
+			doc.addField("classid", rs.getString("classid"));
+			doc.addField("type", rs.getString("type"));
+			doc.addField("checked", rs.getString("checked"));
+			doc.addField("title", rs.getString("title"));
+			doc.addField("title_smart", rs.getString("title"));
+			doc.addField("titleGroup", rs.getString("title"));
+			doc.addField("onclick", rs.getString("onclick"));
+			doc.addField("titlepic", rs.getString("titlepic"));
+			doc.addField("newstime", rs.getString("newstime"));
+			doc.addField("keywords", rs.getString("keywords"));
+			doc.addField("keywords_smart", rs.getString("keywords"));
+			doc.addField("videourl", rs.getString("videourl"));
+			doc.addField("titleurl", rs.getString("titleurl"));
+			doc.addField("authorid", rs.getString("authorid"));
+			doc.addField("author", rs.getString("author"));
+			doc.addField("intro", rs.getString("intro"));
+			doc.addField("intro_smart", rs.getString("intro"));
+			doc.addField("taskid", rs.getString("taskid"));
+			doc.addField("sourceid", rs.getString("sourceid"));
+			doc.addField("imagegroup", rs.getString("imagegroup"));
+			doc.addField("nreinfo", rs.getString("nreinfo"));
+			doc.addField("contentid", rs.getString("contentid"));
 			doc.addField("docversion", curIndexVersion);
-			doc.addField("docTable", rs.getObject("docTable"));
+			doc.addField("docTable", rs.getString("docTable"));
 			return doc;
 		} catch (Exception e) {
 			logger.error("", e);

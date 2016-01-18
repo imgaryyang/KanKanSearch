@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+
+	<!-- ======================== 任务调度 ======================== -->
+
+	<bean id="taskManager" class="com.kankanews.search.task.TaskManager"
+		scope="singleton">
+		<property name="incrementIndexTask" ref="incrementIndexTask"></property>
+	</bean>
+
+	<bean id="incrementIndexTask" class="com.kankanews.search.task.IncrementIndexTask">
+		<property name="httpsqsClient" ref="httpsqsClient"></property>
+		<property name="indexService" ref="indexService"></property>
+	</bean>
+
+	<bean id="periodicIndexTask" class="com.kankanews.search.task.PeriodicIndexTask">
+		<property name="indexService" ref="indexService"></property>
+		<property name="reindexTimeRange" value="${task.reindex_time_range}"></property>
+	</bean>
+
+	<!-- ======================== quartz ======================== -->
+	<bean id="SpringQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="periodicIndexTask" />
+		</property>
+		<property name="targetMethod">  <!-- 要执行的方法名称 -->
+			<value>periodicReindexStart</value>
+		</property>
+	</bean>
+
+	<!-- ======================== 调度触发器 ======================== -->
+	<bean id="CronTriggerBean"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethod"></property>
+		<property name="cronExpression" value="0 12 15 * * ?"></property>
+	</bean>
+
+	<!-- ======================== 调度工厂 ======================== -->
+	<bean id="SpringJobSchedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		scope="singleton">
+		<property name="triggers">
+			<list>
+				<ref bean="CronTriggerBean" />
+			</list>
+		</property>
+	</bean>
+
+</beans>
