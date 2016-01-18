@@ -27,8 +27,14 @@ public class VideoDAO extends BaseDao<Video, String> {
 		this.dbHepler = dbHepler;
 	}
 
-	public ResultSet getAllVideo() {
+	public ResultSet getAllNews() {
 		return dbHepler.executeQuery(globalSQL.getProperty("_WHOLE_INDEX_"));
+	}
+
+	public ResultSet getRangeNews(long stTime, long edTime) {
+		String sql = globalSQL.getProperty("_WHOLE_INDEX_RANGE_");
+		return DBHelper.executeQuery(sql, new Object[] { stTime, edTime,
+				stTime, edTime });
 	}
 
 	public ResultSet getOne(String id) {

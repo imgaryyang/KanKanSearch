@@ -2,8 +2,8 @@ package test.kankanews.search.test.db.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
-import org.hibernate.ScrollableResults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,10 +26,26 @@ public class VideoDAOTest extends JUnitDaoBase {
 	}
 
 	@Test
-	public void testGetAllVideo() throws SQLException {
-		ResultSet result = videoDAO.getAllVideo();
-//		ScrollableResults result = videoDAO.getListByHQLScroll("select v.title from Video v",
-//				null);
+	public void testGetAllNews() throws SQLException {
+		ResultSet result = videoDAO.getAllNews();
+		// ScrollableResults result =
+		// videoDAO.getListByHQLScroll("select v.title from Video v",
+		// null);
+		int i = 0;
+		while (result.next()) {
+			System.out.println(++i + "  " + result.getString(1));
+		}
+		// System.out.println(userDao.findOneByName("张三s"));
+		// System.out.println(userDao.addUser(user));
+	}
+
+	@Test
+	public void testGetRangeNews() throws SQLException {
+		long now = new Date().getTime() / 1000;
+		ResultSet result = videoDAO.getRangeNews(now - 15768000L, now);
+		// ScrollableResults result =
+		// videoDAO.getListByHQLScroll("select v.title from Video v",
+		// null);
 		int i = 0;
 		while (result.next()) {
 			System.out.println(++i + "  " + result.getString(1));
