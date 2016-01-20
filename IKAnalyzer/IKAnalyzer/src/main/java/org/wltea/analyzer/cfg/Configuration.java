@@ -83,5 +83,7 @@ public interface Configuration {
 	public String getDBUser();
 
 	public String getDBPassword();
+	
+	public int getPeriodicTime();
 
 }

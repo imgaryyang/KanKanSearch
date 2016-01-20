@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">  
-<properties>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
 	<comment>IK Analyzer 扩展配置</comment>
 	<!--用户可以在这里配置自己的扩展字典 -->
-	<entry key="ext_dict">ext.dic</entry> 
-	
-	<!--用户可以在这里配置自己的扩展停止词字典-->
-	<entry key="ext_stopwords">stopword.dic;</entry> 
-	
+	<entry key="ext_dict">ext.dic;</entry>
+
+	<!--用户可以在这里配置自己的扩展停止词字典 -->
+	<entry key="ext_stopwords">stopword.dic;</entry>
+	<!--用户可以在这里配置自己的扩展字典 -->
+	<entry key="db_driver">com.mysql.jdbc.Driver</entry>
+	<!--用户可以在这里配置自己的扩展字典 -->
+	<entry key="db_host">jdbc:mysql://172.16.10.45:3306/kankancms</entry>
+
+	<!--用户可以在这里配置自己的扩展停止词字典 -->
+	<entry key="db_user">kkindex</entry>
+	<!--用户可以在这里配置自己的扩展停止词字典 -->
+	<entry key="db_pw">SMGtest</entry>
+	<!--用户可以在这里配置自己的扩展停止词字典 -->
+	<entry key="periodic_time">2</entry>
 </properties>

@@ -45,9 +45,6 @@ public class AnalyseUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(analyse("胡锦涛会见连战").size());
-		System.out.println(analyse("胡锦涛会见连战"));
-		System.out.println(analyse("爸爸去哪儿萌娃王诗龄瘦身成功").size());
-		System.out.println(analyse("爸爸去哪儿萌娃王诗龄瘦身成功"));
+		System.out.println(analyse("(胡锦涛会见连战)"));
 	}
 }

@@ -34,7 +34,8 @@ public class JUnitActionBase {
 			String[] configs = {
 					"file:src/main/resources/spring/springmvc-config.xml",
 					"file:src/main/resources/spring/spring-search-bean.xml",
-					"file:src/main/resources/spring/spring-search-datasource.xml" };
+					"file:src/main/resources/spring/spring-search-datasource.xml",
+					"file:src/main/resources/spring/spring-search-task.xml" };
 			// String[] configs = { "file:src/config/applicationContext.xml" };
 			XmlWebApplicationContext context = new XmlWebApplicationContext();
 			context.setConfigLocations(configs);

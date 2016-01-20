@@ -60,6 +60,8 @@ public class DefaultConfig implements Configuration {
 	private static final String DB_USER = "db_user";
 	// 配置属性——扩展数据库密码
 	private static final String DB_PW = "db_pw";
+	// 配置属性——扩展数据库密码
+	private static final String PERIODIC_TIME = "periodic_time";
 
 	private Properties props;
 	/*
@@ -189,6 +191,10 @@ public class DefaultConfig implements Configuration {
 
 	public String getDBDriver() {
 		return props.getProperty(DB_DRIVER);
+	}
+
+	public int getPeriodicTime() {
+		return Integer.parseInt(props.getProperty(PERIODIC_TIME));
 	}
 
 }

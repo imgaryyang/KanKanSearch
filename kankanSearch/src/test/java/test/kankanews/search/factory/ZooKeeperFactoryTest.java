@@ -19,12 +19,14 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void clientTest() {
-		// zookeeperClient = zookeeperClient.usingNamespace(null);
+		zookeeperClient = zookeeperClient.usingNamespace(null);
 		try {
+			zookeeperClient.delete().deletingChildrenIfNeeded()
+			.forPath("/overseer_elect");
 			// zookeeperClient.delete().deletingChildrenIfNeeded()
 			// .forPath("/aliases.json");
-			// zookeeperClient.delete().deletingChildrenIfNeeded()
-			// .forPath("/clusterstate.json");
+//			zookeeperClient.delete().deletingChildrenIfNeeded()
+//					.forPath("/clusterstate.json");
 			// zookeeperClient.delete().forPath("/schema.xml");
 			// zookeeperClient.create().forPath("/myconf");
 			// zookeeperClient.create().forPath("/myconf/schema.xml");
@@ -33,11 +35,11 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 			// "G://solr/conf/schema.xml"));
 			// zookeeperClient.setData().forPath("/solrConf/schema.xml",
 			// schema);
-			//
-			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-					"G://solr/conf/solrconfig.xml"));
-			zookeeperClient.setData().forPath("/solrConf/solrconfig.xml",
-					solrconfig);
+			// //
+			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
+			// "G://solr/conf/solrconfig.xml"));
+			// zookeeperClient.setData().forPath("/solrConf/solrconfig.xml",
+			// solrconfig);
 
 			// zookeeperClient.create().forPath("/solrConf/admin-extra.html");
 			// byte[] admin_extra = FileUtils.readFileToByteArray(new File(
