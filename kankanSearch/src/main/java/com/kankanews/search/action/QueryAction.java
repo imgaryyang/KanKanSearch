@@ -63,6 +63,7 @@ public class QueryAction {
 			@RequestParam(defaultValue = "") String analyse) {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> searchTerm = new HashMap<String, String>();
+		String analysedWord = null;
 		if (wordsmart != null && !wordsmart.trim().equals("")) {
 			// searchTerm.put("all", word);
 			// searchTerm.put("title", word2);
@@ -73,7 +74,7 @@ public class QueryAction {
 			for (String string : words) {
 				wordBuf.append(string).append(" ");
 			}
-			String analysedWord = "(" + wordBuf.toString() + ")";
+			analysedWord = "(" + wordBuf.toString() + ")";
 			buf.append(" AND (title_smart:").append(analysedWord + "^1");
 			buf.append(" AND keywords_smart:").append(analysedWord + "");
 			buf.append(" OR intro_smart:").append(analysedWord + ")");
@@ -88,7 +89,7 @@ public class QueryAction {
 			for (String string : words) {
 				wordBuf.append(string).append(" ");
 			}
-			String analysedWord = "(" + wordBuf.toString() + ")";
+			analysedWord = "(" + wordBuf.toString() + ")";
 			buf.append(" AND (title:").append(analysedWord + "^10");
 			buf.append(" OR all2:").append(analysedWord + ")");
 			// buf.append(" OR intro:").append(analysedWord + ")");
@@ -123,10 +124,11 @@ public class QueryAction {
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = queryService.search(buf.toString(), page, rows,
-					new String[0], new Boolean[0], highlight, highlighttag);
+					new String[0], new Boolean[0], highlight, analysedWord,
+					highlighttag);
 		} else {
 			result = queryService.searchGroup(buf.toString(), page, rows,
-					highlight, highlighttag);
+					highlight, analysedWord, highlighttag);
 		}
 		return result;
 	}
