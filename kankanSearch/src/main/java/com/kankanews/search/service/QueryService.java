@@ -30,7 +30,7 @@ public class QueryService {
 
 	public Map<String, Object> search(String queryStr, int page, int rows,
 			String[] sortfield, Boolean[] flag, Boolean isHighLight,
-			String highlighttag, boolean isSort) {
+			String hightLightQuery, String highlighttag) {
 		// 检测输入是否合法
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -51,17 +51,19 @@ public class QueryService {
 			query.setStart((page - 1) * rows);
 			query.setRows(rows);
 			query.set("shards.tolerant", true);
-//			if (isSort) {
-				query.setQuery(queryStrBuf.toString());
-				query.setParam("sort", "score desc,newstime desc");
-				//				query.setSort("score", ORDER.desc);
-//				query.setSort("newstime", ORDER.desc);
-//			} else {
-//				query.set("q.alt", queryStrBuf.toString());
-//				query.set("defType", "dismax");
-//				query.set("bf", _SCORE_FUN_);
-//			}
+			// if (isSort) {
+			query.setQuery(queryStrBuf.toString());
+			query.setParam("sort", "score desc,newstime desc");
+			// query.setSort("score", ORDER.desc);
+			// query.setSort("newstime", ORDER.desc);
+			// } else {
+			// query.set("q.alt", queryStrBuf.toString());
+			// query.set("defType", "dismax");
+			// query.set("bf", _SCORE_FUN_);
+			// }hl.q
 			if (isHighLight) {
+				query.setParam("hl.q", "(intro:" + hightLightQuery
+						+ " AND title:" + hightLightQuery + ")");
 				query.setHighlight(true); // 开启高亮组件
 				query.addHighlightField("intro");// 高亮字段
 				query.addHighlightField("title");// 高亮字段
@@ -127,7 +129,7 @@ public class QueryService {
 	 * @Date 2015-1-7 输出结果的时候，由于定义的数据索引没有做很好是调整，显示的结果并不理想，不过此方法可以作为参考
 	 */
 	public Map<String, Object> searchGroup(String queryStr, int page, int rows,
-			boolean isHighLight, String highlighttag, boolean isSort) {
+			boolean isHighLight, String hightLightQuery, String highlighttag) {
 		String indexVersion = GlobalConfig._INDEX_VERSION_;
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("num", "0");
@@ -148,19 +150,21 @@ public class QueryService {
 		query.setParam(GroupParams.GROUP_TOTAL_COUNT, true);
 		query.setParam("hl", isHighLight);
 
-//		if (isSort) {
-			query.setQuery(queryStrBuf.toString());
-//			query.setSort("score", ORDER.desc);
-//			query.setSort("newstime", ORDER.desc);
-			query.setParam("sort", "score desc,newstime desc");
-//		} else {
-//			query.set("q.alt", queryStrBuf.toString());
-//			query.set("defType", "dismax");
-//			query.set("bf", _SCORE_FUN_);
-//		}
+		// if (isSort) {
+		query.setQuery(queryStrBuf.toString());
+		// query.setSort("score", ORDER.desc);
+		// query.setSort("newstime", ORDER.desc);
+		query.setParam("sort", "score desc,newstime desc");
+		// } else {
+		// query.set("q.alt", queryStrBuf.toString());
+		// query.set("defType", "dismax");
+		// query.set("bf", _SCORE_FUN_);
+		// }
 
 		// 设置高亮
 		if (isHighLight) {
+			query.setParam("hl.q", "(intro:" + hightLightQuery + " AND title:"
+					+ hightLightQuery + ")");
 			query.setHighlight(true); // 开启高亮组件
 			query.addHighlightField("intro");// 高亮字段
 			query.addHighlightField("title");// 高亮字段

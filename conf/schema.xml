@@ -9,6 +9,15 @@
 
 	<fieldType name="text_general" class="solr.TextField" positionIncrementGap="100"/>  
 	
+	<fieldType name="text_whitespace" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="solr.WhitespaceTokenizerFactory"/> 
+		</analyzer>
+	</fieldType> 
+	
 	<fieldType name="text_ik_smart_all" class="solr.TextField" positionIncrementGap="100">
 		<analyzer type="index"> 
 			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
@@ -36,6 +45,17 @@
 		</analyzer>
 	</fieldType>
 	
+	<fieldType name="text_spell" class="solr.TextField">  
+      <analyzer type="index">  
+        <tokenizer class="solr.StandardTokenizerFactory"/>  
+        <filter class="solr.LowerCaseFilterFactory"/>  
+      </analyzer>  
+      <analyzer type="query">  
+        <tokenizer class="solr.StandardTokenizerFactory"/>  
+        <filter class="solr.LowerCaseFilterFactory"/>  
+      </analyzer>  
+    </fieldType>
+	
 	<fieldtype name="text_mmseg_Complex" class="solr.TextField" positionIncrementGap="100">
 		<analyzer>
 			<tokenizer class="com.chenlb.mmseg4j.solr.MMSegTokenizerFactory" mode="complex" dicPath="/usr/local/tomcat/webapps/solr/WEB-INF/classes/ext.dic"/>
@@ -58,37 +78,48 @@
 		<field name="classid" type="string" indexed="true" stored="true" multiValued="false"/> 
 		<field name="checked" type="string" indexed="true" stored="true" multiValued="false" />
 		<field name="type" type="string" indexed="true" stored="true" multiValued="false"/> 
-		<field name="title" type="text_ik" indexed="true" stored="true" multiValued="false" /> 
+		<field name="title" type="text_whitespace" indexed="true" stored="true" multiValued="false" /> 
+		<field name="title_smart" type="text_ik_smart" indexed="true" stored="true" multiValued="false" /> 
 		<field name="titleGroup" type="string" indexed="true" stored="true" multiValued="false" docValues="true"/> 
 		<field name="onclick" type="string" indexed="false" stored="true" multiValued="false" /> 
 		<field name="titlepic" type="string" indexed="false" stored="true" multiValued="false" /> 
-		<field name="newstime" type="string" indexed="false" stored="true" multiValued="false" /> 
-		<field name="keywords" type="text_ik" indexed="false" stored="true" multiValued="false" /> 
-		<field name="videourl" type="string" indexed="false" stored="true" multiValued="false"/> 
-		<field name="titleurl" type="string" indexed="false" stored="true" multiValued="false"/> 
+		<field name="newstime" type="long" indexed="true" stored="true" multiValued="false" /> 
+		<field name="keywords" type="text_whitespace" indexed="true" stored="true" multiValued="false" /> 
+		<field name="keywords_smart" type="text_ik_smart" indexed="true" stored="true" multiValued="false" /> 
+		<field name="videourl" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="titleurl" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="sourceid" type="string" indexed="true" stored="true" multiValued="false"/> 
 		<field name="authorid" type="string" indexed="true" stored="true" multiValued="false"/> 
 		<field name="author" type="string" indexed="true" stored="true" multiValued="false"/> 
-		<field name="intro" type="text_ik" indexed="true" stored="true" multiValued="false"/> 
+		<field name="taskid" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="intro" type="text_whitespace" indexed="true" stored="true" multiValued="false"/> 
+		<field name="intro_smart" type="text_ik_smart" indexed="true" stored="true" multiValued="false" /> 
 		<field name="imagegroup" type="string" indexed="false" stored="true" multiValued="false"/> 
+		<field name="nreinfo" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="contentid" type="string" indexed="true" stored="true" multiValued="false"/> 
 		<field name="docversion" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="docTable" type="string" indexed="true" stored="true" multiValued="false"/>
 		<!--拷贝字段-->
-		<field name="all" type="text_ik_smart" indexed="true" stored="false" multiValued="true"/>
+		<field name="all" type="text_ik" indexed="true" stored="false" multiValued="true"/>
 		<!--拷贝字段-->
 		<field name="all2" type="text_ik" indexed="true" stored="false" multiValued="true"/>
-
 		
+		<!--提示字段-->
+		<field name="suggestion" type="text_ik" indexed="true" stored="true" termVectors="true" multiValued="true" />  
+
 		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 
-	</fields>
-	<copyField source="title" dest="all"/>
+	</fields> 
 	<copyField source="keywords" dest="all"/>
 	<copyField source="intro" dest="all"/>
 	<copyField source="title" dest="all2"/>
 	<copyField source="keywords" dest="all2"/>
 	<copyField source="intro" dest="all2"/>
+	<copyField source="title" dest="suggestion" /> 
 
 	<solrQueryParser defaultOperator="OR"/>  
 	<uniqueKey>docId</uniqueKey>
 	<defaultSearchField>all</defaultSearchField>
+	<similarity class="com.kankanews.search.similarity.IgnoreLengthNormAndTfSimilarity"/>
 
 </schema>

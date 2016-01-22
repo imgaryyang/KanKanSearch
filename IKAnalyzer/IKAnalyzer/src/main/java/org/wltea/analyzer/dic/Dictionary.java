@@ -86,17 +86,17 @@ public class Dictionary {
 		this.loadQuantifierDict();
 		Calendar cal = Calendar.getInstance();
 		// 每天定点执行
-		cal.set(Calendar.HOUR_OF_DAY, 10);
+		cal.set(Calendar.HOUR_OF_DAY, cfg.getPeriodicTime());
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
-		// cal.add(Calendar.DAY_OF_MONTH, 1);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
 		long delay = cal.getTime().getTime() - new Date().getTime();
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				// 执行的内容
 				boolean flag = loadDbDict();
-				System.out.println(flag);
+				log.info("词库加载:" + flag);
 			}
 		}, delay, 24 * 60 * 60 * 1000);
 	}
@@ -324,7 +324,6 @@ public class Dictionary {
 	private boolean loadDbDict() {
 		_MainDict = new DictSegment((char) 0);
 		log.info("加载DB");
-		System.out.println("加载DB");
 		// 加载扩展词典配置
 		String driver = cfg.getDBDriver();
 		String host = cfg.getDBHost();

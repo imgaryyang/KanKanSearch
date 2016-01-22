@@ -28,17 +28,26 @@ public class ConfigAction {
 		return GlobalConfig._IS_INCREMENT_INDEX_ + "";
 	}
 
+	@RequestMapping("/config/isPeriodicIndex/{is}")
+	@ResponseBody
+	public String isPeriodicIndex(@PathVariable Boolean is) {
+		GlobalConfig._IS_PERIODIC_INDEX_ = is;
+		return GlobalConfig._IS_PERIODIC_INDEX_ + "";
+	}
+
 	@RequestMapping("/config/getConfig")
 	@ResponseBody
 	public String getConfig() {
-		return GlobalConfig._IS_INCREMENT_INDEX_ + ""
-				+ GlobalConfig._INDEX_VERSION_;
+		return "_IS_INCREMENT_INDEX_ : " + GlobalConfig._IS_INCREMENT_INDEX_
+				+ "<br/>" + "_INDEX_VERSION_ : " + GlobalConfig._INDEX_VERSION_
+				+ "<br/>" + "_IS_PERIODIC_INDEX_ : "
+				+ GlobalConfig._IS_PERIODIC_INDEX_;
 	}
 
 	@RequestMapping("/config")
 	@ResponseBody
 	public ModelAndView show() {
-		ModelAndView model = new ModelAndView("config");
+		ModelAndView model = new ModelAndView("home");
 		model.addObject("_IS_INCREMENT_INDEX_",
 				GlobalConfig._IS_INCREMENT_INDEX_);
 		logger.info("屌屌屌");

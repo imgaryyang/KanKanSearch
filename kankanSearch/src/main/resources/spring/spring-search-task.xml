@@ -45,7 +45,7 @@
 	<bean id="CronTriggerBean"
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="SpringQtzJobMethod"></property>
-		<property name="cronExpression" value="0 12 15 * * ?"></property>
+		<property name="cronExpression" value="0 30 2 * * ?"></property>
 	</bean>
 
 	<!-- ======================== 调度工厂 ======================== -->
