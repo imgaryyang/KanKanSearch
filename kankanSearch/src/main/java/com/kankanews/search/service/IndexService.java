@@ -14,11 +14,11 @@ import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.config.GlobalConfig;
-import com.kankanews.search.core.DBHelper;
-import com.kankanews.search.core.GsonUtil;
 import com.kankanews.search.db.dao.PhotoDAO;
 import com.kankanews.search.db.dao.VideoDAO;
 import com.kankanews.search.db.model.IncrementNew;
+import com.kankanews.search.utils.DBHelper;
+import com.kankanews.search.utils.GsonUtil;
 
 public class IndexService {
 	Logger logger = Logger.getLogger(IndexService.class);

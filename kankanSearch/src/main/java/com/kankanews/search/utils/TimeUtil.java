@@ -1,4 +1,4 @@
-package com.kankanews.search.core;
+package com.kankanews.search.utils;
 
 import java.util.Calendar;
 import java.util.Date;

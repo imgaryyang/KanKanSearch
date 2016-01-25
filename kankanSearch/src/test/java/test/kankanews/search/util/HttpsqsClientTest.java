@@ -1,4 +1,4 @@
-package test.kankanews.search.core;
+package test.kankanews.search.util;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,8 +7,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.kankanews.search.core.httpsqs.HttpsqsClient;
-import com.kankanews.search.core.httpsqs.HttpsqsException;
+import com.kankanews.search.utils.httpsqs.HttpsqsClient;
+import com.kankanews.search.utils.httpsqs.HttpsqsException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/*.xml" })

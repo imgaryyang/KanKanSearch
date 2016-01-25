@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kankanews.search.config.GlobalConfig;
-import com.kankanews.search.core.GsonUtil;
-import com.kankanews.search.core.httpsqs.HttpsqsClient;
 import com.kankanews.search.db.model.IncrementNew;
 import com.kankanews.search.service.IndexService;
+import com.kankanews.search.utils.GsonUtil;
+import com.kankanews.search.utils.httpsqs.HttpsqsClient;
 
 public class IncrementIndexTask implements Runnable {
 	Logger logger = Logger.getLogger(IncrementIndexTask.class);

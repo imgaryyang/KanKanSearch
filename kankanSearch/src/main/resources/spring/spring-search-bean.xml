@@ -28,7 +28,7 @@
 
 	<!-- ======================== 模型层 ======================== -->
 
-	<bean id="dbHepler" class="com.kankanews.search.core.DBHelper">
+	<bean id="dbHepler" class="com.kankanews.search.utils.DBHelper">
 		<property name="driver" value="${jdbc.driver}"></property>
 		<property name="url" value="${jdbc.url}"></property>
 		<property name="user" value="${jdbc.user}"></property>
@@ -64,7 +64,7 @@
 	<bean id="zookeeperClient" factory-bean="zookeeperFactory"
 		factory-method="instanceClient">
 	</bean>
-	<bean id="httpsqsClient" class="com.kankanews.search.core.httpsqs.HttpsqsClient">
+	<bean id="httpsqsClient" class="com.kankanews.search.utils.httpsqs.HttpsqsClient">
 		<property name="prefix" value="${httpsqs.prefix}"></property>
 		<property name="queueName" value="${httpsqs.queuename}"></property>
 	</bean>

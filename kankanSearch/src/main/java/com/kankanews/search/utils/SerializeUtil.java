@@ -1,4 +1,4 @@
-package com.kankanews.search.core;
+package com.kankanews.search.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

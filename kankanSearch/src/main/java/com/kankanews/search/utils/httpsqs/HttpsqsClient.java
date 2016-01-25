@@ -1,4 +1,4 @@
-package com.kankanews.search.core.httpsqs;
+package com.kankanews.search.utils.httpsqs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
