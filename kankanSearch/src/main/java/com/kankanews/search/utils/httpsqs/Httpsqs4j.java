@@ -1,4 +1,4 @@
-package com.kankanews.search.core.httpsqs;
+package com.kankanews.search.utils.httpsqs;
 
 
 public class Httpsqs4j {

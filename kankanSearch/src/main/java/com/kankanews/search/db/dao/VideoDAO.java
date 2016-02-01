@@ -8,9 +8,9 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kankanews.search.core.DBHelper;
 import com.kankanews.search.db.base.BaseDao;
 import com.kankanews.search.db.model.Video;
+import com.kankanews.search.utils.DBHelper;
 
 public class VideoDAO extends BaseDao<Video, String> {
 

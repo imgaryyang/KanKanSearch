@@ -1,4 +1,4 @@
-package com.kankanews.search.core;
+package com.kankanews.search.utils;
 
  
 import com.fasterxml.jackson.core.JsonParser;

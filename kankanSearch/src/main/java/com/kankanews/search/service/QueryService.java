@@ -18,8 +18,8 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.GroupParams;
 
 import com.kankanews.search.config.GlobalConfig;
-import com.kankanews.search.core.JacksonUtil;
 import com.kankanews.search.db.model.SearchResult;
+import com.kankanews.search.utils.JacksonUtil;
 
 public class QueryService {
 	Logger logger = Logger.getLogger(QueryService.class);

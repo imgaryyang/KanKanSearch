@@ -5,7 +5,7 @@
  * Copyright 2010 QinYu, Inc. All rights reserved.
  * 
  */
-package com.kankanews.search.core.httpsqs;
+package com.kankanews.search.utils.httpsqs;
 
 import java.util.regex.Pattern;
 

@@ -6,6 +6,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/lib"/>
+        <dependent-module archiveName="IKAnalyzer-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/IKAnalyzer/IKAnalyzer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/kankanSearch/target/classes"/>
         <property name="context-root" value="kankanSearch"/>
     </wb-module>

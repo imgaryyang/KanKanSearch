@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kankanews.search.core.AnalyseUtil;
 import com.kankanews.search.service.QueryService;
+import com.kankanews.search.utils.AnalyseUtil;
 
 @Controller
 @RequestMapping("/search")
