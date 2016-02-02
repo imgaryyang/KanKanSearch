@@ -45,6 +45,6 @@ public class AnalyseUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(analyse("(胡锦涛会见连战)"));
+		System.out.println(analyse("(六小龄童)"));
 	}
 }

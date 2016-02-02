@@ -77,8 +77,8 @@ public class LexiconUtil {
 					String pinyin = PinYinUtil.converterToFirstSpell(word);
 
 					System.out.println(word + " : " + pinyin.split(",")[0]);
-					st.execute("insert into kk_lexicon values(null,'" + word
-							+ "','" + pinyin.split(",")[0] + "')");
+					st.execute("insert into kk_lexicon_copy1 values(null,'"
+							+ word + "','" + pinyin.split(",")[0] + "')");
 				}
 				reader.close();
 			}

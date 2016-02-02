@@ -77,7 +77,6 @@ public class QueryService {
 
 		QueryResponse rsp = null;
 		try {
-			System.out.println(query.getQuery());
 			rsp = solrClient.query(query);
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());

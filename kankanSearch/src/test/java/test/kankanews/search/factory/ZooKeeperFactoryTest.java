@@ -19,10 +19,10 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void clientTest() {
-		zookeeperClient = zookeeperClient.usingNamespace(null);
+//		zookeeperClient = zookeeperClient.usingNamespace(null);
 		try {
-			zookeeperClient.delete().deletingChildrenIfNeeded()
-			.forPath("/overseer_elect");
+			// zookeeperClient.delete().deletingChildrenIfNeeded()
+			// .forPath("/overseer_elect");
 			// zookeeperClient.delete().deletingChildrenIfNeeded()
 			// .forPath("/aliases.json");
 //			zookeeperClient.delete().deletingChildrenIfNeeded()
@@ -31,10 +31,9 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 			// zookeeperClient.create().forPath("/myconf");
 			// zookeeperClient.create().forPath("/myconf/schema.xml");
 			// zookeeperClient.create().forPath("/myconf/solrconfig.xml");
-			// byte[] schema = FileUtils.readFileToByteArray(new File(
-			// "G://solr/conf/schema.xml"));
-			// zookeeperClient.setData().forPath("/solrConf/schema.xml",
-			// schema);
+			byte[] schema = FileUtils.readFileToByteArray(new File(
+					"H://Project/Java/KanKanSearch/conf/solrconfig.xml"));
+			zookeeperClient.setData().forPath("/solrConf/solrconfig.xml", schema);
 			// //
 			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
 			// "G://solr/conf/solrconfig.xml"));

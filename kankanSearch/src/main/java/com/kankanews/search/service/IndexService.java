@@ -30,12 +30,14 @@ public class IndexService {
 	private static int docIndexNum;
 	private static boolean isIndexingWhole = false;
 
-	public boolean addWhole() {
+	public boolean addWhole(String version) {
 		logger.info("建立索引启动");
 		isIndexingWhole = true;
-		String indexVersion = GlobalConfig._INDEX_VERSION_;
-		int curIndexVersion = Integer.parseInt(indexVersion);
+//		String indexVersion = GlobalConfig._INDEX_VERSION_;
+//		int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
+		int curIndexVersion = Integer.parseInt(version);
+		
 		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
 		ResultSet rs = videoDAO.getAllNews();
 		if (rs == null) {
@@ -83,11 +85,6 @@ public class IndexService {
 			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
 			System.gc();
-			// try {
-			// solrClient.close();
-			// } catch (IOException e) {
-			// logger.error("", e);
-			// }
 		}
 		logger.info("建立索引结束");
 		return true;
@@ -101,11 +98,6 @@ public class IndexService {
 			logger.error("", e);
 			return false;
 		} finally {
-			// try {
-			// solrClient.close();
-			// } catch (IOException e) {
-			// logger.error("", e);
-			// }
 		}
 		return true;
 	}
@@ -138,11 +130,6 @@ public class IndexService {
 			return false;
 		} finally {
 			DBHelper.closeConn(rs);
-			// try {
-			// solrClient.close();
-			// } catch (IOException e) {
-			// logger.error("", e);
-			// }
 		}
 		logger.info("提交" + incrementNew.getId());
 		return true;
@@ -164,11 +151,6 @@ public class IndexService {
 			logger.error("", e);
 			return false;
 		} finally {
-			// try {
-			// solrClient.close();
-			// } catch (IOException e) {
-			// logger.error("", e);
-			// }
 		}
 	}
 
@@ -176,21 +158,14 @@ public class IndexService {
 		try {
 			solrClient.connect();
 			String indexVersion = GlobalConfig._INDEX_VERSION_;
-			// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 			// 删除所有的索引
 			solrClient.deleteByQuery("docversion:" + indexVersion);
-			// solrClient.deleteByQuery("*:*");
 			solrClient.commit();
 			logger.info("删除索引结束");
 		} catch (Exception e) {
 			logger.error("", e);
 			return false;
 		} finally {
-			// try {
-			// solrClient.close();
-			// } catch (IOException e) {
-			// logger.error("", e);
-			// }
 		}
 		return true;
 	}
@@ -310,6 +285,10 @@ public class IndexService {
 			doc.addField("contentid", rs.getString("contentid"));
 			doc.addField("docversion", curIndexVersion);
 			doc.addField("docTable", rs.getString("docTable"));
+			doc.addField(
+					"_shard",
+					"shard"
+							+ (Math.abs(rs.getString("title").hashCode()) % 4 + 1));
 			return doc;
 		} catch (Exception e) {
 			logger.error("", e);

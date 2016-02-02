@@ -18,9 +18,9 @@ public class PeriodicIndexTask {
 			logger.info("定时重建索引任务开启");
 			long now = new Date().getTime() / 1000;
 			boolean flag = indexService.reindex(now - reindexTimeRange, now);
-			indexService.optimized();
 			logger.info("任务是否成功:" + flag);
 		}
+		indexService.optimized();
 	}
 
 	public long getReindexTimeRange() {

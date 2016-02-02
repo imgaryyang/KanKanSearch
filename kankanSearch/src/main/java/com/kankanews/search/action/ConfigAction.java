@@ -50,7 +50,6 @@ public class ConfigAction {
 		ModelAndView model = new ModelAndView("home");
 		model.addObject("_IS_INCREMENT_INDEX_",
 				GlobalConfig._IS_INCREMENT_INDEX_);
-		logger.info("屌屌屌");
 		return model;
 	}
 }

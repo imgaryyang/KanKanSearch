@@ -60,67 +60,74 @@ public class QueryAction {
 			@RequestParam(defaultValue = "false") boolean highlight,
 			@RequestParam(defaultValue = "false") boolean isduplicate,
 			@RequestParam(defaultValue = "em") String highlighttag,
-			@RequestParam(defaultValue = "") String analyse) {
+			@RequestParam(defaultValue = "") String analyse,
+			@RequestParam(defaultValue = "*") String sttime,
+			@RequestParam(defaultValue = "*") String edtime,
+			@RequestParam(defaultValue = "") String notnullfield) {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> searchTerm = new HashMap<String, String>();
 		String analysedWord = null;
-		if (wordsmart != null && !wordsmart.trim().equals("")) {
-			// searchTerm.put("all", word);
-			// searchTerm.put("title", word2);
-			// searchTerm.put("intro", word2);
-			// searchTerm.put("keywords", word2);
-			List<String> words = AnalyseUtil.analyse(wordsmart);
-			StringBuffer wordBuf = new StringBuffer();
-			for (String string : words) {
-				wordBuf.append(string).append(" ");
-			}
-			analysedWord = "(" + wordBuf.toString() + ")";
-			buf.append(" AND (title_smart:").append(analysedWord + "^1");
-			buf.append(" AND keywords_smart:").append(analysedWord + "");
-			buf.append(" OR intro_smart:").append(analysedWord + ")");
-		}
+		// if (wordsmart != null && !wordsmart.trim().equals("")) {
+		// // searchTerm.put("all", word);
+		// // searchTerm.put("title", word2);
+		// // searchTerm.put("intro", word2);
+		// // searchTerm.put("keywords", word2);
+		// List<String> words = AnalyseUtil.analyse(wordsmart);
+		// StringBuffer wordBuf = new StringBuffer();
+		// for (String string : words) {
+		// wordBuf.append(string).append(" ");
+		// }
+		// analysedWord = "(" + wordBuf.toString() + ")";
+		// buf.append(" AND (title_smart:").append(analysedWord + "^1");
+		// buf.append(" AND keywords_smart:").append(analysedWord + "");
+		// buf.append(" OR intro_smart:").append(analysedWord + ")");
+		// }
 		if (word != null && !word.trim().equals("")) {
-			// searchTerm.put("all2", word2);
-			// searchTerm.put("title_smart", word + "^2");
-			// searchTerm.put("intro_smart", word + "^1");
-			// searchTerm.put("keywords_smart", word + "^0.5");
 			List<String> words = AnalyseUtil.analyse(word);
 			StringBuffer wordBuf = new StringBuffer();
 			for (String string : words) {
 				wordBuf.append(string).append(" ");
 			}
+			if (wordBuf.toString().trim().equals("")) {
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put("num", "0");
+				result.put("qtime", "0");
+				result.put("queryresult", "");
+				return result;
+			}
 			analysedWord = "(" + wordBuf.toString() + ")";
 			buf.append(" AND (title:").append(analysedWord + "^10");
 			buf.append(" OR all2:").append(analysedWord + ")");
-			// buf.append(" OR intro:").append(analysedWord + ")");
 		}
 		if (newsid != null && !newsid.trim().equals(""))
-			// searchTerm.put("id", newsid);
 			buf.append(" AND id:").append(newsid);
 		if (type != null && !type.trim().equals(""))
-			// searchTerm.put("type", type);
 			buf.append(" AND type:").append(type);
 		if (checked != null && !checked.trim().equals(""))
-			// searchTerm.put("checked", checked);
 			buf.append(" AND checked:").append(checked);
 		if (author != null && !author.trim().equals(""))
-			// searchTerm.put("author", author);
 			buf.append(" AND author:").append(author);
 		if (authorid != null && !authorid.trim().equals(""))
-			// searchTerm.put("authorid", authorid);
 			buf.append(" AND authorid:").append(authorid);
 		if (title != null && !title.trim().equals(""))
-			// searchTerm.put("titleGroup", title);
 			buf.append(" AND titleGroup:").append(title);
 		if (contentid != null && !contentid.trim().equals(""))
-			// searchTerm.put("contentid", contentid);
 			buf.append(" AND contentid:").append(contentid);
 		if (nreinfo != null && !nreinfo.trim().equals(""))
-			// searchTerm.put("nreinfo", nreinfo);
 			buf.append(" AND nreinfo:").append(nreinfo);
 		if (taskid != null && !taskid.trim().equals(""))
-			// searchTerm.put("taskid", taskid);
 			buf.append(" AND taskid:").append(taskid);
+		if (!sttime.trim().equals("*") || !edtime.trim().equals("*")) {
+			buf.append(" AND newstime:[ ").append(sttime).append(" TO ")
+					.append(edtime).append("]");
+		}
+		if (notnullfield != null && !notnullfield.trim().equals("")) {
+			String[] fields = notnullfield.split("\\|");
+			for (String string : fields) {
+				buf.append(" AND -" + string + ":\"\"");
+			}
+			
+		}
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = queryService.search(buf.toString(), page, rows,

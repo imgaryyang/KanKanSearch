@@ -10,7 +10,7 @@ public class LexiconUtilTest extends JUnitDaoBase {
 
 	@Test
 	public void testGetString() {
-		LexiconUtil.insertDB();
+		LexiconUtil.getAllLexicon();
 		// System.out.println("河北省唐山市".length());
 	}
 }
