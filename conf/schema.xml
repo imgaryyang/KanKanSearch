@@ -54,23 +54,7 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>  
         <filter class="solr.LowerCaseFilterFactory"/>  
       </analyzer>  
-    </fieldType>
-	
-	<fieldtype name="text_mmseg_Complex" class="solr.TextField" positionIncrementGap="100">
-		<analyzer>
-			<tokenizer class="com.chenlb.mmseg4j.solr.MMSegTokenizerFactory" mode="complex" dicPath="/usr/local/tomcat/webapps/solr/WEB-INF/classes/ext.dic"/>
-		</analyzer>
-	</fieldtype>
-	<fieldtype name="text_mmseg_MaxWord" class="solr.TextField" positionIncrementGap="100">
-		<analyzer>
-			<tokenizer class="com.chenlb.mmseg4j.solr.MMSegTokenizerFactory" mode="max-word" dicPath="/usr/local/tomcat/webapps/solr/WEB-INF/classes/ext.dic" />
-		</analyzer>
-	</fieldtype>
-	<fieldtype name="text_mmseg_Simple" class="solr.TextField" positionIncrementGap="100">
-		<analyzer>
-			<tokenizer class="com.chenlb.mmseg4j.solr.MMSegTokenizerFactory" mode="simple" dicPath="/usr/local/tomcat/webapps/solr/WEB-INF/classes/ext.dic" />
-		</analyzer>
-	</fieldtype>
+    </fieldType> 
 
 	<fields>
 		<field name="docId" type="uuid" indexed="true" stored="true" multiValued="false" required="true" />
@@ -106,6 +90,8 @@
 		
 		<!--提示字段-->
 		<field name="suggestion" type="text_ik" indexed="true" stored="true" termVectors="true" multiValued="true" />  
+		
+		<field name="_shard" type="string" indexed="true" stored="true" multiValued="false"/>
 
 		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 

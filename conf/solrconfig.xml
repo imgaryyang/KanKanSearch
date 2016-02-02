@@ -550,7 +550,7 @@
      <str name="echoHandler">true</str>
     </lst>
   </requestHandler>
-  
+    <!--
   <requestHandler class="org.apache.solr.handler.component.SearchHandler"  
                     name="/suggest">  
         <lst name="defaults">  
@@ -564,7 +564,7 @@
         <arr name="components">  
             <str>suggest</str>  
         </arr>  
-    </requestHandler> 
+    </requestHandler> -->
   
 
 
@@ -591,7 +591,7 @@
        A component to return terms and document frequency of those
        terms
     -->
-  <searchComponent name="suggest" class="solr.TermsComponent"/>
+ <!-- <searchComponent name="suggest" class="solr.TermsComponent"/>
   
   <searchComponent class="solr.SpellCheckComponent" name="suggest">  
 	<str name="queryAnalyzerFieldType">text_ik</str>  
@@ -599,18 +599,18 @@
 		<str name="name">suggest</str>  
 		<str name="classname">org.apache.solr.spelling.suggest.Suggester</str>  
 		<str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>  
-		<str name="field">suggestion</str>  
-		<!-- the indexed field to derive suggestions from -->  
-		<float name="threshold">0.0001</float>  
+		<str name="field">suggestion</str>   -->  
+		<!-- the indexed field to derive suggestions from --> 
+<!--		<float name="threshold">0.0001</float>  
 		<str name="spellcheckIndexDir">spellchecker</str>  
 		<str name="comparatorClass">freq</str>  
 		<str name="buildOnCommit">true</str>
-		<str name="buildOnOptimize">true</str>  
+		<str name="buildOnOptimize">true</str>  -->  
 		<!--<str name="buildOnCommit">true</str>-->  
-	</lst>  
+<!--	</lst>  
   </searchComponent>  
  
-  <queryConverter name="phraseQueryConverter" class="org.apache.solr.spelling.SpellingQueryConverter"/>  
+  <queryConverter name="phraseQueryConverter" class="org.apache.solr.spelling.SpellingQueryConverter"/>  --> 
   
   <!-- A request handler for demonstrating the terms component -->
   <requestHandler name="/terms" class="solr.SearchHandler" startup="lazy">
