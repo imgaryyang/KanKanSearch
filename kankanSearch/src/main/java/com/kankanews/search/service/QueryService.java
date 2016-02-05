@@ -73,7 +73,7 @@ public class QueryService {
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}
-		logger.info("|" + queryStrBuf.toString() + "|");
+//		logger.info("|" + queryStrBuf.toString() + "|");
 
 		QueryResponse rsp = null;
 		try {
@@ -170,7 +170,7 @@ public class QueryService {
 			query.setHighlightSimplePre("<" + highlighttag + ">");// 标记
 			query.setHighlightSimplePost("</" + highlighttag + ">");
 		}
-		logger.info("|" + queryStrBuf.toString() + "|");
+//		logger.info("|" + queryStrBuf.toString() + "|");
 		QueryResponse response = null;
 		try {
 			response = solrClient.query(query);

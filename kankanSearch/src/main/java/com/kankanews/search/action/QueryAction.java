@@ -83,6 +83,7 @@ public class QueryAction {
 		// buf.append(" OR intro_smart:").append(analysedWord + ")");
 		// }
 		if (word != null && !word.trim().equals("")) {
+			logger.info("_word_:" + word + "|");
 			List<String> words = AnalyseUtil.analyse(word);
 			StringBuffer wordBuf = new StringBuffer();
 			for (String string : words) {
@@ -126,7 +127,7 @@ public class QueryAction {
 			for (String string : fields) {
 				buf.append(" AND -" + string + ":\"\"");
 			}
-			
+
 		}
 		Map<String, Object> result;
 		if (isduplicate) {
