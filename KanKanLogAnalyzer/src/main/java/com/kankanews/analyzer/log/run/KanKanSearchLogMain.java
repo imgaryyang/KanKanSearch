@@ -16,13 +16,14 @@ import com.kankanews.analyzer.log.model.Log4jModel;
 import com.kankanews.analyzer.log.model.LogModel;
 import com.kankanews.analyzer.log.source.FileLogSource;
 import com.kankanews.analyzer.log.source.LogSource;
+import com.kankanews.utils.GsonUtil;
 
 public class KanKanSearchLogMain {
 	private static List<KanKanSearchObj> logs = new ArrayList<KanKanSearchObj>();
 	private static Map<String, Integer> wordMap = new HashMap<String, Integer>();
 
 	public static void main(String[] args) {
-		String root = "C://Users/mu/Desktop/新建文件夹/logs";
+		String root = "C://Users/mu/Desktop/新建文件夹/old_logs";
 		File rootDirectory = new File(root);
 		rootDirectory.isDirectory();
 
@@ -34,12 +35,13 @@ public class KanKanSearchLogMain {
 				LogModel log = analyzer.parseLine(line);
 				if (log != null && log instanceof Log4jModel) {
 					String message = ((Log4jModel) log).getMessage();
+
 					if (message.charAt(0) == '|'
 							&& message.charAt(message.length() - 1) == '|') {
-						// String json = message.substring(1, message.length() -
-						// 1);
-						// KanKanSearchObj obj = GsonUtil.toObject(json,
-						// KanKanSearchObj.class);
+						String json = message
+								.substring(1, message.length() - 1);
+//						KanKanSearchObj obj = GsonUtil.toObject(json,
+//								KanKanSearchObj.class);
 						int i = message.indexOf("title:") + 7;
 						int j = i;
 						if (j == 6 || j >= message.length())
@@ -55,21 +57,33 @@ public class KanKanSearchLogMain {
 							logs.add(obj);
 						}
 					}
+
+					// if (message.indexOf("_word_:") == 0) {
+					//
+					// KanKanSearchObj obj = new KanKanSearchObj();
+					// obj.setTitle((String) message.subSequence(8,
+					// message.length() - 2));
+					// if (obj != null && obj.getTitle() != null
+					// && !obj.getTitle().trim().equals("")) {
+					// obj.setDate(((Log4jModel) log).getDate());
+					// logs.add(obj);
+					// }
+					// }
 				}
 			}
 			logSource.closs();
 		}
 
 		for (KanKanSearchObj search : logs) {
-//			String[] words = search.getTitle().split(" ");
-//			for (String word : words) {
-				 String word = search.getTitle();
-				Integer num = wordMap.get(word);
-				if (num == null) {
-					wordMap.put(word, 1);
-				} else {
-					wordMap.put(word, num + 1);
-//				}
+			// String[] words = search.getTitle().split(" ");
+			// for (String word : words) {
+			String word = search.getTitle();
+			Integer num = wordMap.get(word);
+			if (num == null) {
+				wordMap.put(word, 1);
+			} else {
+				wordMap.put(word, num + 1);
+				// }
 			}
 		}
 		System.out.println(wordMap.size());

@@ -34,7 +34,12 @@ public class FileLogSourceTest {
 //		for (String ss : rootDirectory.list()) {
 //			System.out.println(ss);
 //		}
-		System.out.println("éè·¯æ¥è¿");
+		String log = "2016-02-05 16:24:47,638 - INFO - _word_:(好莱坞影帝道格拉斯自曝罹患舌癌)|";
+		String[] ssss = log.split(" - ");
+		String word = ssss[2];
+		System.out.println(word.indexOf("_word_:"));
+		System.out.println(word.subSequence(8, word.length() - 2));
+		
 	}
 
 }
