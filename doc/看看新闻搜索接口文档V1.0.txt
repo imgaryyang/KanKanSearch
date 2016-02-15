@@ -4,7 +4,7 @@
 	title : 标题(全匹配不分词查询)
 	newsid : 新闻id(string) 默认("")
 	type ： 新闻类型(0 图文, 1 视频, 3 图集)(int) 默认("")
-	checked : 是否审核(0 否, 1 是) 默认("1")
+	checked : 是否审核(0 否, 1 是) 默认("")
 	author : 编者(string) 默认("")
 	authorid : 编者id(string) 默认("")
 	taskid : 作者id(string) 默认("")

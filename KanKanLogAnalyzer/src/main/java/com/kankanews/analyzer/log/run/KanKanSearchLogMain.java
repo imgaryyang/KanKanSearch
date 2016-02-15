@@ -23,7 +23,7 @@ public class KanKanSearchLogMain {
 	private static Map<String, Integer> wordMap = new HashMap<String, Integer>();
 
 	public static void main(String[] args) {
-		String root = "C://Users/mu/Desktop/新建文件夹/old_logs";
+		String root = "C://Users/mu/Desktop/新建文件夹/logs";
 		File rootDirectory = new File(root);
 		rootDirectory.isDirectory();
 
@@ -36,39 +36,43 @@ public class KanKanSearchLogMain {
 				if (log != null && log instanceof Log4jModel) {
 					String message = ((Log4jModel) log).getMessage();
 
-					if (message.charAt(0) == '|'
-							&& message.charAt(message.length() - 1) == '|') {
-						String json = message
-								.substring(1, message.length() - 1);
-//						KanKanSearchObj obj = GsonUtil.toObject(json,
-//								KanKanSearchObj.class);
-						int i = message.indexOf("title:") + 7;
-						int j = i;
-						if (j == 6 || j >= message.length())
-							continue;
-						while (message.charAt(j) != ')') {
-							j++;
-						}
-						KanKanSearchObj obj = new KanKanSearchObj();
-						obj.setTitle((String) message.subSequence(i, j));
-						if (obj != null && obj.getTitle() != null
-								&& !obj.getTitle().trim().equals("")) {
-							obj.setDate(((Log4jModel) log).getDate());
-							logs.add(obj);
-						}
-					}
-
-					// if (message.indexOf("_word_:") == 0) {
-					//
+					// if (message.charAt(0) == '|'
+					// && message.charAt(message.length() - 1) == '|') {
+					// String json = message
+					// .substring(1, message.length() - 1);
+					// // KanKanSearchObj obj = GsonUtil.toObject(json,
+					// // KanKanSearchObj.class);
+					// int i = message.indexOf("title:") + 7;
+					// int j = i;
+					// if (j == 6 || j >= message.length())
+					// continue;
+					// while (message.charAt(j) != ')') {
+					// j++;
+					// }
 					// KanKanSearchObj obj = new KanKanSearchObj();
-					// obj.setTitle((String) message.subSequence(8,
-					// message.length() - 2));
+					// obj.setTitle((String) message.subSequence(i, j));
 					// if (obj != null && obj.getTitle() != null
 					// && !obj.getTitle().trim().equals("")) {
 					// obj.setDate(((Log4jModel) log).getDate());
 					// logs.add(obj);
 					// }
 					// }
+
+					if (message.indexOf("_word_:") == 0 && message.length() > 10) {
+
+						KanKanSearchObj obj = new KanKanSearchObj();
+						try {
+						obj.setTitle((String) message.subSequence(8,
+								message.length() - 2));
+						} catch(Exception e){
+							System.out.println(message);
+						}
+						if (obj != null && obj.getTitle() != null
+								&& !obj.getTitle().trim().equals("")) {
+							obj.setDate(((Log4jModel) log).getDate());
+							logs.add(obj);
+						}
+					}
 				}
 			}
 			logSource.closs();
