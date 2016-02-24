@@ -30,4 +30,9 @@ public class GsonUtil {
 		}.getType());
 	}
 
+	public static Map<String, Object> toMapObj(String json) {
+		return gson.fromJson(json, new TypeToken<Map<String, Object>>() {
+		}.getType());
+	}
+
 }

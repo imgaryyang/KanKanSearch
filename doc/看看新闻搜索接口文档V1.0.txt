@@ -3,14 +3,13 @@
 	word : 主要搜索字段包含(title,keywords,intro)(string) 默认("")
 	title : 标题(全匹配不分词查询)
 	newsid : 新闻id(string) 默认("")
-	type ： 新闻类型(0 图文, 1 视频, 3 图集)(int) 默认("")
-	checked : 是否审核(0 否, 1 是) 默认("")
+	type ： 新闻类型(1 视频, 2 图文, 3 图集)(int) 默认("")
+	checked : 是否审核(0 否, 1 是) 默认("1")
 	author : 编者(string) 默认("")
 	authorid : 编者id(string) 默认("")
 	taskid : 作者id(string) 默认("")
-	nreinfo : (string) 默认("")
+	nreinfo : 是否生成页面(string) 默认("0")
 	contentid : (string) 默认("")
-	analyse : 分析字段 (string) 默认("") 结构(eg:PC,chrome,kankanews)
 	page : 第几页(int) 默认(1)
 	rows : 每页几行(int) 默认(10)
 	highlight : 高亮(true 高亮, false 不高亮)(string) 默认(false)
@@ -19,6 +18,9 @@
 	sttime : 开始时间时间戳(long) 默认("*"不限)
 	edtime : 结束时间时间戳(long) 默认("*"不限)
 	notnullfield : 不为空字段集合以|分割(string) 默认("") eg:contentid|authorid 
+	classid : 栏目分类(string) 默认("")
+	doctable : 表名(string) 默认("") 只能传 kk_ecms_kankanvideos or kk_ecms_photo
+	_item ：调用端分类(string) 默认("") eg:PC页面:pcsite, APP:app, 相关新闻:relate
 	
 返回结果
 	num : 查询结果总数

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,10 +61,12 @@ public class QueryAction {
 			@RequestParam(defaultValue = "false") boolean highlight,
 			@RequestParam(defaultValue = "false") boolean isduplicate,
 			@RequestParam(defaultValue = "em") String highlighttag,
-			@RequestParam(defaultValue = "") String analyse,
 			@RequestParam(defaultValue = "*") String sttime,
 			@RequestParam(defaultValue = "*") String edtime,
-			@RequestParam(defaultValue = "") String notnullfield) {
+			@RequestParam(defaultValue = "") String notnullfield,
+			@RequestParam(defaultValue = "") String classid,
+			@RequestParam(defaultValue = "") String doctable,
+			@RequestParam(defaultValue = "") String _item) {
 		StringBuffer buf = new StringBuffer();
 		Map<String, String> searchTerm = new HashMap<String, String>();
 		String analysedWord = null;
@@ -83,7 +86,7 @@ public class QueryAction {
 		// buf.append(" OR intro_smart:").append(analysedWord + ")");
 		// }
 		if (word != null && !word.trim().equals("")) {
-			logger.info("_word_:" + word + "|");
+			logger.info("_search:|" + _item + "|" + word + "|");
 			List<String> words = AnalyseUtil.analyse(word);
 			StringBuffer wordBuf = new StringBuffer();
 			for (String string : words) {
@@ -106,18 +109,23 @@ public class QueryAction {
 			buf.append(" AND type:").append(type);
 		if (checked != null && !checked.trim().equals(""))
 			buf.append(" AND checked:").append(checked);
+		if (classid != null && !classid.trim().equals(""))
+			buf.append(" AND classid:").append(classid);
 		if (author != null && !author.trim().equals(""))
 			buf.append(" AND author:").append(author);
 		if (authorid != null && !authorid.trim().equals(""))
 			buf.append(" AND authorid:").append(authorid);
-		if (title != null && !title.trim().equals(""))
-			buf.append(" AND titleGroup:").append(title);
+		if (title != null && !title.trim().equals("")) {
+			buf.append(" AND titleGroup:").append(escapeQueryChars(title));
+		}
 		if (contentid != null && !contentid.trim().equals(""))
 			buf.append(" AND contentid:").append(contentid);
 		if (nreinfo != null && !nreinfo.trim().equals(""))
 			buf.append(" AND nreinfo:").append(nreinfo);
 		if (taskid != null && !taskid.trim().equals(""))
 			buf.append(" AND taskid:").append(taskid);
+		if (doctable != null && !doctable.trim().equals(""))
+			buf.append(" AND docTable:").append(doctable);
 		if (!sttime.trim().equals("*") || !edtime.trim().equals("*")) {
 			buf.append(" AND newstime:[ ").append(sttime).append(" TO ")
 					.append(edtime).append("]");
@@ -154,5 +162,22 @@ public class QueryAction {
 			wordBuf.append(string).append(" ");
 		}
 		return wordBuf.toString().trim();
+	}
+
+	public static String escapeQueryChars(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			// These characters are part of the query syntax and must be escaped
+			if (c == '\\' || c == '+' || c == '-' || c == '!' || c == '('
+					|| c == ')' || c == ':' || c == '^' || c == '[' || c == ']'
+					|| c == '\"' || c == '{' || c == '}' || c == '~'
+					|| c == '?' || c == '|' || c == '&' || c == ';' || c == '/'
+					|| Character.isWhitespace(c)) {
+				sb.append('\\');
+			}
+			sb.append(c);
+		}
+		return sb.toString();
 	}
 }

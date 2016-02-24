@@ -73,7 +73,7 @@ public class QueryService {
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}
-//		logger.info("|" + queryStrBuf.toString() + "|");
+		// logger.info("|" + queryStrBuf.toString() + "|");
 
 		QueryResponse rsp = null;
 		try {
@@ -170,7 +170,7 @@ public class QueryService {
 			query.setHighlightSimplePre("<" + highlighttag + ">");// 标记
 			query.setHighlightSimplePost("</" + highlighttag + ">");
 		}
-//		logger.info("|" + queryStrBuf.toString() + "|");
+		// logger.info("|" + queryStrBuf.toString() + "|");
 		QueryResponse response = null;
 		try {
 			response = solrClient.query(query);
@@ -214,7 +214,7 @@ public class QueryService {
 		}
 		result.put("num", foundNum + "");
 		result.put("qtime", response.getQTime() + "");
-		result.put("queryresult", JacksonUtil.toString(queryResult));// GsonUtil.toString(queryResult)
+		result.put("queryresult", queryResult);// GsonUtil.toString(queryResult)
 		return result;
 	}
 
