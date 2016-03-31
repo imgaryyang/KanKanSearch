@@ -33,11 +33,11 @@ public class IndexService {
 	public boolean addWhole(String version) {
 		logger.info("建立索引启动");
 		isIndexingWhole = true;
-//		String indexVersion = GlobalConfig._INDEX_VERSION_;
-//		int curIndexVersion = Integer.parseInt(indexVersion);
+		// String indexVersion = GlobalConfig._INDEX_VERSION_;
+		// int curIndexVersion = Integer.parseInt(indexVersion);
 		// int curIndexVersion = Integer.parseInt(indexVersion) + 1;
 		int curIndexVersion = Integer.parseInt(version);
-		
+
 		Collection<SolrInputDocument> _docs = new ArrayList<SolrInputDocument>();
 		ResultSet rs = videoDAO.getAllNews();
 		if (rs == null) {
@@ -85,6 +85,7 @@ public class IndexService {
 			isIndexingWhole = false;
 			DBHelper.closeConn(rs);
 			System.gc();
+			docIndexNum = 0;
 		}
 		logger.info("建立索引结束");
 		return true;
@@ -154,10 +155,10 @@ public class IndexService {
 		}
 	}
 
-	public boolean deleteWhole() {
+	public boolean deleteWhole(String indexVersion) {
 		try {
 			solrClient.connect();
-			String indexVersion = GlobalConfig._INDEX_VERSION_;
+			// String indexVersion = GlobalConfig._INDEX_VERSION_;
 			// 删除所有的索引
 			solrClient.deleteByQuery("docversion:" + indexVersion);
 			solrClient.commit();
@@ -261,28 +262,30 @@ public class IndexService {
 		try {
 			SolrInputDocument doc = new SolrInputDocument();
 			doc.addField("id", rs.getString("id"));
+			doc.addField("authorid", rs.getString("authorid"));
+			doc.addField("author", rs.getString("author"));
+			doc.addField("areaname", rs.getString("areaname"));
 			doc.addField("classid", rs.getString("classid"));
-			doc.addField("type", rs.getString("type"));
 			doc.addField("checked", rs.getString("checked"));
+			doc.addField("contentid", rs.getString("contentid"));
+			doc.addField("intro", rs.getString("intro"));
+			doc.addField("intro_smart", rs.getString("intro"));
+			doc.addField("imagegroup", rs.getString("imagegroup"));
+			doc.addField("keywords", rs.getString("keywords"));
+			doc.addField("keywords_smart", rs.getString("keywords"));
+			doc.addField("labels", rs.getString("labels"));
+			doc.addField("nreinfo", rs.getString("nreinfo"));
+			doc.addField("newstime", rs.getString("newstime"));
+			doc.addField("onclick", rs.getString("onclick"));
+			doc.addField("sourceid", rs.getString("sourceid"));
 			doc.addField("title", rs.getString("title"));
 			doc.addField("title_smart", rs.getString("title"));
 			doc.addField("titleGroup", rs.getString("title"));
-			doc.addField("onclick", rs.getString("onclick"));
 			doc.addField("titlepic", rs.getString("titlepic"));
-			doc.addField("newstime", rs.getString("newstime"));
-			doc.addField("keywords", rs.getString("keywords"));
-			doc.addField("keywords_smart", rs.getString("keywords"));
-			doc.addField("videourl", rs.getString("videourl"));
 			doc.addField("titleurl", rs.getString("titleurl"));
-			doc.addField("authorid", rs.getString("authorid"));
-			doc.addField("author", rs.getString("author"));
-			doc.addField("intro", rs.getString("intro"));
-			doc.addField("intro_smart", rs.getString("intro"));
 			doc.addField("taskid", rs.getString("taskid"));
-			doc.addField("sourceid", rs.getString("sourceid"));
-			doc.addField("imagegroup", rs.getString("imagegroup"));
-			doc.addField("nreinfo", rs.getString("nreinfo"));
-			doc.addField("contentid", rs.getString("contentid"));
+			doc.addField("type", rs.getString("type"));
+			doc.addField("videourl", rs.getString("videourl"));
 			doc.addField("docversion", curIndexVersion);
 			doc.addField("docTable", rs.getString("docTable"));
 			doc.addField(

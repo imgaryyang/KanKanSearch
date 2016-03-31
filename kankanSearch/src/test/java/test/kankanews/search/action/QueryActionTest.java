@@ -19,7 +19,7 @@ public class QueryActionTest extends JUnitActionBase {
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		request.setServletPath("/search/query");
 		// request.setParameter("word", "(棱镜门)");
-		request.setParameter("title", "*上海新闻舆论战线深入学习习近平重要讲话*");
+		// request.setParameter("title", "*上海新闻舆论战线深入学习习近平重要讲话*");
 		// request.setParameter("author", "天脉素材");
 		request.setParameter("page", "1");
 		request.setParameter("rows", "20");
@@ -27,9 +27,11 @@ public class QueryActionTest extends JUnitActionBase {
 		// request.setParameter("highlight", "true");
 		// request.setParameter("nreinfo", "0");
 		// request.setParameter("checked", "1");
-		request.setParameter("isduplicate", "true");
-		request.setParameter("classid", "8132");
-		request.setParameter("doctable", "kk_ecms_kankanvideos");
+		// request.setParameter("isduplicate", "true");
+		// request.setParameter("classid", "8132");
+		// request.setParameter("doctable", "kk_ecms_kankanvideos");
+		request.setParameter("areaname", "上海市");
+		request.setParameter("labels", "新闻*");
 		// request.setParameter("notnullfield", "contentid|intro");
 		// request.setParameter("edtime", "1454377400");
 		System.out.println(new Date());

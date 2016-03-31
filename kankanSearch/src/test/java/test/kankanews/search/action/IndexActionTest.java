@@ -14,7 +14,7 @@ public class IndexActionTest extends JUnitActionBase {
 	public void testAddWhole() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		request.setServletPath("/index/add/whole");
+		request.setServletPath("/index/add/whole/0");
 		final ModelAndView mav = this.excuteAction(request, response);
 	}
 

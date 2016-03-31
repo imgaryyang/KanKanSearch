@@ -8,11 +8,13 @@ public class SearchResult {
 	private String id;
 	private String author;
 	private String authorid;
+	private String areaname;
 	private String classid;
 	private String checked;
 	private String imagegroup;
 	private String intro;
 	private String keywords;
+	private String labels;
 	private String newstime;
 	private String onclick;
 	private String sourceid;
@@ -44,6 +46,8 @@ public class SearchResult {
 		this.intro = (String) doc.get("intro");
 		this.taskid = (String) doc.get("taskid");
 		this.sourceid = (String) doc.get("sourceid");
+		this.labels = (String) doc.get("labels");
+		this.areaname = (String) doc.get("areaname");
 		this.docVersion = "" + doc.get("docversion");
 	}
 
@@ -189,6 +193,22 @@ public class SearchResult {
 
 	public void setSourceid(String sourceid) {
 		this.sourceid = sourceid;
+	}
+
+	public String getAreaname() {
+		return areaname;
+	}
+
+	public void setAreaname(String areaname) {
+		this.areaname = areaname;
+	}
+
+	public String getLabels() {
+		return labels;
+	}
+
+	public void setLabels(String labels) {
+		this.labels = labels;
 	}
 
 }

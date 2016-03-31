@@ -55,10 +55,10 @@ public class IndexAction {
 		return indexService.getDocIndexNum() + "";
 	}
 
-	@RequestMapping("/delete/whole")
+	@RequestMapping("/delete/whole/{version}")
 	@ResponseBody
-	public String deleteWhole() {
-		return indexService.deleteWhole() + "";
+	public String deleteWhole(@PathVariable final String version) {
+		return indexService.deleteWhole(version) + "";
 	}
 
 }

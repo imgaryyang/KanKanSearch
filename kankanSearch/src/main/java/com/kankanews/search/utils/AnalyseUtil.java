@@ -12,13 +12,19 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 public class AnalyseUtil {
 	private static Analyzer analyzer = new IKAnalyzer(false);
+	private static Analyzer analyzerSmart = new IKAnalyzer(true);
 
-	public static List<String> analyse(String context) {
+	public static List<String> analyse(String context, boolean isSmart) {
 		List<String> terms = new ArrayList<String>();
 		// 获取Lucene的TokenStream对象
 		TokenStream ts = null;
 		try {
-			ts = analyzer.tokenStream("myfield", new StringReader(context));
+			if (isSmart) {
+				ts = analyzerSmart.tokenStream("myfield", new StringReader(
+						context));
+			} else {
+				ts = analyzer.tokenStream("myfield", new StringReader(context));
+			}
 			// 获取词元文本属性
 			CharTermAttribute term = ts.addAttribute(CharTermAttribute.class);
 			ts.reset();
@@ -45,6 +51,6 @@ public class AnalyseUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(analyse("(六小龄童)"));
+		System.out.println(analyse("(六小龄童)", true));
 	}
 }

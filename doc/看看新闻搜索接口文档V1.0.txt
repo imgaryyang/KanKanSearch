@@ -19,6 +19,8 @@
 	edtime : 结束时间时间戳(long) 默认("*"不限)
 	notnullfield : 不为空字段集合以|分割(string) 默认("") eg:contentid|authorid 
 	classid : 栏目分类(string) 默认("")
+	areaname : 地区(string) 默认("")(全匹配不分词查询)
+	labels : 标签(string) 默认("")(全匹配不分词查询)
 	doctable : 表名(string) 默认("") 只能传 kk_ecms_kankanvideos or kk_ecms_photo
 	_item ：调用端分类(string) 默认("") eg:PC页面:pcsite, APP:app, 相关新闻:relate
 	
@@ -29,11 +31,13 @@
 					字段 	id
 							author
 							authorid
+							areaname
 							classid
 							checked
 							intro 
 							imagegroup 
 							keywords
+							labels
 							newstime 
 							onclick
 							sourceid

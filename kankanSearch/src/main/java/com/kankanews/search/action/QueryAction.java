@@ -65,6 +65,8 @@ public class QueryAction {
 			@RequestParam(defaultValue = "*") String edtime,
 			@RequestParam(defaultValue = "") String notnullfield,
 			@RequestParam(defaultValue = "") String classid,
+			@RequestParam(defaultValue = "") String areaname,
+			@RequestParam(defaultValue = "") String labels,
 			@RequestParam(defaultValue = "") String doctable,
 			@RequestParam(defaultValue = "") String _item) {
 		StringBuffer buf = new StringBuffer();
@@ -85,9 +87,26 @@ public class QueryAction {
 		// buf.append(" AND keywords_smart:").append(analysedWord + "");
 		// buf.append(" OR intro_smart:").append(analysedWord + ")");
 		// }
+		// if (wordsmart != null && !wordsmart.trim().equals("")) {
+		// List<String> words = AnalyseUtil.analyse(wordsmart, true);
+		// StringBuffer wordBuf = new StringBuffer();
+		// for (String string : words) {
+		// wordBuf.append(string).append(" ");
+		// }
+		// if (wordBuf.toString().trim().equals("")) {
+		// Map<String, Object> result = new HashMap<String, Object>();
+		// result.put("num", "0");
+		// result.put("qtime", "0");
+		// result.put("queryresult", "");
+		// return result;
+		// }
+		// analysedWord = "(" + wordBuf.toString() + ")";
+		// buf.append(" AND (title:").append(analysedWord + "^10");
+		// buf.append(" OR all_smart:").append(analysedWord + ")");
+		// }
 		if (word != null && !word.trim().equals("")) {
 			logger.info("_search:|" + _item + "|" + word + "|");
-			List<String> words = AnalyseUtil.analyse(word);
+			List<String> words = AnalyseUtil.analyse(word, false);
 			StringBuffer wordBuf = new StringBuffer();
 			for (String string : words) {
 				wordBuf.append(string).append(" ");
@@ -101,7 +120,7 @@ public class QueryAction {
 			}
 			analysedWord = "(" + wordBuf.toString() + ")";
 			buf.append(" AND (title:").append(analysedWord + "^10");
-			buf.append(" OR all2:").append(analysedWord + ")");
+			buf.append(" OR all:").append(analysedWord + ")");
 		}
 		if (newsid != null && !newsid.trim().equals(""))
 			buf.append(" AND id:").append(newsid);
@@ -122,6 +141,10 @@ public class QueryAction {
 			buf.append(" AND contentid:").append(contentid);
 		if (nreinfo != null && !nreinfo.trim().equals(""))
 			buf.append(" AND nreinfo:").append(nreinfo);
+		if (areaname != null && !areaname.trim().equals(""))
+			buf.append(" AND areaname:").append(areaname);
+		if (labels != null && !labels.trim().equals(""))
+			buf.append(" AND labels:").append(labels);
 		if (taskid != null && !taskid.trim().equals(""))
 			buf.append(" AND taskid:").append(taskid);
 		if (doctable != null && !doctable.trim().equals(""))
@@ -155,14 +178,14 @@ public class QueryAction {
 		return "test";
 	}
 
-	private String analyseWord(String word) {
-		List<String> words = AnalyseUtil.analyse(word);
-		StringBuffer wordBuf = new StringBuffer();
-		for (String string : words) {
-			wordBuf.append(string).append(" ");
-		}
-		return wordBuf.toString().trim();
-	}
+	// private String analyseWord(String word) {
+	// List<String> words = AnalyseUtil.analyse(word);
+	// StringBuffer wordBuf = new StringBuffer();
+	// for (String string : words) {
+	// wordBuf.append(string).append(" ");
+	// }
+	// return wordBuf.toString().trim();
+	// }
 
 	public static String escapeQueryChars(String s) {
 		StringBuilder sb = new StringBuilder();
