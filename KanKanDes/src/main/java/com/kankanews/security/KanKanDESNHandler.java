@@ -13,6 +13,7 @@ public class KanKanDESNHandler extends ChannelInboundHandlerAdapter { // (1)
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
 		String input = (String) msg;
+		System.out.println(input);
 		try {
 			input = new String(Base64.decode(input), "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
