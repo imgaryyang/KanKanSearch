@@ -1,6 +1,8 @@
 package com.kankanews.security;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -14,11 +16,12 @@ public class KanKanDESNHandler extends ChannelInboundHandlerAdapter { // (1)
 	public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
 		String input = (String) msg;
 		System.out.println(input);
-		try {
-			input = new String(Base64.decode(input), "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			ctx.writeAndFlush("args is error");
-		}
+//		try {
+//			input = new String(Base64.decode(input));
+//		} catch (Exception e1) {
+//			ctx.writeAndFlush("args is error");
+//		}
+//		input = "encrypt|shanghaifabu|[{\"hphm\":\"沪AVF019\",\"hpzl\":\"小型汽车号牌\",\"fdjh\":\"150025154\",\"ctype\":\"wfqk\"}]";
 		String[] inputArr = input.split("\\|");
 		if (inputArr.length < 3) {
 			ctx.writeAndFlush("args is error");
@@ -30,15 +33,20 @@ public class KanKanDESNHandler extends ChannelInboundHandlerAdapter { // (1)
 				ctx.writeAndFlush("args is error");
 			} else if ("encrypt".equals(type)) {
 				try {
-					ctx.writeAndFlush(new String(DES.bytesToHexString(DES
-							.encrypt(data.getBytes(), keyEn.getBytes()))));
+					String ss = DES.bytesToHexString(
+							DES.encrypt(data.getBytes(), keyEn.getBytes()));
+					ctx.writeAndFlush(ss);
+					// ctx.writeAndFlush(DESOld.encrypt(data, keyEn));
 				} catch (Exception e) {
 					ctx.writeAndFlush("encrypt has error");
 				}
 			} else if ("decrypt".equals(type)) {
 				try {
-					ctx.writeAndFlush(new String(DES.decrypt(
-							DES.hexStringToBytes(data), keyEn.getBytes())));
+					String str = new String(DES.decrypt(
+							DES.hexStringToBytes(data), keyEn.getBytes()), Charset
+							.forName("UTF-8"));
+					// String str = DESOld.decrypt(data, keyEn);
+					ctx.writeAndFlush(str);
 				} catch (Exception e) {
 					ctx.writeAndFlush("decrypt has error");
 				}

@@ -41,7 +41,7 @@ public class KanKanDESN {
 											new DelimiterBasedFrameDecoder(
 													409600, delimiter),
 											new StringDecoder(Charset
-													.forName("UTF-8")),
+													.forName("GBK")),
 											new StringEncoder(Charset
 													.forName("UTF-8")),
 											new KanKanDESNHandler());
