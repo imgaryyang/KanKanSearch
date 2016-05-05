@@ -1,8 +1,9 @@
 package com.kankanews.fmi.server;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -19,8 +20,6 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
 import org.apache.thrift.TException;
 
 import com.kankanews.fmi.model.Restaurant;
@@ -37,37 +36,44 @@ public class FMISearchServiceImpl implements IFMISearchService.Iface {
 	}
 
 	public String searchHints(String keyword) throws TException {
-		System.out.println(keyword);
 		List<String> tempList = new ArrayList<String>();
-		Date data1 = new Date();
 
 		prefixQueryHint(tempList, "dzna", keyword);
 		if (tempList.size() < 5) {
 			standQueryHint(tempList, "dz", keyword);
 		}
-		Date data2 = new Date();
-		System.out.println(data2.getTime() - data1.getTime());
-		System.out.println(tempList.size());
 		StringBuffer buf = new StringBuffer();
 		for (String string : tempList) {
 			buf.append(string);
 			buf.append(",");
 		}
+		if (buf.toString().trim().equals(""))
+			return "";
 		return buf.toString().substring(0, buf.length() - 1);
 	}
 
-	public String search(String keyword, int page, int num) throws TException {
+	public String search(String keyword, String page, String num)
+			throws TException {
+		int pages = Integer.parseInt(page);
+		int nums = Integer.parseInt(num);
 		List<Restaurant> tempList = new ArrayList<Restaurant>();
-		if (page > 100)
+		if (pages > 100)
 			return "";
-		int start = (page - 1) * num;
-		standQuery(tempList, keyword, start, start + num - 1);
-
-		return GsonUtil.toString(tempList);
+		int start = (pages - 1) * nums;
+		int resultNum = standQuery(tempList, keyword, start, start + nums - 1);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("num", resultNum + "");
+		map.put("data", tempList);
+		return GsonUtil.toString(map);
 	}
 
-	public void standQuery(List<Restaurant> resultList, String word, int start,
+	public void reIndex() throws TException {
+		IndexBuild.init();
+	}
+
+	public int standQuery(List<Restaurant> resultList, String word, int start,
 			int end) {
+		int length = 0;
 		try {
 			Analyzer analyzer = new StandardAnalyzer();
 
@@ -80,8 +86,9 @@ public class FMISearchServiceImpl implements IFMISearchService.Iface {
 					"dwmc" }, analyzer);
 			parser.setDefaultOperator(QueryParser.Operator.AND);
 			Query query = parser.parse(word);
-			ScoreDoc[] hits = isearcher.search(query, null, end).scoreDocs;
+			ScoreDoc[] hits = isearcher.search(query, null, 1000).scoreDocs;
 			// 迭代输出结果
+			length = hits.length;
 			if (hits.length < end)
 				end = hits.length;
 			for (int i = start; i < end; i++) {
@@ -97,6 +104,7 @@ public class FMISearchServiceImpl implements IFMISearchService.Iface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return length;
 	}
 
 	public void standQueryHint(List<String> resultList, String field,

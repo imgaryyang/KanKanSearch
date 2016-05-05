@@ -28,7 +28,8 @@ public class FMIServer {
 			TProcessor processor = new IFMISearchService.Processor(
 					new FMISearchServiceImpl());
 			TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(
-					serverTransport).processor(processor));
+					serverTransport).processor(processor).protocolFactory(
+					proFactory));
 			System.out.println("Start server on port 4096...");
 			server.serve();
 		} catch (TTransportException e) {

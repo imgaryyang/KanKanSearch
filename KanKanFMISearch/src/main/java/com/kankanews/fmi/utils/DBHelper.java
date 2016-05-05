@@ -12,10 +12,15 @@ import org.apache.log4j.Logger;
 public final class DBHelper {
 	private static Logger logger = Logger.getLogger(DBHelper.class);
 
+	// private static String driver = "com.mysql.jdbc.Driver"; // 数据库驱动
+	// private static String url = "jdbc:mysql://172.24.26.164:3306/test";// 数据库
+	// private static String user = "root"; // 用户名
+	// private static String password = "root"; // 密码
+
 	private static String driver = "com.mysql.jdbc.Driver"; // 数据库驱动
-	private static String url = "jdbc:mysql://172.24.26.164:3306/test";// 数据库
-	private static String user = "root"; // 用户名
-	private static String password = "root"; // 密码
+	private static String url = "jdbc:mysql://kkpublic.mysql.rds.aliyuncs.com:3306/shfb";// 数据库
+	private static String user = "shfb"; // 用户名
+	private static String password = "shfb_20141127"; // 密码
 
 	// 此方法为获取数据库连接
 	public static Connection getConnection() {

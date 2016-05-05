@@ -30,20 +30,22 @@ public class IndexBuild {
 					.executeQuery("select xkzh,dwmc,jcrq,jcjg,dz,dwdz from canyin");
 			while (result.next()) {
 				Document doc = new Document();
-				doc.add(new Field("xkzh", result.getString("xkzh"),
-						Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("dwmc", result.getString("dwmc"),
+				doc.add(new Field("xkzh", setNullString(result
+						.getString("xkzh")), Field.Store.YES,
+						Field.Index.NOT_ANALYZED));
+				doc.add(new Field("dwmc", setNullString(result
+						.getString("dwmc")), TextField.TYPE_STORED));
+				doc.add(new Field("jcrq", setNullString(result
+						.getString("jcrq")), TextField.TYPE_STORED));
+				doc.add(new Field("jcjg", setNullString(result
+						.getString("jcjg")), TextField.TYPE_STORED));
+				doc.add(new Field("dz", setNullString(result.getString("dz")),
 						TextField.TYPE_STORED));
-				doc.add(new Field("jcrq", result.getString("jcrq"),
-						TextField.TYPE_STORED));
-				doc.add(new Field("jcjg", result.getString("jcjg"),
-						TextField.TYPE_STORED));
-				doc.add(new Field("dz", result.getString("dz"),
-						TextField.TYPE_STORED));
-				doc.add(new Field("dzna", result.getString("dz"),
-						Field.Store.YES, Field.Index.NOT_ANALYZED));
-				doc.add(new Field("dwdz", result.getString("dwdz"),
-						TextField.TYPE_STORED));
+				doc.add(new Field("dzna",
+						setNullString(result.getString("dz")), Field.Store.YES,
+						Field.Index.NOT_ANALYZED));
+				doc.add(new Field("dwdz", setNullString(result
+						.getString("dwdz")), TextField.TYPE_STORED));
 				iwriter.addDocument(doc);
 			}
 			iwriter.close();
@@ -51,5 +53,11 @@ public class IndexBuild {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String setNullString(String src) {
+		if (src == null)
+			return "";
+		return src;
 	}
 }
