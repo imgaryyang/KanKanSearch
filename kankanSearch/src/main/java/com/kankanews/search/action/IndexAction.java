@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.kankanews.search.service.AppIndexService;
 import com.kankanews.search.service.IndexService;
 
 @Controller
@@ -19,6 +19,9 @@ public class IndexAction {
 	@Autowired
 	private IndexService indexService;
 
+	@Autowired
+	private AppIndexService appIndexService;
+
 	@RequestMapping("/test")
 	@ResponseBody
 	public String testRichText() {
@@ -26,15 +29,25 @@ public class IndexAction {
 		return "test";
 	}
 
-	@RequestMapping("/add/whole/{version}")
+	@RequestMapping("/add/whole/{version}/type/{type}")
 	@ResponseBody
-	public String addWhole(@PathVariable final String version) {
-		new Thread(new Runnable() {
-			public void run() {
-				indexService.addWhole(version);
-				indexService.optimized();
-			}
-		}).start();
+	public String addWhole(@PathVariable final String version,
+			@PathVariable final String type) {
+		if ("app".equals(type)) {
+			new Thread(new Runnable() {
+				public void run() {
+					appIndexService.addWhole(version);
+					appIndexService.optimized();
+				}
+			}).start();
+		} else {
+			new Thread(new Runnable() {
+				public void run() {
+					indexService.addWhole(version);
+					indexService.optimized();
+				}
+			}).start();
+		}
 		return "begin";
 	}
 
@@ -44,6 +57,7 @@ public class IndexAction {
 		new Thread(new Runnable() {
 			public void run() {
 				indexService.optimized();
+				appIndexService.optimized();
 			}
 		}).start();
 		return "begin";
@@ -52,13 +66,19 @@ public class IndexAction {
 	@RequestMapping("/get/curIndexNum")
 	@ResponseBody
 	public String getCurIndexNum() {
-		return indexService.getDocIndexNum() + "";
+		return "index : " + indexService.getDocIndexNum() + " <br/>apps : "
+				+ appIndexService.getDocIndexNum();
 	}
 
-	@RequestMapping("/delete/whole/{version}")
+	@RequestMapping("/delete/whole/{version}/type/{type}")
 	@ResponseBody
-	public String deleteWhole(@PathVariable final String version) {
-		return indexService.deleteWhole(version) + "";
+	public String deleteWhole(@PathVariable final String version,
+			@PathVariable final String type) {
+		if ("app".equals(type)) {
+			return appIndexService.deleteWhole(version) + "";
+		} else {
+			return indexService.deleteWhole(version) + "";
+		}
 	}
 
 }

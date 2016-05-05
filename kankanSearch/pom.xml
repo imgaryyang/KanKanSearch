@@ -17,22 +17,11 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>
-					tomcat7-maven-plugin
-				</artifactId>
-				<version>
-					2.2
-				</version>
-				<configuration>
-					<url>http://172.16.10.76:8080/manager/text</url>
-					<server>tomcat</server>
-					<username>smg</username>
-					<password>smg</password>
-					<path>/${project.build.finalName}</path>
-				</configuration>
-			</plugin>
+			<!-- <plugin> <groupId>org.apache.tomcat.maven</groupId> <artifactId> 
+				tomcat7-maven-plugin </artifactId> <version> 2.2 </version> <configuration> 
+				<url>http://172.16.10.76:8080/manager/text</url> <server>tomcat</server> 
+				<username>smg</username> <password>smg</password> <path>/${project.build.finalName}</path> 
+				</configuration> </plugin> -->
 		</plugins>
 	</build>
 	<properties>

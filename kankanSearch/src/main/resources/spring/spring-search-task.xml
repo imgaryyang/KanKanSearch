@@ -18,6 +18,7 @@
 	<bean id="taskManager" class="com.kankanews.search.task.TaskManager"
 		scope="singleton">
 		<property name="incrementIndexTask" ref="incrementIndexTask"></property>
+		<property name="appIncrementIndexTask" ref="appIncrementIndexTask"></property>
 	</bean>
 
 	<bean id="incrementIndexTask" class="com.kankanews.search.task.IncrementIndexTask">
@@ -25,8 +26,14 @@
 		<property name="indexService" ref="indexService"></property>
 	</bean>
 
+	<bean id="appIncrementIndexTask" class="com.kankanews.search.task.AppIncrementIndexTask">
+		<property name="httpsqsClientApp" ref="httpsqsClientApp"></property>
+		<property name="appIndexService" ref="appIndexService"></property>
+	</bean>
+
 	<bean id="periodicIndexTask" class="com.kankanews.search.task.PeriodicIndexTask">
 		<property name="indexService" ref="indexService"></property>
+		<property name="appIndexService" ref="appIndexService"></property>
 		<property name="reindexTimeRange" value="${task.reindex_time_range}"></property>
 	</bean>
 

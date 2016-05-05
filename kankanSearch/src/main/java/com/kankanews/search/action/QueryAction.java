@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kankanews.search.service.AppQueryService;
 import com.kankanews.search.service.QueryService;
 import com.kankanews.search.utils.AnalyseUtil;
 
@@ -23,6 +23,9 @@ public class QueryAction {
 
 	@Autowired
 	private QueryService queryService;
+
+	@Autowired
+	private AppQueryService appQueryService;
 
 	/**
 	 * 
@@ -172,10 +175,58 @@ public class QueryAction {
 		return result;
 	}
 
-	@RequestMapping("/queryGroup")
+	@RequestMapping("/queryApp")
 	@ResponseBody
-	public String queryGroup() {
-		return "test";
+	public Map<String, Object> queryApp(
+			@RequestParam(defaultValue = "") String title,
+			@RequestParam(defaultValue = "") String classid,
+			@RequestParam(defaultValue = "") String type,
+			@RequestParam(defaultValue = "") String checked,
+			@RequestParam(defaultValue = "1") Integer page,
+			@RequestParam(defaultValue = "10") Integer rows,
+			@RequestParam(defaultValue = "false") boolean highlight,
+			@RequestParam(defaultValue = "false") boolean isduplicate,
+			@RequestParam(defaultValue = "em") String highlighttag,
+			@RequestParam(defaultValue = "*") String sttime,
+			@RequestParam(defaultValue = "*") String edtime,
+			@RequestParam(defaultValue = "") String _item) {
+		StringBuffer buf = new StringBuffer();
+		String analysedWord = null;
+		if (title != null && !title.trim().equals("")) {
+			List<String> words = AnalyseUtil.analyse(title, false);
+			StringBuffer wordBuf = new StringBuffer();
+			for (String string : words) {
+				wordBuf.append(string).append(" ");
+			}
+			if (wordBuf.toString().trim().equals("")) {
+				Map<String, Object> result = new HashMap<String, Object>();
+				result.put("num", "0");
+				result.put("qtime", "0");
+				result.put("queryresult", "");
+				return result;
+			}
+			analysedWord = "(" + wordBuf.toString() + ")";
+			buf.append(" AND title:").append(analysedWord);
+		}
+		if (type != null && !type.trim().equals(""))
+			buf.append(" AND type:").append(type);
+		if (checked != null && !checked.trim().equals(""))
+			buf.append(" AND checked:").append(checked);
+		if (classid != null && !classid.trim().equals(""))
+			buf.append(" AND classid:").append(classid);
+		if (!sttime.trim().equals("*") || !edtime.trim().equals("*")) {
+			buf.append(" AND newstime:[ ").append(sttime).append(" TO ")
+					.append(edtime).append("]");
+		}
+		Map<String, Object> result;
+		if (isduplicate) {
+			result = appQueryService.search(buf.toString(), page, rows,
+					highlight, analysedWord, highlighttag);
+		} else {
+			result = appQueryService.searchGroup(buf.toString(), page, rows,
+					highlight, analysedWord, highlighttag);
+		}
+		return result;
 	}
 
 	// private String analyseWord(String word) {

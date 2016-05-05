@@ -5,12 +5,14 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.kankanews.search.config.GlobalConfig;
+import com.kankanews.search.service.AppIndexService;
 import com.kankanews.search.service.IndexService;
 
 public class PeriodicIndexTask {
 	Logger logger = Logger.getLogger(PeriodicIndexTask.class);
 
 	private IndexService indexService;
+	private AppIndexService appIndexService;
 	private long reindexTimeRange;
 
 	public void periodicReindexStart() {
@@ -21,6 +23,7 @@ public class PeriodicIndexTask {
 			logger.info("任务是否成功:" + flag);
 		}
 		indexService.optimized();
+		appIndexService.optimized();
 	}
 
 	public long getReindexTimeRange() {
@@ -37,6 +40,14 @@ public class PeriodicIndexTask {
 
 	public void setIndexService(IndexService indexService) {
 		this.indexService = indexService;
+	}
+
+	public AppIndexService getAppIndexService() {
+		return appIndexService;
+	}
+
+	public void setAppIndexService(AppIndexService appIndexService) {
+		this.appIndexService = appIndexService;
 	}
 
 }

@@ -19,11 +19,21 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void clientTest() {
-		// zookeeperClient = zookeeperClient.usingNamespace(null);
+		zookeeperClient = zookeeperClient.usingNamespace(null);
 		try {
-			// zookeeperClient.create().forPath("/solrConfNew");
-			// zookeeperClient.create().forPath("/solrConfNew/schema.xml");
-			// zookeeperClient.create().forPath("/solrConfNew/solrconfig.xml");
+			zookeeperClient = zookeeperClient.usingNamespace("configs");
+			zookeeperClient.create().forPath("/solrConfApp");
+			zookeeperClient.create().forPath("/solrConfApp/schema.xml");
+			zookeeperClient.create().forPath("/solrConfApp/solrconfig.xml");
+			byte[] schema = FileUtils.readFileToByteArray(new File(
+					"H://Project/Java/KanKanSearch/conf/app/schema.xml"));
+			zookeeperClient.setData().forPath("/solrConfApp/schema.xml",
+					schema);
+			byte[] solrconfig = FileUtils.readFileToByteArray(new File(
+					"H://Project/Java/KanKanSearch/conf/solrconfig.xml"));
+			zookeeperClient.setData().forPath("/solrConfApp/solrconfig.xml",
+					solrconfig);
+			
 			// zookeeperClient.delete().deletingChildrenIfNeeded()
 			// .forPath("/overseer_elect");
 			// zookeeperClient.delete().deletingChildrenIfNeeded()
@@ -34,43 +44,35 @@ public class ZooKeeperFactoryTest extends AbstractJUnit4SpringContextTests {
 			// zookeeperClient.create().forPath("/myconf");
 			// zookeeperClient.create().forPath("/myconf/schema.xml");
 			// zookeeperClient.create().forPath("/myconf/solrconfig.xml");
-			// byte[] schema = FileUtils.readFileToByteArray(new File(
-			// "H://Project/Java/KanKanSearch/conf/solrconfig.xml"));
-			// zookeeperClient.setData().forPath("/solrConf/solrconfig.xml",
-			// schema);
 			// //
-			// byte[] schema = FileUtils.readFileToByteArray(new File(
-			// "H://Project/Java/KanKanSearch/conf/schema.xml"));
-			// zookeeperClient.setData()
-			// .forPath("/solrConfNew/schema.xml", schema);
-			// byte[] solrconfig = FileUtils.readFileToByteArray(new File(
-			// "H://Project/Java/KanKanSearch/conf/solrconfig.xml"));
-			// zookeeperClient.setData().forPath("/solrConfNew/solrconfig.xml",
-			// solrconfig);
+//			byte[] schema = FileUtils.readFileToByteArray(new File(
+//					"H://state.json"));
+//			zookeeperClient.setData().forPath(
+//					"/collections/kankanSearchNew/state.json", schema);
 
-			// zookeeperClient.create().forPath("/solrConfNew/admin-extra.html");
-			// byte[] admin_extra = FileUtils.readFileToByteArray(new File(
-			// "G://solr/conf/admin-extra.html"));
-			// zookeeperClient.setData().forPath("/solrConfNew/admin-extra.html",
-			// admin_extra);
+			zookeeperClient.create().forPath("/solrConfApp/admin-extra.html");
+			byte[] admin_extra = FileUtils.readFileToByteArray(new File(
+					"H://Project/Java/KanKanSearch/conf/admin-extra.html"));
+			zookeeperClient.setData().forPath("/solrConfApp/admin-extra.html",
+					admin_extra);
 			//
-			// zookeeperClient.create().forPath(
-			// "/solrConfNew/admin-extra.menu-bottom.html");
-			// byte[] admin_extra_menu_bottom = FileUtils
-			// .readFileToByteArray(new File(
-			// "G://solr/conf/admin-extra.menu-bottom.html"));
-			// zookeeperClient.setData().forPath(
-			// "/solrConfNew/admin-extra.menu-bottom.html",
-			// admin_extra_menu_bottom);
-			//
-			// zookeeperClient.create().forPath(
-			// "/solrConfNew/admin-extra.menu-top.html");
-			// byte[] admin_extra_menu_top = FileUtils
-			// .readFileToByteArray(new File(
-			// "G://solr/conf/admin-extra.menu-top.html"));
-			// zookeeperClient.setData().forPath(
-			// "/solrConfNew/admin-extra.menu-top.html",
-			// admin_extra_menu_top);
+			zookeeperClient.create().forPath(
+					"/solrConfApp/admin-extra.menu-bottom.html");
+			byte[] admin_extra_menu_bottom = FileUtils
+					.readFileToByteArray(new File(
+							"H://Project/Java/KanKanSearch/conf/admin-extra.menu-bottom.html"));
+			zookeeperClient.setData().forPath(
+					"/solrConfApp/admin-extra.menu-bottom.html",
+					admin_extra_menu_bottom);
+
+			zookeeperClient.create().forPath(
+					"/solrConfApp/admin-extra.menu-top.html");
+			byte[] admin_extra_menu_top = FileUtils
+					.readFileToByteArray(new File(
+							"H://Project/Java/KanKanSearch/conf/admin-extra.menu-top.html"));
+			zookeeperClient.setData().forPath(
+					"/solrConfApp/admin-extra.menu-top.html",
+					admin_extra_menu_top);
 			// zookeeperClient.getData().forPath("");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

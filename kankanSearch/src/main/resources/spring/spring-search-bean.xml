@@ -45,6 +45,11 @@
 		<property name="dbHepler" ref="dbHepler"></property>
 	</bean>
 
+	<bean id="appDAO" class="com.kankanews.search.db.dao.AppDAO">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="dbHepler" ref="dbHepler"></property>
+	</bean>
+
 	<!-- ======================== 客户端 ======================== -->
 
 	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.CloudSolrClient"
@@ -53,6 +58,13 @@
 		<property name="zkConnectTimeout" value="${solr.connect_timeout}"></property>
 		<property name="zkClientTimeout" value="${solr.client_timeout}"></property>
 		<property name="defaultCollection" value="${solr.default_collection}"></property>
+	</bean>
+	<bean id="solrClientApp" class="org.apache.solr.client.solrj.impl.CloudSolrClient"
+		scope="singleton">
+		<constructor-arg value="${zk.host}"></constructor-arg>
+		<property name="zkConnectTimeout" value="${solr.connect_timeout}"></property>
+		<property name="zkClientTimeout" value="${solr.client_timeout}"></property>
+		<property name="defaultCollection" value="${solr.app_collection}"></property>
 	</bean>
 	<bean id="zookeeperFactory" class="com.kankanews.search.factory.ZooKeeperFactory"
 		scope="singleton">
@@ -68,6 +80,10 @@
 		<property name="prefix" value="${httpsqs.prefix}"></property>
 		<property name="queueName" value="${httpsqs.queuename}"></property>
 	</bean>
+	<bean id="httpsqsClientApp" class="com.kankanews.search.utils.httpsqs.HttpsqsClient">
+		<property name="prefix" value="${httpsqs.prefix}"></property>
+		<property name="queueName" value="${httpsqs.queuenameApp}"></property>
+	</bean>
 
 
 	<!-- ======================== 业务逻辑 ======================== -->
@@ -76,6 +92,13 @@
 		<property name="videoDAO" ref="videoDAO"></property>
 		<property name="photoDAO" ref="photoDAO"></property>
 		<property name="solrClient" ref="solrClient"></property>
+	</bean>
+	<bean id="appIndexService" class="com.kankanews.search.service.AppIndexService">
+		<property name="appDAO" ref="appDAO"></property>
+		<property name="solrClientApp" ref="solrClientApp"></property>
+	</bean>
+	<bean id="appQueryService" class="com.kankanews.search.service.AppQueryService">
+		<property name="solrClientApp" ref="solrClientApp"></property>
 	</bean>
 
 	<bean id="queryService" class="com.kankanews.search.service.QueryService">
