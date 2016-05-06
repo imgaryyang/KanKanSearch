@@ -16,14 +16,17 @@ public class PeriodicIndexTask {
 	private long reindexTimeRange;
 
 	public void periodicReindexStart() {
-		if (GlobalConfig._IS_PERIODIC_INDEX_) {
-			logger.info("定时重建索引任务开启");
-			long now = new Date().getTime() / 1000;
-			boolean flag = indexService.reindex(now - reindexTimeRange, now);
-			logger.info("任务是否成功:" + flag);
+		if (GlobalConfig._IS_INCREMENT_INDEX_) {
+			if (GlobalConfig._IS_PERIODIC_INDEX_) {
+				logger.info("定时重建索引任务开启");
+				long now = new Date().getTime() / 1000;
+				boolean flag = indexService
+						.reindex(now - reindexTimeRange, now);
+				logger.info("任务是否成功:" + flag);
+			}
+			indexService.optimized();
+			appIndexService.optimized();
 		}
-		indexService.optimized();
-		appIndexService.optimized();
 	}
 
 	public long getReindexTimeRange() {

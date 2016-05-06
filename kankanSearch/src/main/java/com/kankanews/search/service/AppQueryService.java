@@ -45,7 +45,7 @@ public class AppQueryService {
 			query.setRows(rows);
 			query.set("shards.tolerant", true);
 			query.setQuery(queryStrBuf.toString());
-			query.setParam("sort", "top desc, newstime desc");
+			query.setParam("sort", "newstime desc");
 			if (isHighLight) {
 				query.setParam("hl.q", "(title:" + hightLightQuery + ")");
 				query.setHighlight(true); // 开启高亮组件
@@ -127,7 +127,7 @@ public class AppQueryService {
 		query.setParam("hl", isHighLight);
 
 		query.setQuery(queryStrBuf.toString());
-		query.setParam("sort", "top desc, newstime desc");
+		query.setParam("sort", "newstime desc");
 
 		// 设置高亮
 		if (isHighLight) {
