@@ -1,0 +1,89 @@
+<schema name="coretest" version="1.5" >
+	<fieldType name="uuid" class="solr.UUIDField" indexed="true" />
+
+	<fieldType name="string" class="solr.StrField" sortMissingLast="true"/>  
+
+	<fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>  
+
+	<fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>   
+
+	<fieldType name="text_general" class="solr.TextField" positionIncrementGap="100"/>  
+	
+	<fieldType name="text_whitespace" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="solr.WhitespaceTokenizerFactory"/> 
+		</analyzer>
+	</fieldType> 
+	
+	<fieldType name="text_whitespace_smart" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="solr.WhitespaceTokenizerFactory"/> 
+		</analyzer>
+	</fieldType> 
+	
+	<fieldType name="text_ik_smart_all" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+	</fieldType>
+	
+	<fieldType name="text_ik_smart" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="true"/> 
+		</analyzer>
+	</fieldType>
+
+	<fieldType name="text_ik" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+		<analyzer type="query"> 
+			<tokenizer class="org.apache.lucene.analysis.ik.IKTokenizerFactory" useSmart="false"/> 
+		</analyzer>
+	</fieldType> 
+
+	<fields>
+		<field name="docId" type="uuid" indexed="true" stored="true" multiValued="false" required="true" />
+		<field name="id" type="string" indexed="true" stored="true" multiValued="false" />
+		<field name="classid" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="checked" type="string" indexed="true" stored="true" multiValued="false" />
+		<field name="editor" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="headline" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="keyboard" type="string" indexed="true" stored="true" multiValued="false" />
+		<field name="labels" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="newstime" type="long" indexed="true" stored="true" multiValued="false" /> 
+		<field name="o_cmsid" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="o_classid" type="string" indexed="true" stored="true" multiValued="false" />
+		<field name="type" type="string" indexed="true" stored="true" multiValued="false"/> 
+		<field name="title" type="text_whitespace" indexed="true" stored="true" multiValued="false" />
+		<field name="titleGroup" type="string" indexed="true" stored="true" multiValued="false" docValues="true"/> 
+		<field name="titlepic" type="string" indexed="false" stored="true" multiValued="false" /> 
+		<field name="titleurl" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="top" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="sharepic" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="docversion" type="string" indexed="true" stored="true" multiValued="false"/>
+		<field name="docTable" type="string" indexed="true" stored="true" multiValued="false"/>
+		
+		<field name="_shard" type="string" indexed="true" stored="true" multiValued="false"/>
+
+		<field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
+
+	</fields>  
+
+	<solrQueryParser defaultOperator="OR"/>  
+	<uniqueKey>docId</uniqueKey>
+	<defaultSearchField>title</defaultSearchField> 
+
+</schema>

@@ -1,0 +1,37 @@
+搜索接口:/kankanSearch/search/queryApp
+参数:  
+	title : 标题(分词查询) 默认("")
+	type ： 类型(int) 默认("")
+	checked : 是否审核 默认("")
+	classid : 栏目分类(string) 默认("")
+	page : 第几页(int) 默认(1)
+	rows : 每页几行(int) 默认(10)
+	highlight : 高亮(true 高亮, false 不高亮)(string) 默认(false)
+	isduplicate : 查询结果是否允许重复(true 允许, false 不允许)(string) 默认(false)
+	highlighttag : 高亮标签(string) 默认("em")
+	sttime : 开始时间时间戳(long) 默认("*"不限)
+	edtime : 结束时间时间戳(long) 默认("*"不限)
+	
+返回结果
+	num : 查询结果总数
+	qtime : 搜索时间
+	queryresult  :  返回结果(Array)
+					字段 	id         
+							classid    
+							checked    
+							editor     
+							headline   
+							keyboard   
+							labels     
+							newstime   
+							o_cmsid    
+							o_classid  
+							titleurl   
+							title    
+							titlepic   
+							type       
+							top        
+							
+
+	
+	
