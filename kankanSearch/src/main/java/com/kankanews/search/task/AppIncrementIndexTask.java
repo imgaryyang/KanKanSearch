@@ -51,7 +51,7 @@ public class AppIncrementIndexTask implements Runnable {
 		try {
 			boolean flag = false;
 			if (map.get("action").trim().equals("insert")) {
-				flag = appIndexService.addOne(map.get("id"));
+				flag = appIndexService.addOne(map.get("ids"));
 				if (!flag) {
 					httpsqsClientApp.putString(GsonUtil.toString(map));
 					Thread.currentThread().sleep(60000);
@@ -69,7 +69,7 @@ public class AppIncrementIndexTask implements Runnable {
 					Thread.currentThread().sleep(60000);
 					return;
 				}
-				flag = appIndexService.addOne(map.get("id"));
+				flag = appIndexService.addOne(map.get("ids"));
 				if (!flag) {
 					httpsqsClientApp.putString(GsonUtil.toString(map));
 					Thread.currentThread().sleep(60000);

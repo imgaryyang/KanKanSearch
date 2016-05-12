@@ -187,8 +187,9 @@ public class QueryAction {
 			@RequestParam(defaultValue = "false") boolean highlight,
 			@RequestParam(defaultValue = "false") boolean isduplicate,
 			@RequestParam(defaultValue = "em") String highlighttag,
-			@RequestParam(defaultValue = "*") String sttime,
-			@RequestParam(defaultValue = "*") String edtime,
+//			@RequestParam(defaultValue = "*") String sttime,
+//			@RequestParam(defaultValue = "*") String edtime,
+			@RequestParam(defaultValue = "[ * TO * ]") String newstime,
 			@RequestParam(defaultValue = "") String _item) {
 		StringBuffer buf = new StringBuffer();
 		String analysedWord = null;
@@ -214,10 +215,12 @@ public class QueryAction {
 			buf.append(" AND checked:").append(checked);
 		if (classid != null && !classid.trim().equals(""))
 			buf.append(" AND classid:").append(classid);
-		if (!sttime.trim().equals("*") || !edtime.trim().equals("*")) {
-			buf.append(" AND newstime:[ ").append(sttime).append(" TO ")
-					.append(edtime).append("]");
-		}
+//		if (!sttime.trim().equals("*") || !edtime.trim().equals("*")) {
+//			buf.append(" AND newstime:[ ").append(sttime).append(" TO ")
+//					.append(edtime).append("]");
+//		}
+		if (newstime != null && !newstime.trim().equals(""))
+			buf.append(" AND newstime:").append(newstime);
 		Map<String, Object> result;
 		if (isduplicate) {
 			result = appQueryService.search(buf.toString(), page, rows,
