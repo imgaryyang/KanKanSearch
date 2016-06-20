@@ -27,7 +27,7 @@ public class IndexBuild {
 		try {
 			iwriter = new IndexWriter(directory, config);
 			ResultSet result = DBHelper
-					.executeQuery("select xkzh,dwmc,jcrq,jcjg,dz,dwdz from canyin");
+					.executeQuery("select xkzh,dwmc,jcrq,jcjg,dz,dwdz from canyin where jcjg is not null and jcjg <> 'NULL' and jcjg <> '' and jcjg <> 'null'");
 			while (result.next()) {
 				Document doc = new Document();
 				doc.add(new Field("xkzh", setNullString(result
